@@ -1,0 +1,31 @@
+[package]
+name = "syn-internal-codegen"
+version = "0.0.0"
+authors = ["David Tolnay <dtolnay@gmail.com>", "Nika Layzell <nika@thelayzells.com>"]
+edition = "2018"
+
+publish = false # this is an internal crate which should never be published
+
+[dependencies]
+anyhow = "1.0"
+color-backtrace = "0.4"
+indexmap = { version = "1.0", features = ["serde-1"] }
+inflections = "1.1"
+proc-macro2 = { version = "1.0.20", features = ["span-locations"] }
+quote = "1.0"
+semver = { version = "1.0", features = ["serde"] }
+serde = { version = "1.0.88", features = ["derive"] }
+serde_json = "1.0.38"
+syn-codegen = { path = "../json" }
+syn = { path = "..", features = ["derive", "parsing", "printing", "full"], default-features = false }
+thiserror = "1.0"
+toml = "0.5"
+
+[dependencies.rustfmt]
+package = "rustfmt-nightly"
+git = "https://github.com/rust-lang/rustfmt"
+rev = "3d9b57a22e85a02edef13b8aff15ab800410ebad"
+
+[workspace]
+# Prefer that `cargo clean` in syn's directory does not require a rebuild of
+# rustfmt in the codegen directory.
