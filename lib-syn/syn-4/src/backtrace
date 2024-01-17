@@ -1,0 +1,83 @@
+stack backtrace:
+   0:     0x559651e2718c - std::backtrace_rs::backtrace::libunwind::trace::hc924fd0950cd252a
+                               at /rustc/0e2dac8375950a12812ec65868e42b43ed214ef9/library/std/src/../../backtrace/src/backtrace/libunwind.rs:104:5
+   1:     0x559651e2718c - std::backtrace_rs::backtrace::trace_unsynchronized::h1f1e5099087a035d
+                               at /rustc/0e2dac8375950a12812ec65868e42b43ed214ef9/library/std/src/../../backtrace/src/backtrace/mod.rs:66:5
+   2:     0x559651e2718c - std::sys_common::backtrace::_print_fmt::h7f749ee0d7e60277
+                               at /rustc/0e2dac8375950a12812ec65868e42b43ed214ef9/library/std/src/sys_common/backtrace.rs:68:5
+   3:     0x559651e2718c - <std::sys_common::backtrace::_print::DisplayBacktrace as core::fmt::Display>::fmt::hf2a9b1c1e3c5633a
+                               at /rustc/0e2dac8375950a12812ec65868e42b43ed214ef9/library/std/src/sys_common/backtrace.rs:44:22
+   4:     0x559651e4cb90 - core::fmt::rt::Argument::fmt::hf92f60b99e5f2da7
+                               at /rustc/0e2dac8375950a12812ec65868e42b43ed214ef9/library/core/src/fmt/rt.rs:142:9
+   5:     0x559651e4cb90 - core::fmt::write::hb0341582c8a0c09d
+                               at /rustc/0e2dac8375950a12812ec65868e42b43ed214ef9/library/core/src/fmt/mod.rs:1120:17
+   6:     0x559651e2559f - std::io::Write::write_fmt::he23a7ec5e369bd01
+                               at /rustc/0e2dac8375950a12812ec65868e42b43ed214ef9/library/std/src/io/mod.rs:1810:15
+   7:     0x559651e26f74 - std::sys_common::backtrace::_print::h3db1ae47b9c0d335
+                               at /rustc/0e2dac8375950a12812ec65868e42b43ed214ef9/library/std/src/sys_common/backtrace.rs:47:5
+   8:     0x559651e26f74 - std::sys_common::backtrace::print::hc8e0b8a08747ada0
+                               at /rustc/0e2dac8375950a12812ec65868e42b43ed214ef9/library/std/src/sys_common/backtrace.rs:34:9
+   9:     0x559651e28487 - std::panicking::default_hook::{{closure}}::ha12a6f0dc62115f6
+  10:     0x559651e281ef - std::panicking::default_hook::hec044768ea7a0274
+                               at /rustc/0e2dac8375950a12812ec65868e42b43ed214ef9/library/std/src/panicking.rs:292:9
+  11:     0x559651e28908 - std::panicking::rust_panic_with_hook::h6c1fffd1d47b6cc0
+                               at /rustc/0e2dac8375950a12812ec65868e42b43ed214ef9/library/std/src/panicking.rs:779:13
+  12:     0x559651e287b9 - std::panicking::begin_panic_handler::{{closure}}::h1a2441dabd4c9624
+                               at /rustc/0e2dac8375950a12812ec65868e42b43ed214ef9/library/std/src/panicking.rs:649:13
+  13:     0x559651e27656 - std::sys_common::backtrace::__rust_end_short_backtrace::h0e4d2982a610eadc
+                               at /rustc/0e2dac8375950a12812ec65868e42b43ed214ef9/library/std/src/sys_common/backtrace.rs:171:18
+  14:     0x559651e28552 - rust_begin_unwind
+                               at /rustc/0e2dac8375950a12812ec65868e42b43ed214ef9/library/std/src/panicking.rs:645:5
+  15:     0x559651d6aa25 - core::panicking::panic_fmt::h80ebc3ca0e660b44
+                               at /rustc/0e2dac8375950a12812ec65868e42b43ed214ef9/library/core/src/panicking.rs:72:14
+  16:     0x559651d6aa93 - core::panicking::panic::h6011675d458ff26a
+                               at /rustc/0e2dac8375950a12812ec65868e42b43ed214ef9/library/core/src/panicking.rs:142:5
+  17:     0x559651dc6f36 - syn::path::printing::<impl syn::private>::print_path::hb511a7becc5e44cb
+                               at /home/cardigan/Desktop/panic4r/lib-syn/syn-4/syn-1.0.38/src/path.rs:713:17
+  18:     0x559651db7cf5 - syn::ty::printing::<impl quote::to_tokens::ToTokens for syn::ty::TypePath>::to_tokens::h1e2f4d353532a9a6
+                               at /home/cardigan/Desktop/panic4r/lib-syn/syn-4/syn-1.0.38/src/ty.rs:1155:13
+  19:     0x559651db8283 - <syn::ty::Type as quote::to_tokens::ToTokens>::to_tokens::h00975930b465c864
+                               at /home/cardigan/Desktop/panic4r/lib-syn/syn-4/syn-1.0.38/src/ty.rs:9:1
+  20:     0x559651d8e977 - <&T as quote::to_tokens::ToTokens>::to_tokens::h840db3d4986e6570
+                               at /home/cardigan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/quote-1.0.35/src/to_tokens.rs:79:9
+  21:     0x559651d6b70d - quote::to_tokens::ToTokens::to_token_stream::hdab69a8590462360
+                               at /home/cardigan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/quote-1.0.35/src/to_tokens.rs:61:9
+  22:     0x559651d6b79b - quote::to_tokens::ToTokens::into_token_stream::hd2eff33666e41ebb
+                               at /home/cardigan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/quote-1.0.35/src/to_tokens.rs:73:9
+  23:     0x559651d6b6b4 - <T as quote::spanned::Spanned>::__span::h6b3007a460b77965
+                               at /home/cardigan/.cargo/registry/src/index.crates.io-6f17d22bba15001f/quote-1.0.35/src/spanned.rs:24:20
+  24:     0x559651d6b69a - <T as syn::spanned::Spanned>::span::h10a02230b8e2ef01
+                               at /home/cardigan/Desktop/panic4r/lib-syn/syn-4/syn-1.0.38/src/spanned.rs:112:9
+  25:     0x559651d6c024 - syn_4::main::ha201d96754d6cdaf
+                               at /home/cardigan/Desktop/panic4r/lib-syn/syn-4/src/main.rs:11:5
+  26:     0x559651d6b81b - core::ops::function::FnOnce::call_once::h142ff548d1e6e85f
+                               at /rustc/0e2dac8375950a12812ec65868e42b43ed214ef9/library/core/src/ops/function.rs:250:5
+  27:     0x559651d6b7de - std::sys_common::backtrace::__rust_begin_short_backtrace::h0ba66dd4df4eab42
+                               at /rustc/0e2dac8375950a12812ec65868e42b43ed214ef9/library/std/src/sys_common/backtrace.rs:155:18
+  28:     0x559651d6c141 - std::rt::lang_start::{{closure}}::h444bb5824077db7b
+                               at /rustc/0e2dac8375950a12812ec65868e42b43ed214ef9/library/std/src/rt.rs:167:18
+  29:     0x559651e23177 - core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once::h2058c1da1cce9e62
+                               at /rustc/0e2dac8375950a12812ec65868e42b43ed214ef9/library/core/src/ops/function.rs:284:13
+  30:     0x559651e23177 - std::panicking::try::do_call::h0165b0555fcef710
+                               at /rustc/0e2dac8375950a12812ec65868e42b43ed214ef9/library/std/src/panicking.rs:552:40
+  31:     0x559651e23177 - std::panicking::try::hf78c168c8d3140ac
+                               at /rustc/0e2dac8375950a12812ec65868e42b43ed214ef9/library/std/src/panicking.rs:516:19
+  32:     0x559651e23177 - std::panic::catch_unwind::h267458cd325fcaa0
+                               at /rustc/0e2dac8375950a12812ec65868e42b43ed214ef9/library/std/src/panic.rs:142:14
+  33:     0x559651e23177 - std::rt::lang_start_internal::{{closure}}::h478414899a90ca9d
+                               at /rustc/0e2dac8375950a12812ec65868e42b43ed214ef9/library/std/src/rt.rs:148:48
+  34:     0x559651e23177 - std::panicking::try::do_call::h5497831bb67e3422
+                               at /rustc/0e2dac8375950a12812ec65868e42b43ed214ef9/library/std/src/panicking.rs:552:40
+  35:     0x559651e23177 - std::panicking::try::h8bb73cbe007af0ca
+                               at /rustc/0e2dac8375950a12812ec65868e42b43ed214ef9/library/std/src/panicking.rs:516:19
+  36:     0x559651e23177 - std::panic::catch_unwind::h59c7b3e02b0a8cc4
+                               at /rustc/0e2dac8375950a12812ec65868e42b43ed214ef9/library/std/src/panic.rs:142:14
+  37:     0x559651e23177 - std::rt::lang_start_internal::h19419f132bf82fd7
+                               at /rustc/0e2dac8375950a12812ec65868e42b43ed214ef9/library/std/src/rt.rs:148:20
+  38:     0x559651d6c11a - std::rt::lang_start::hbcf62289f4020339
+                               at /rustc/0e2dac8375950a12812ec65868e42b43ed214ef9/library/std/src/rt.rs:166:17
+  39:     0x559651d6c0de - main
+  40:     0x7f55005cd083 - __libc_start_main
+                               at /build/glibc-wuryBv/glibc-2.31/csu/../csu/libc-start.c:308:16
+  41:     0x559651d6b28e - _start
+  42:                0x0 - <unknown>
