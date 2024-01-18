@@ -1,0 +1,88 @@
+From 40d883d405ba3e992d84367a6e9ede4053125ab3 Mon Sep 17 00:00:00 2001
+From: Andrew Gallant <jamslam@gmail.com>
+Date: Thu, 25 May 2023 11:41:10 -0400
+Subject: [PATCH] bug: fix complete literal optimization issue
+
+This bug results in some regexes reporting matches at every position
+even when it should't. The bug happens because the internal literal
+optimizer winds up using an "empty" searcher that reports a match at
+every position. This is technically correct whenever the literal
+searcher is used as a prefilter (although slower than necessary), but an
+optimization added later enabled the searcher to run on its own and not
+as a prefilter. i.e., Without the confirm step by the regex engine. In
+that context, the "empty" searcher is totally incorrect.
+
+So this bug corresponds to a code path where the "empty" literal
+searcher is used, but is also in a case where the literal searcher is
+used directly to find matches and not as a prefilter. I believe at
+least the following are required to trigger this path:
+
+* The literals extracted need to be "complete." That is, the language
+described by the regex is small and finite.
+* There needs to be at least 26 distinct starting bytes among all of
+the elements in the language described by the regex.
+* There needs to be fewer than 26 distinct ending bytes among all of
+the elements in the language described by the regex.
+* Possibly other criteria...
+
+The actual fix is to change the code that selects the literal searcher.
+Indeed, there was even a comment in the erroneous code saying that the
+path was impossible, but of course, it isn't. We change that path to
+return None, as it should have long ago. This in turn results in the
+case outlined above not using a literal searcher and just the regex
+engine.
+
+Fixes #999
+---
+ src/exec.rs         | 13 ++++++++++++-
+ tests/regression.rs | 13 +++++++++++++
+ 2 files changed, 25 insertions(+), 1 deletion(-)
+
+diff --git a/src/exec.rs b/src/exec.rs
+index c449b38..ee8b589 100644
+--- a/src/exec.rs
++++ b/src/exec.rs
+@@ -1439,7 +1439,18 @@ impl ExecReadOnly {
+                     // This case shouldn't happen. When the regex isn't
+                     // anchored, then complete prefixes should imply complete
+                     // suffixes.
+-                    Some(MatchType::Literal(MatchLiteralType::Unanchored))
++                    //
++                    // The above is wrong! This case can happen. While
++                    // complete prefixes should imply complete suffixes
++                    // here, that doesn't necessarily mean we have a useful
++                    // prefix matcher! It could be the case that the literal
++                    // searcher decided the prefixes---even though they are
++                    // "complete"---weren't good enough and thus created an
++                    // empty matcher. If that happens and we return Unanchored
++                    // here, then we'll end up using that matcher, which is
++                    // very bad because it matches at every position. So...
++                    // return None.
++                    None
+                 };
+             }
+             None
+diff --git a/tests/regression.rs b/tests/regression.rs
+index 1ff4cba..291062a 100644
+--- a/tests/regression.rs
++++ b/tests/regression.rs
+@@ -248,3 +248,16 @@ fn regression_big_regex_overflow() {
+     let re = regex_new!(pat);
+     assert!(re.is_err());
+ }
++
++#[test]
++fn regression_complete_literals_suffix_incorrect() {
++    let needles = vec![
++        "aA", "bA", "cA", "dA", "eA", "fA", "gA", "hA", "iA", "jA", "kA",
++        "lA", "mA", "nA", "oA", "pA", "qA", "rA", "sA", "tA", "uA", "vA",
++        "wA", "xA", "yA", "zA",
++    ];
++    let pattern = needles.join("|");
++    let re = regex!(&pattern);
++    let hay = "FUBAR";
++    assert_eq!(0, re.find_iter(text!(hay)).count());
++}
+-- 
+2.25.1
+
