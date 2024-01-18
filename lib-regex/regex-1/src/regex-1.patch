@@ -1,0 +1,45 @@
+From b2ca9c16dab559697ef152913a75479d7382efc1 Mon Sep 17 00:00:00 2001
+From: Andrew Gallant <jamslam@gmail.com>
+Date: Mon, 5 Jun 2023 08:36:20 -0400
+Subject: [PATCH] compile: make Regex::new(r"(?-u:\B)") fail again
+
+This regex failed to compile in `regex <1.8`, but the migration to
+regex-automata tweaked the rules in a subtle way that permitted it
+to compile despite the fact that the old/status-quo matching engines
+can't handle it correctly. By that, I mean that they may permit the \B
+to match between code units. That in turn results in panicking when
+slicing a &str.
+
+In `regex 1.9`, this regex will actually be able to be compiled, but
+the matching engines will correctly and robustly never report matches
+that split UTF-8 code units. For now, we just add code that causes
+`regex 1.8` to have the same behavior as previous releases.
+
+Fixes #1006
+---
+ src/compile.rs | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/src/compile.rs b/src/compile.rs
+index 0030cfb..23e63ec 100644
+--- a/src/compile.rs
++++ b/src/compile.rs
+@@ -137,6 +137,15 @@ impl Compiler {
+     }
+ 
+     fn compile_one(mut self, expr: &Hir) -> result::Result<Program, Error> {
++        if self.compiled.only_utf8
++            && expr.properties().look_set().contains(Look::WordAsciiNegate)
++        {
++            return Err(Error::Syntax(
++                "ASCII-only \\B is not allowed in Unicode regexes \
++                 because it may result in invalid UTF-8 matches"
++                    .to_string(),
++            ));
++        }
+         // If we're compiling a forward DFA and we aren't anchored, then
+         // add a `.*?` before the first capture group.
+         // Other matching engines handle this by baking the logic into the
+-- 
+2.25.1
+
