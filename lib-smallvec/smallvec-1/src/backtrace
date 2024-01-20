@@ -1,0 +1,62 @@
+stack backtrace:
+   0:     0x7ff74f067e0a - std::sys_common::backtrace::_print::impl$0::fmt
+                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33/library\std\src\sys_common\backtrace.rs:44
+   1:     0x7ff74f0760db - core::fmt::rt::Argument::fmt
+                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33/library\core\src\fmt\rt.rs:138
+   2:     0x7ff74f0760db - core::fmt::write
+                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33/library\core\src\fmt\mod.rs:1094
+   3:     0x7ff74f066141 - std::io::Write::write_fmt<std::sys::windows::stdio::Stderr>        
+                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33/library\std\src\io\mod.rs:1714
+   4:     0x7ff74f067b8a - std::sys_common::backtrace::_print
+                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33/library\std\src\sys_common\backtrace.rs:47
+   5:     0x7ff74f067b8a - std::sys_common::backtrace::print
+                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33/library\std\src\sys_common\backtrace.rs:34
+   6:     0x7ff74f069c4a - std::panicking::default_hook::closure$1
+                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33/library\std\src\panicking.rs:270
+   7:     0x7ff74f0698b8 - std::panicking::default_hook
+                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33/library\std\src\panicking.rs:290
+   8:     0x7ff74f06a2fe - std::panicking::rust_panic_with_hook
+                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33/library\std\src\panicking.rs:707
+   9:     0x7ff74f06a1aa - std::panicking::begin_panic_handler::closure$0
+                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33/library\std\src\panicking.rs:597
+  10:     0x7ff74f0687f9 - std::sys_common::backtrace::__rust_end_short_backtrace<std::panicking::begin_panic_handler::closure_env$0,never$>
+                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33/library\std\src\sys_common\backtrace.rs:170
+  11:     0x7ff74f069ef0 - std::panicking::begin_panic_handler
+                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33/library\std\src\panicking.rs:595
+  12:     0x7ff74f07b08d - core::panicking::panic_nounwind_fmt
+                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33/library\core\src\panicking.rs:96
+  13:     0x7ff74f07b146 - core::panicking::panic_nounwind
+                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33/library\core\src\panicking.rs:126
+  14:     0x7ff74f0613bb - core::mem::uninitialized
+                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33\library\core\src\mem\mod.rs:692
+  15:     0x7ff74f0613bb - smallvec::SmallVec<array$<enum2$<smallvec_1::main::Void>,8> >::new<array$<enum2$<smallvec_1::main::Void>,8> >
+                               at D:\rustpanic\panic4r\lib-smallvec\smallvec-1\rust-smallvec-0.6.8\lib.rs:398
+  16:     0x7ff74f061f8e - smallvec_1::main
+                               at D:\rustpanic\panic4r\lib-smallvec\smallvec-1\src\main.rs:3  
+  17:     0x7ff74f0617cb - core::ops::function::FnOnce::call_once<void (*)(),tuple$<> >       
+                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33\library\core\src\ops\function.rs:250
+  18:     0x7ff74f061f5e - std::sys_common::backtrace::__rust_begin_short_backtrace<void (*)(),tuple$<> >
+                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33\library\std\src\sys_common\backtrace.rs:154
+  19:     0x7ff74f061f5e - std::sys_common::backtrace::__rust_begin_short_backtrace<void (*)(),tuple$<> >
+                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33\library\std\src\sys_common\backtrace.rs:154
+  20:     0x7ff74f061f31 - std::rt::lang_start::closure$0<tuple$<> >
+                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33\library\std\src\rt.rs:166
+  21:     0x7ff74f0642c8 - std::rt::lang_start_internal::closure$2
+                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33/library\std\src\rt.rs:148
+  22:     0x7ff74f0642c8 - std::panicking::try::do_call
+                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33/library\std\src\panicking.rs:502
+  23:     0x7ff74f0642c8 - std::panicking::try
+                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33/library\std\src\panicking.rs:466
+  24:     0x7ff74f0642c8 - std::panic::catch_unwind
+                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33/library\std\src\panic.rs:142
+  25:     0x7ff74f0642c8 - std::rt::lang_start_internal
+                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33/library\std\src\rt.rs:148
+  26:     0x7ff74f061f0a - std::rt::lang_start<tuple$<> >
+                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33\library\std\src\rt.rs:165
+  27:     0x7ff74f061fb9 - main
+  28:     0x7ff74f079a80 - invoke_main
+                               at D:\a\_work\1\s\src\vctools\crt\vcstartup\src\startup\exe_common.inl:78
+  29:     0x7ff74f079a80 - __scrt_common_main_seh
+                               at D:\a\_work\1\s\src\vctools\crt\vcstartup\src\startup\exe_common.inl:288
+  30:     0x7ffda93b54e0 - BaseThreadInitThunk
+  31:     0x7ffda9bc485b - RtlUserThreadStart

@@ -1,0 +1,49 @@
+From cd0da1ae5e0b4c44226bb4a4493b790879769aea Mon Sep 17 00:00:00 2001
+From: Andreas Molzer <andreas.molzer@gmx.de>
+Date: Fri, 30 Aug 2019 22:27:32 +0200
+Subject: [PATCH] Fix num parsing for invalid multi-byte sign chars
+
+Ensure that splitting the potential sign character from the remainder
+respects UTF8 boundaries. This lets invalid characters fail correctly
+with an error, instead of panicking.
+---
+ src/lib.rs | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
+
+diff --git a/src/lib.rs b/src/lib.rs
+index 172e714..6641a3a 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -216,7 +216,12 @@ macro_rules! float_trait_impl {
+                 }
+ 
+                 fn slice_shift_char(src: &str) -> Option<(char, &str)> {
+-                    src.chars().nth(0).map(|ch| (ch, &src[1..]))
++                    let mut chars = src.chars();
++                    if let Some(ch) = chars.next() {
++                        Some((ch, chars.as_str()))
++                    } else {
++                        None
++                    }
+                 }
+ 
+                 let (is_positive, src) =  match slice_shift_char(src) {
+@@ -395,6 +400,15 @@ fn from_str_radix_unwrap() {
+     assert_eq!(f, 0.0);
+ }
+ 
++#[test]
++fn from_str_radix_multi_byte_fail() {
++    // Ensure parsing doesn't panic, even on invalid sign characters
++    assert!(f32::from_str_radix("™0.2", 10).is_err());
++
++    // Even when parsing the exponent sign
++    assert!(f32::from_str_radix("0.2E™1", 10).is_err());
++}
++
+ #[test]
+ fn wrapping_is_num() {
+     fn require_num<T: Num>(_: &T) {}
+-- 
+2.42.0.windows.2
+

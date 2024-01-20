@@ -1,0 +1,33 @@
+From 99be50b1e729cc93e0a2a332f622274642b08543 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Emilio=20Cobos=20=C3=81lvarez?= <emilio@crisal.io>
+Date: Sat, 19 Oct 2019 05:02:11 +0200
+Subject: [PATCH] Add a test for #139.
+
+Works now on trunk.
+
+Closes #139
+---
+ lib.rs | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/lib.rs b/lib.rs
+index 8f56c83..96d87bf 100644
+--- a/lib.rs
++++ b/lib.rs
+@@ -2356,6 +2356,13 @@ mod tests {
+         assert_eq!(v[..], ['a']);
+     }
+ 
++    // #139
++    #[test]
++    fn uninhabited() {
++        enum Void {}
++        let _sv = SmallVec::<[Void; 8]>::new();
++    }
++
+     #[test]
+     fn grow_spilled_same_size() {
+         let mut v: SmallVec<[u8; 2]> = SmallVec::new();
+-- 
+2.42.0.windows.2
+
