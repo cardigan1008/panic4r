@@ -1,0 +1,65 @@
+From d94f95523aed7fecc71fc2e082d1458f69dd8de3 Mon Sep 17 00:00:00 2001
+From: Andrew Gallant <jamslam@gmail.com>
+Date: Fri, 24 Mar 2023 19:52:05 -0400
+Subject: [PATCH] dfa: fix bug in how the reverse DFA is called
+
+In turns out that in *some* calls to Fsm::reverse, we were passing an
+incorrect start offset. Namely, the haystack we pass is sub-sliced at
+`&text[start..]`, but in some places, we were passing `text.len()` as
+the start offset of the reverse search. But of course, it should be
+`text.len() - start`. This was indeed the case in most places, but it
+looks like it needed to be corrected in two additional places.
+
+I've also added this test to regex-automata's set of regression tests
+and can confirm that it doesn't happen there. (regex-automata is far
+more principled about handling offsets like this.)
+
+Fixes #969
+---
+ src/exec.rs           |  4 ++--
+ tests/test_default.rs | 10 ++++++++++
+ 2 files changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/src/exec.rs b/src/exec.rs
+index e75ca08..b9abcdc 100644
+--- a/src/exec.rs
++++ b/src/exec.rs
+@@ -459,7 +459,7 @@ impl<'c> RegularExpression for ExecNoSync<'c> {
+                     self.cache.value(),
+                     true,
+                     &text[start..],
+-                    text.len(),
++                    text.len() - start,
+                 ) {
+                     dfa::Result::Match(_) => Some(text.len()),
+                     dfa::Result::NoMatch(_) => None,
+@@ -511,7 +511,7 @@ impl<'c> RegularExpression for ExecNoSync<'c> {
+                     self.cache.value(),
+                     true,
+                     &text[start..],
+-                    text.len(),
++                    text.len() - start,
+                 ) {
+                     dfa::Result::Match(_) => true,
+                     dfa::Result::NoMatch(_) => false,
+diff --git a/tests/test_default.rs b/tests/test_default.rs
+index be627f7..19a319a 100644
+--- a/tests/test_default.rs
++++ b/tests/test_default.rs
+@@ -220,3 +220,13 @@ fn empty_alt_regex_fails() {
+     let result = Regex::new(r"(?:|){4294967295}");
+     assert!(result.is_err());
+ }
++
++// Regression test for: https://github.com/rust-lang/regex/issues/969
++#[test]
++fn regression_i969() {
++    use regex::Regex;
++
++    let re = Regex::new(r"c.*d\z").unwrap();
++    assert_eq!(Some(6), re.shortest_match_at("ababcd", 4));
++    assert_eq!(Some(6), re.find_at("ababcd", 4).map(|m| m.end()));
++}
+-- 
+2.25.1
+
