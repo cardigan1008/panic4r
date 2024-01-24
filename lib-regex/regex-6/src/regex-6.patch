@@ -1,0 +1,91 @@
+From 7b1599f2f6903e4087c6cd109404be4056406ad9 Mon Sep 17 00:00:00 2001
+From: Andrew Gallant <jamslam@gmail.com>
+Date: Sat, 30 Mar 2019 09:10:12 -0400
+Subject: [PATCH] syntax: fix counted repetition bug
+
+This fixes a bug where the HIR translator would panic on regexes such as
+`(?i){1}` since it assumes that every repetition operator has a valid
+sub-expression, and `(?i)` is not actually a sub-expression (but is more
+like a directive instead).
+
+Previously, we fixed this same bug for *uncounted* repetitions in commit
+17764ffe (for bug #465), but we did not fix it for counted repetitions.
+We apply the same fix here.
+
+Fixes #555
+---
+ CHANGELOG.md                  |  2 ++
+ regex-syntax/src/ast/parse.rs | 19 +++++++++++++++++++
+ tests/regression.rs           |  6 ++++++
+ 3 files changed, 27 insertions(+)
+
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index 26ec169..809e51c 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -10,6 +10,8 @@ Performance improvements:
+ 
+ Bug fixes:
+ 
++* [BUG #555](https://github.com/rust-lang/regex/issues/555):
++  Fix a bug where the parser would panic on patterns like `(?m){1,1}`.
+ * [BUG #557](https://github.com/rust-lang/regex/issues/557):
+   Fix a bug where captures could lead to an incorrect match.
+ 
+diff --git a/regex-syntax/src/ast/parse.rs b/regex-syntax/src/ast/parse.rs
+index b73baee..9e9900c 100644
+--- a/regex-syntax/src/ast/parse.rs
++++ b/regex-syntax/src/ast/parse.rs
+@@ -1100,6 +1100,13 @@ impl<'s, P: Borrow<Parser>> ParserI<'s, P> {
+                 ast::ErrorKind::RepetitionMissing,
+             )),
+         };
++        match ast {
++            Ast::Empty(_) | Ast::Flags(_) => return Err(self.error(
++                self.span(),
++                ast::ErrorKind::RepetitionMissing,
++            )),
++            _ => {}
++        }
+         if !self.bump_and_bump_space() {
+             return Err(self.error(
+                 Span::new(start, self.pos()),
+@@ -3124,6 +3131,18 @@ bar
+                 ast: Box::new(lit('a', 0)),
+             })));
+ 
++        assert_eq!(
++            parser(r"(?i){0}").parse().unwrap_err(),
++            TestError {
++                span: span(4..4),
++                kind: ast::ErrorKind::RepetitionMissing,
++            });
++        assert_eq!(
++            parser(r"(?m){1,1}").parse().unwrap_err(),
++            TestError {
++                span: span(4..4),
++                kind: ast::ErrorKind::RepetitionMissing,
++            });
+         assert_eq!(
+             parser(r"a{").parse().unwrap_err(),
+             TestError {
+diff --git a/tests/regression.rs b/tests/regression.rs
+index af96c62..c3d4c7d 100644
+--- a/tests/regression.rs
++++ b/tests/regression.rs
+@@ -14,6 +14,12 @@ fn regression_many_repeat_stack_overflow() {
+     assert_eq!(vec![(0, 1)], findall!(re, "a"));
+ }
+ 
++// See: https://github.com/rust-lang/regex/issues/555
++#[test]
++fn regression_invalid_repetition_expr() {
++    assert!(regex_new!("(?m){1,1}").is_err());
++}
++
+ // See: https://github.com/rust-lang/regex/issues/75
+ mat!(regression_unsorted_binary_search_1, r"(?i)[a_]+", "A_", Some((0, 2)));
+ mat!(regression_unsorted_binary_search_2, r"(?i)[A_]+", "a_", Some((0, 2)));
+-- 
+2.25.1
+
