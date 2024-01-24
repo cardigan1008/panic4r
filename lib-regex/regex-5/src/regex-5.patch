@@ -1,0 +1,97 @@
+From 231643248b585eae007c46fad0c4830978c0d425 Mon Sep 17 00:00:00 2001
+From: Andrew Gallant <jamslam@gmail.com>
+Date: Sat, 30 Mar 2019 09:34:13 -0400
+Subject: [PATCH] syntax: fix bug when parsing ((?x))
+
+This fixes yet another bug with our handling of (?flags) directives in
+the regex. This time, we try to be a bit more principled and
+specifically treat a (?flags) directive as a valid empty sub-expression.
+While this means we could remove errors reported from previous fixes for
+things like `(?i)+`, we retain those for now since they are a bit weird.
+Although `((?i))+` is now allowed, which is equivalent. We should
+probably allow `(?i)+` in the future for consistency sake.
+
+Fixes #527
+---
+ CHANGELOG.md                      |  2 ++
+ regex-syntax/src/hir/translate.rs | 19 ++++++++++++++-----
+ tests/regression.rs               |  6 ++++++
+ 3 files changed, 22 insertions(+), 5 deletions(-)
+
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index 809e51c..5497fc3 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -10,6 +10,8 @@ Performance improvements:
+ 
+ Bug fixes:
+ 
++* [BUG #527](https://github.com/rust-lang/regex/issues/527):
++  Fix a bug where the parser would panic on patterns like `((?x))`.
+ * [BUG #555](https://github.com/rust-lang/regex/issues/555):
+   Fix a bug where the parser would panic on patterns like `(?m){1,1}`.
+ * [BUG #557](https://github.com/rust-lang/regex/issues/557):
+diff --git a/regex-syntax/src/hir/translate.rs b/regex-syntax/src/hir/translate.rs
+index 31a1ca4..c2afd98 100644
+--- a/regex-syntax/src/hir/translate.rs
++++ b/regex-syntax/src/hir/translate.rs
+@@ -240,11 +240,6 @@ impl<'t, 'p> Visitor for TranslatorI<'t, 'p> {
+     type Err = Error;
+ 
+     fn finish(self) -> Result<Hir> {
+-        if self.trans().stack.borrow().is_empty() {
+-            // This can happen if the Ast given consists of a single set of
+-            // flags. e.g., `(?i)`. /shrug
+-            return Ok(Hir::empty());
+-        }
+         // ... otherwise, we should have exactly one HIR on the stack.
+         assert_eq!(self.trans().stack.borrow().len(), 1);
+         Ok(self.pop().unwrap().unwrap_expr())
+@@ -287,6 +282,16 @@ impl<'t, 'p> Visitor for TranslatorI<'t, 'p> {
+             }
+             Ast::Flags(ref x) => {
+                 self.set_flags(&x.flags);
++                // Flags in the AST are generally considered directives and
++                // not actual sub-expressions. However, they can be used in
++                // the concrete syntax like `((?i))`, and we need some kind of
++                // indication of an expression there, and Empty is the correct
++                // choice.
++                //
++                // There can also be things like `(?i)+`, but we rule those out
++                // in the parser. In the future, we might allow them for
++                // consistency sake.
++                self.push(HirFrame::Expr(Hir::empty()));
+             }
+             Ast::Literal(ref x) => {
+                 self.push(HirFrame::Expr(self.hir_literal(x)?));
+@@ -1547,6 +1552,10 @@ mod tests {
+             hir_group_name(2, "foo", hir_lit("b")),
+             hir_group(3, hir_lit("c")),
+         ]));
++        assert_eq!(t("()"), hir_group(1, Hir::empty()));
++        assert_eq!(t("((?i))"), hir_group(1, Hir::empty()));
++        assert_eq!(t("((?x))"), hir_group(1, Hir::empty()));
++        assert_eq!(t("(((?x)))"), hir_group(1, hir_group(2, Hir::empty())));
+     }
+ 
+     #[test]
+diff --git a/tests/regression.rs b/tests/regression.rs
+index c3d4c7d..5f5a74b 100644
+--- a/tests/regression.rs
++++ b/tests/regression.rs
+@@ -20,6 +20,12 @@ fn regression_invalid_repetition_expr() {
+     assert!(regex_new!("(?m){1,1}").is_err());
+ }
+ 
++// See: https://github.com/rust-lang/regex/issues/527
++#[test]
++fn regression_invalid_flags_expression() {
++    assert!(regex_new!("(((?x)))").is_ok());
++}
++
+ // See: https://github.com/rust-lang/regex/issues/75
+ mat!(regression_unsorted_binary_search_1, r"(?i)[a_]+", "A_", Some((0, 2)));
+ mat!(regression_unsorted_binary_search_2, r"(?i)[A_]+", "a_", Some((0, 2)));
+-- 
+2.25.1
+
