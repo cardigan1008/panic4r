@@ -1,0 +1,28 @@
+From c939de8a25eeebe72c327b36e213a0c77e59b19a Mon Sep 17 00:00:00 2001
+From: Ed Page <eopage@gmail.com>
+Date: Mon, 14 Nov 2022 12:13:18 -0600
+Subject: [PATCH] fix: Don't panic on non-built arg rendering
+
+For num_args, we'll just use the default
+
+Fixes #4479
+---
+ src/builder/arg.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/builder/arg.rs b/src/builder/arg.rs
+index 241fe257..17db059a 100644
+--- a/src/builder/arg.rs
++++ b/src/builder/arg.rs
+@@ -4183,7 +4183,7 @@ impl Arg {
+     fn render_arg_val(&self, required: bool) -> String {
+         let mut rendered = String::new();
+ 
+-        let num_vals = self.get_num_args().expect(INTERNAL_ERROR_MSG);
++        let num_vals = self.get_num_args().unwrap_or_else(|| 1.into());
+ 
+         let mut val_names = if self.val_names.is_empty() {
+             vec![self.id.as_internal_str().to_owned()]
+-- 
+2.42.0.windows.2
+
