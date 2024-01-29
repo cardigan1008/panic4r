@@ -1,0 +1,92 @@
+From 0540d19a3e1c993428faa8b06605d35f411b35ce Mon Sep 17 00:00:00 2001
+From: Jacob Pratt <jacob@jhpratt.dev>
+Date: Sun, 24 Jan 2021 21:35:13 -0500
+Subject: [PATCH] Fix #309
+
+This simple change fixes all reported invalid values.
+---
+ CHANGELOG.md  |  6 ++++++
+ Cargo.toml    |  2 +-
+ src/date.rs   |  8 ++++----
+ tests/date.rs | 11 +++++++++++
+ 4 files changed, 22 insertions(+), 5 deletions(-)
+
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index 0219df3..0f1da69 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -7,6 +7,12 @@ Versioning].
+ 
+ ---
+ 
++## 0.2.25 [2021-01-24]
++
++### Fixed
++
++- Fix #309, which can cause panics in certain situations.
++
+ ## 0.2.24 [2021-01-08]
+ 
+ ### Fixed
+diff --git a/Cargo.toml b/Cargo.toml
+index 395a603..2cc49de 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -1,6 +1,6 @@
+ [package]
+ name = "time"
+-version = "0.2.24"
++version = "0.2.25"
+ authors = ["Jacob Pratt <the.z.cuber@gmail.com>"]
+ edition = "2018"
+ repository = "https://github.com/time-rs/time"
+diff --git a/src/date.rs b/src/date.rs
+index 42db6e7..51cce3c 100644
+--- a/src/date.rs
++++ b/src/date.rs
+@@ -542,11 +542,11 @@ impl Date {
+         };
+ 
+         let raw_weekday =
+-            (day as i32 + (13 * (month as i32 + 1)) / 5 + adjusted_year + adjusted_year / 4
++            ((day as i32 + (13 * (month as i32 + 1)) / 5 + adjusted_year + adjusted_year / 4
+                 - adjusted_year / 100
+                 + adjusted_year / 400)
+-                % 7
+-                - 2;
++                - 2)
++                % 7;
+ 
+         if raw_weekday < 0 {
+             (raw_weekday + 7) as u8
+@@ -586,7 +586,7 @@ impl Date {
+             6 => Weekday::Sunday,
+             // FIXME The compiler isn't able to optimize this away. See
+             // rust-lang/rust#66993.
+-            _ => unreachable!("A value mod 7 is always in the range 0..7"),
++            n => unreachable!("A value mod 7 is always in the range 0..7 (was {})", n),
+         }
+     }
+ 
+diff --git a/tests/date.rs b/tests/date.rs
+index e296730..1b724c0 100644
+--- a/tests/date.rs
++++ b/tests/date.rs
+@@ -1230,3 +1230,14 @@ fn previous_day_panics() {
+ fn julian_day_panics() {
+     Date::from_julian_day(i64::MAX);
+ }
++
++#[test]
++fn issue_309() {
++    assert_eq!(date!(-36 - 11 - 01).weekday(), Weekday::Sunday);
++    assert_eq!(date!(-26 - 96).weekday(), Weekday::Sunday);
++    assert_eq!(date!(-31 - 137).weekday(), Weekday::Sunday);
++    assert_eq!(date!(-31 - 137).week(), 20);
++    assert_eq!(date!(-60 - 63).iso_year_week(), (-60, 9));
++    assert_eq!(date!(-208 - 99).week(), 14);
++    assert_eq!(util::weeks_in_year(-102), 52);
++}
+-- 
+2.25.1
+
