@@ -1,0 +1,28 @@
+From c64c1d7429d32eaef3a501c730906656a9606f5d Mon Sep 17 00:00:00 2001
+From: David Tolnay <dtolnay@gmail.com>
+Date: Sat, 27 Feb 2021 20:40:51 -0800
+Subject: [PATCH] Fix panic deserializing RawValue from invalid utf-8 bytes
+
+---
+ src/read.rs | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/src/read.rs b/src/read.rs
+index 522c0e0..574857c 100644
+--- a/src/read.rs
++++ b/src/read.rs
+@@ -587,7 +587,10 @@ impl<'a> Read<'a> for SliceRead<'a> {
+         V: Visitor<'a>,
+     {
+         let raw = &self.slice[self.raw_buffering_start_index..self.index];
+-        let raw = str::from_utf8(raw).unwrap();
++        let raw = match str::from_utf8(raw) {
++            Ok(raw) => raw,
++            Err(_) => return error(self, ErrorCode::InvalidUnicodeCodePoint),
++        };
+         visitor.visit_map(BorrowedRawDeserializer {
+             raw_value: Some(raw),
+         })
+-- 
+2.25.1
+
