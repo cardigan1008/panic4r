@@ -1,2 +1,0 @@
-cargo:rustc-cfg=has_i128
-cargo:rerun-if-changed=num-traits-num-traits-0.2.8\build.rs
