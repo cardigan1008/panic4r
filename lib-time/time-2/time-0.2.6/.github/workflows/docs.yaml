@@ -1,0 +1,35 @@
+name: Documentation
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  documentation:
+    name: Documentation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+
+      - name: Install toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly # rust-lang/rust#43466, rust-lang/rust#43781
+          override: true
+
+      - name: Run `cargo doc --features serde,deprecated,panicking-api`
+        uses: actions-rs/cargo@v1
+        with:
+          command: doc
+          args: --features serde,deprecated,panicking-api
+
+      - name: Build & publish documentation
+        uses: JamesIves/github-pages-deploy-action@releases/v2
+        env:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: target/doc
