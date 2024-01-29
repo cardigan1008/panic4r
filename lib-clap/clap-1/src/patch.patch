@@ -1,0 +1,35 @@
+From 50c59f63bbf8d537115198a0104a7b0cfcddb630 Mon Sep 17 00:00:00 2001
+From: Ed Page <eopage@gmail.com>
+Date: Mon, 15 Jan 2024 09:30:19 -0600
+Subject: [PATCH] fix(parser): Don't panic with conflicts and groups
+
+With #5298, I had overlooked that `matcher.arg_ids()` includes
+`ArgGroup`s.  I had assumed I could always find a present `id` among
+`Arg`s and `unwrap`ed.
+
+I skipped a test for this because the use case is a bit strange that the
+long term value for the test would likely be low.
+If/when we add derive support for `args_conflicts_with_subcommands`, it
+will then cover this case.
+
+Fixes #5304
+---
+ clap_builder/src/parser/parser.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/clap_builder/src/parser/parser.rs b/clap_builder/src/parser/parser.rs
+index e840efc9..c1642001 100644
+--- a/clap_builder/src/parser/parser.rs
++++ b/clap_builder/src/parser/parser.rs
+@@ -514,7 +514,7 @@ impl<'cmd> Parser<'cmd> {
+                     arg_os.display().to_string(),
+                     matcher
+                         .arg_ids()
+-                        .map(|id| self.cmd.find(id).unwrap().to_string())
++                        .filter_map(|id| self.cmd.find(id).map(|a| a.to_string()))
+                         .collect(),
+                     Usage::new(self.cmd).create_usage_with_title(&[]),
+                 );
+-- 
+2.42.0.windows.2
+

@@ -1,0 +1,27 @@
+From e23efd5fbdc9c9519000b0ec0aeb92a799e77635 Mon Sep 17 00:00:00 2001
+From: DavisVaughan <davis@rstudio.com>
+Date: Fri, 23 Jun 2023 15:42:30 -0400
+Subject: [PATCH] Reset `lock_count` appropriately in `bump()`
+
+---
+ lock_api/src/remutex.rs | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/lock_api/src/remutex.rs b/lock_api/src/remutex.rs
+index a2f8185..a7146b1 100644
+--- a/lock_api/src/remutex.rs
++++ b/lock_api/src/remutex.rs
+@@ -183,8 +183,10 @@ impl<R: RawMutexFair, G: GetThreadId> RawReentrantMutex<R, G> {
+         if self.lock_count.get() == 1 {
+             let id = self.owner.load(Ordering::Relaxed);
+             self.owner.store(0, Ordering::Relaxed);
++            self.lock_count.set(0);
+             self.mutex.bump();
+             self.owner.store(id, Ordering::Relaxed);
++            self.lock_count.set(1);
+         }
+     }
+ }
+-- 
+2.42.0.windows.2
+
