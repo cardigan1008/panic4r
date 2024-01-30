@@ -1,0 +1,13 @@
+Cargo.lock
+target/
+
+*~
+*.rej
+*.orig
+
+examples/wasm/pkg/
+examples/wasm/www/dist/
+examples/wasm/www/node_modules/
+
+fuzz/artifacts/
+fuzz/corpus/

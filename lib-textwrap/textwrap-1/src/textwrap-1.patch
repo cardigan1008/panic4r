@@ -1,0 +1,43 @@
+From 4c35069533e0596aa51d1da01413e0674f42f5b1 Mon Sep 17 00:00:00 2001
+From: Makoto <makoto@emurasoft.com>
+Date: Fri, 25 Jun 2021 11:32:27 -0700
+Subject: [PATCH] Fix find_words()
+
+---
+ src/lib.rs             | 6 ++++++
+ src/word_separators.rs | 2 +-
+ 2 files changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/src/lib.rs b/src/lib.rs
+index 02cc0e4..5e0a505 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -1851,6 +1851,12 @@ mod tests {
+         );
+     }
+ 
++    #[test]
++    fn fill_unicode_boundary() {
++        // https://github.com/mgeisler/textwrap/issues/390
++        fill("\u{1b}!Ͽ", 10);
++    }
++
+     #[test]
+     #[cfg(not(feature = "smawk"))]
+     #[cfg(not(feature = "unicode-linebreak"))]
+diff --git a/src/word_separators.rs b/src/word_separators.rs
+index 81ec6d4..abac756 100644
+--- a/src/word_separators.rs
++++ b/src/word_separators.rs
+@@ -216,7 +216,7 @@ impl WordSeparator for UnicodeBreakProperties {
+         let mut opportunities = unicode_linebreak::linebreaks(&stripped)
+             .filter(|(idx, _)| {
+                 #[allow(clippy::match_like_matches_macro)]
+-                match &line[..*idx].chars().next_back() {
++                match &stripped[..*idx].chars().next_back() {
+                     // We suppress breaks at ‘-’ since we want to control
+                     // this via the WordSplitter.
+                     Some('-') => false,
+-- 
+2.25.1
+
