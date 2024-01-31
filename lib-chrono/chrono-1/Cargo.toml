@@ -1,0 +1,9 @@
+[package]
+name = "chrono-1"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+chrono = {path = "chrono-2afdde8f7f23f087b5027662e2882dba0663fef7"}
