@@ -1,0 +1,63 @@
+From 9a5f76c9bb70647d1ab4abd88872e395a7c06c79 Mon Sep 17 00:00:00 2001
+From: AR Baart <643200+ARBaart@users.noreply.github.com>
+Date: Mon, 21 Mar 2022 21:44:49 +0100
+Subject: [PATCH] Fix issue #658 duration_round by zero panics (#659)
+
+---
+ CHANGELOG.md |  1 +
+ src/round.rs | 13 +++++++++++++
+ 2 files changed, 14 insertions(+)
+
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index 1cfeceb..fd8facd 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -20,6 +20,7 @@ Versions with only mechanical changes will be omitted from the following list.
+ * Add `DateTime::from_local()` to construct from given local date and time (#572)
+ * Correct build for wasm32-unknown-emscripten target (#568)
+ * Change `Local::now()` and `Utc::now()` documentation from "current date" to "current date and time" (#647)
++* Fix `duration_round` panic on rounding by `Duration::zero()` (#658)
+ 
+ ## 0.4.19
+ 
+diff --git a/src/round.rs b/src/round.rs
+index b357d91..c10b78c 100644
+--- a/src/round.rs
++++ b/src/round.rs
+@@ -185,6 +185,9 @@ where
+         if span > stamp.abs() {
+             return Err(RoundingError::DurationExceedsTimestamp);
+         }
++        if span == 0 {
++            return Ok(original);
++        }
+         let delta_down = stamp % span;
+         if delta_down == 0 {
+             Ok(original)
+@@ -394,6 +397,11 @@ mod tests {
+     fn test_duration_round() {
+         let dt = Utc.ymd(2016, 12, 31).and_hms_nano(23, 59, 59, 175_500_000);
+ 
++        assert_eq!(
++            dt.duration_round(Duration::zero()).unwrap().to_string(),
++            "2016-12-31 23:59:59.175500 UTC"
++        );
++
+         assert_eq!(
+             dt.duration_round(Duration::milliseconds(10)).unwrap().to_string(),
+             "2016-12-31 23:59:59.180 UTC"
+@@ -456,6 +464,11 @@ mod tests {
+     fn test_duration_round_naive() {
+         let dt = Utc.ymd(2016, 12, 31).and_hms_nano(23, 59, 59, 175_500_000).naive_utc();
+ 
++        assert_eq!(
++            dt.duration_round(Duration::zero()).unwrap().to_string(),
++            "2016-12-31 23:59:59.175500"
++        );
++
+         assert_eq!(
+             dt.duration_round(Duration::milliseconds(10)).unwrap().to_string(),
+             "2016-12-31 23:59:59.180"
+-- 
+2.25.1
+
