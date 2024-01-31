@@ -1,0 +1,38 @@
+From 5a6b2b40a781c19ad34a3593313468d922fceeea Mon Sep 17 00:00:00 2001
+From: Paul Dicker <paul@pitdicker.nl>
+Date: Mon, 4 Sep 2023 18:55:05 +0200
+Subject: [PATCH] Fix arbitrary string slicing in `parse_rfc3339_relaxed`
+
+---
+ src/datetime/tests.rs | 1 +
+ src/format/parse.rs   | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/datetime/tests.rs b/src/datetime/tests.rs
+index 2077b99..a9de653 100644
+--- a/src/datetime/tests.rs
++++ b/src/datetime/tests.rs
+@@ -804,6 +804,7 @@ fn test_datetime_from_str() {
+             .unwrap())
+     );
+     assert!("2015-2-18T23:16:9.15".parse::<DateTime<Utc>>().is_err());
++    assert!("2015-02-18T23:16:9.15øøø".parse::<DateTime<Utc>>().is_err());
+ 
+     // no test for `DateTime<Local>`, we cannot verify that much.
+ }
+diff --git a/src/format/parse.rs b/src/format/parse.rs
+index caac24c..a884903 100644
+--- a/src/format/parse.rs
++++ b/src/format/parse.rs
+@@ -586,7 +586,7 @@ fn parse_rfc3339_relaxed<'a>(parsed: &mut Parsed, mut s: &'a str) -> ParseResult
+         Ok(_) => return Err(NOT_ENOUGH),
+     };
+     s = s.trim_start();
+-    let (s, offset) = if s.len() >= 3 && "UTC".eq_ignore_ascii_case(&s[..3]) {
++    let (s, offset) = if s.len() >= 3 && "UTC".as_bytes().eq_ignore_ascii_case(&s.as_bytes()[..3]) {
+         (&s[3..], 0)
+     } else {
+         scan::timezone_offset(s, scan::colon_or_space, true, false, true)?
+-- 
+2.25.1
+
