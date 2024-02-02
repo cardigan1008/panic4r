@@ -1,0 +1,119 @@
+stack backtrace:
+   0:     0x563d9c496126 - std::backtrace_rs::backtrace::libunwind::trace::ha1ffb427d146be06
+                               at /rustc/cb4d9a1902b3ea17e93872dafb76d24aa6295c47/library/std/src/../../backtrace/src/backtrace/libunwind.rs:104:5
+   1:     0x563d9c496126 - std::backtrace_rs::backtrace::trace_unsynchronized::h3233e8c5c99079a0
+                               at /rustc/cb4d9a1902b3ea17e93872dafb76d24aa6295c47/library/std/src/../../backtrace/src/backtrace/mod.rs:66:5
+   2:     0x563d9c496126 - std::sys_common::backtrace::_print_fmt::ha09c54c73dc31523
+                               at /rustc/cb4d9a1902b3ea17e93872dafb76d24aa6295c47/library/std/src/sys_common/backtrace.rs:68:5
+   3:     0x563d9c496126 - <std::sys_common::backtrace::_print::DisplayBacktrace as core::fmt::Display>::fmt::hb575efd12cb49bf9
+                               at /rustc/cb4d9a1902b3ea17e93872dafb76d24aa6295c47/library/std/src/sys_common/backtrace.rs:44:22
+   4:     0x563d9c4b5b30 - core::fmt::rt::Argument::fmt::hfa005e844bc9fe43
+                               at /rustc/cb4d9a1902b3ea17e93872dafb76d24aa6295c47/library/core/src/fmt/rt.rs:142:9
+   5:     0x563d9c4b5b30 - core::fmt::write::h559fda85dc6292c4
+                               at /rustc/cb4d9a1902b3ea17e93872dafb76d24aa6295c47/library/core/src/fmt/mod.rs:1120:17
+   6:     0x563d9c493ebf - std::io::Write::write_fmt::h48410cf63c4d622c
+                               at /rustc/cb4d9a1902b3ea17e93872dafb76d24aa6295c47/library/std/src/io/mod.rs:1846:15
+   7:     0x563d9c495f04 - std::sys_common::backtrace::_print::heaf546ff60bf3821
+                               at /rustc/cb4d9a1902b3ea17e93872dafb76d24aa6295c47/library/std/src/sys_common/backtrace.rs:47:5
+   8:     0x563d9c495f04 - std::sys_common::backtrace::print::h52cc0b68730fd3bf
+                               at /rustc/cb4d9a1902b3ea17e93872dafb76d24aa6295c47/library/std/src/sys_common/backtrace.rs:34:9
+   9:     0x563d9c4975d7 - std::panicking::default_hook::{{closure}}::h9cc287dacf0db228
+  10:     0x563d9c497339 - std::panicking::default_hook::hf0eb17b9efad4d83
+                               at /rustc/cb4d9a1902b3ea17e93872dafb76d24aa6295c47/library/std/src/panicking.rs:292:9
+  11:     0x563d9c497a68 - std::panicking::rust_panic_with_hook::h8c15e55009b1f0cd
+                               at /rustc/cb4d9a1902b3ea17e93872dafb76d24aa6295c47/library/std/src/panicking.rs:781:13
+  12:     0x563d9c497942 - std::panicking::begin_panic_handler::{{closure}}::h91ecb7a781b19fc7
+                               at /rustc/cb4d9a1902b3ea17e93872dafb76d24aa6295c47/library/std/src/panicking.rs:659:13
+  13:     0x563d9c496626 - std::sys_common::backtrace::__rust_end_short_backtrace::h7612bfc645f63d2f
+                               at /rustc/cb4d9a1902b3ea17e93872dafb76d24aa6295c47/library/std/src/sys_common/backtrace.rs:171:18
+  14:     0x563d9c497694 - rust_begin_unwind
+                               at /rustc/cb4d9a1902b3ea17e93872dafb76d24aa6295c47/library/std/src/panicking.rs:647:5
+  15:     0x563d9c3f52b5 - core::panicking::panic_fmt::h4f89a8cc63569575
+                               at /rustc/cb4d9a1902b3ea17e93872dafb76d24aa6295c47/library/core/src/panicking.rs:72:14
+  16:     0x563d9c3f5492 - core::panicking::panic_bounds_check::hfa1690ec62cbed04
+                               at /rustc/cb4d9a1902b3ea17e93872dafb76d24aa6295c47/library/core/src/panicking.rs:208:5
+  17:     0x563d9c4022b1 - <usize as core::slice::index::SliceIndex<[T]>>::index_mut::haa13c3c3492f3984
+                               at /rustc/cb4d9a1902b3ea17e93872dafb76d24aa6295c47/library/core/src/slice/index.rs:261:14
+  18:     0x563d9c406176 - core::slice::index::<impl core::ops::index::IndexMut<I> for [T]>::index_mut::h6607b9bdb1887b14
+                               at /rustc/cb4d9a1902b3ea17e93872dafb76d24aa6295c47/library/core/src/slice/index.rs:29:9
+  19:     0x563d9c406176 - <alloc::vec::Vec<T,A> as core::ops::index::IndexMut<I>>::index_mut::hf1ec989d2d4f7e72
+                               at /rustc/cb4d9a1902b3ea17e93872dafb76d24aa6295c47/library/alloc/src/vec/mod.rs:2783:9
+  20:     0x563d9c4051e0 - tokio_util::time::wheel::Wheel<T>::insert::h5cdbdc28efb44410
+                               at /home/cardigan/Desktop/panic4r/lib-tokio/tokio-1/tokio-df6348fb4a8d9d34d241ab7275688e1ab489383c/tokio-util/src/time/wheel/mod.rs:108:20
+  21:     0x563d9c402e44 - tokio_util::time::delay_queue::DelayQueue<T>::insert_idx::h521b435b275e346a
+                               at /home/cardigan/Desktop/panic4r/lib-tokio/tokio-1/tokio-df6348fb4a8d9d34d241ab7275688e1ab489383c/tokio-util/src/time/delay_queue.rs:663:15
+  22:     0x563d9c403c6c - tokio_util::time::delay_queue::DelayQueue<T>::insert_at::h914c8a09050e5c1d
+                               at /home/cardigan/Desktop/panic4r/lib-tokio/tokio-1/tokio-df6348fb4a8d9d34d241ab7275688e1ab489383c/tokio-util/src/time/delay_queue.rs:550:9
+  23:     0x563d9c4036f1 - tokio_util::time::delay_queue::DelayQueue<T>::insert::h29e631086f2dc743
+                               at /home/cardigan/Desktop/panic4r/lib-tokio/tokio-1/tokio-df6348fb4a8d9d34d241ab7275688e1ab489383c/tokio-util/src/time/delay_queue.rs:655:9
+  24:     0x563d9c4058be - tokio_1::main::{{closure}}::h51a1b6ca427208bf
+                               at /home/cardigan/Desktop/panic4r/lib-tokio/tokio-1/src/main.rs:10:9
+  25:     0x563d9c3feaf6 - <core::pin::Pin<P> as core::future::future::Future>::poll::h02dca72b960ac90a
+                               at /rustc/cb4d9a1902b3ea17e93872dafb76d24aa6295c47/library/core/src/future/future.rs:124:9
+  26:     0x563d9c407eb4 - tokio::runtime::scheduler::current_thread::CoreGuard::block_on::{{closure}}::{{closure}}::{{closure}}::h0a88e97f0cad96e4
+                               at /home/cardigan/Desktop/panic4r/lib-tokio/tokio-1/tokio-df6348fb4a8d9d34d241ab7275688e1ab489383c/tokio/src/runtime/scheduler/current_thread.rs:536:57
+  27:     0x563d9c400493 - tokio::runtime::coop::with_budget::{{closure}}::h0ab55308fa86305e
+                               at /home/cardigan/Desktop/panic4r/lib-tokio/tokio-1/tokio-df6348fb4a8d9d34d241ab7275688e1ab489383c/tokio/src/runtime/coop.rs:100:9
+  28:     0x563d9c3f6f88 - tokio::runtime::context::budget::{{closure}}::hce77eb668f5e2b2f
+                               at /home/cardigan/Desktop/panic4r/lib-tokio/tokio-1/tokio-df6348fb4a8d9d34d241ab7275688e1ab489383c/tokio/src/runtime/context.rs:44:24
+  29:     0x563d9c3f6344 - std::thread::local::LocalKey<T>::try_with::hbf976010a3335a72
+                               at /rustc/cb4d9a1902b3ea17e93872dafb76d24aa6295c47/library/std/src/thread/local.rs:286:16
+  30:     0x563d9c3f5c1a - std::thread::local::LocalKey<T>::with::h68bb360f6e4506a0
+                               at /rustc/cb4d9a1902b3ea17e93872dafb76d24aa6295c47/library/std/src/thread/local.rs:262:9
+  31:     0x563d9c3f6e4c - tokio::runtime::context::budget::h0cec936d9b0a92c5
+                               at /home/cardigan/Desktop/panic4r/lib-tokio/tokio-1/tokio-df6348fb4a8d9d34d241ab7275688e1ab489383c/tokio/src/runtime/context.rs:44:5
+  32:     0x563d9c407e5d - tokio::runtime::coop::with_budget::hbcfe165893a04187
+                               at /home/cardigan/Desktop/panic4r/lib-tokio/tokio-1/tokio-df6348fb4a8d9d34d241ab7275688e1ab489383c/tokio/src/runtime/coop.rs:93:5
+  33:     0x563d9c407e5d - tokio::runtime::coop::budget::hba61e774c24351cf
+                               at /home/cardigan/Desktop/panic4r/lib-tokio/tokio-1/tokio-df6348fb4a8d9d34d241ab7275688e1ab489383c/tokio/src/runtime/coop.rs:70:5
+  34:     0x563d9c407e5d - tokio::runtime::scheduler::current_thread::CoreGuard::block_on::{{closure}}::{{closure}}::hda801e97e4eacf42
+                               at /home/cardigan/Desktop/panic4r/lib-tokio/tokio-1/tokio-df6348fb4a8d9d34d241ab7275688e1ab489383c/tokio/src/runtime/scheduler/current_thread.rs:536:25
+  35:     0x563d9c406cac - tokio::runtime::scheduler::current_thread::Context::enter::h8393c80d5f0b4534
+                               at /home/cardigan/Desktop/panic4r/lib-tokio/tokio-1/tokio-df6348fb4a8d9d34d241ab7275688e1ab489383c/tokio/src/runtime/scheduler/current_thread.rs:356:19
+  36:     0x563d9c4076cc - tokio::runtime::scheduler::current_thread::CoreGuard::block_on::{{closure}}::hf618b3c89011170b
+                               at /home/cardigan/Desktop/panic4r/lib-tokio/tokio-1/tokio-df6348fb4a8d9d34d241ab7275688e1ab489383c/tokio/src/runtime/scheduler/current_thread.rs:535:36
+  37:     0x563d9c4073eb - tokio::runtime::scheduler::current_thread::CoreGuard::enter::{{closure}}::h68a37bd9d3a5fde3
+                               at /home/cardigan/Desktop/panic4r/lib-tokio/tokio-1/tokio-df6348fb4a8d9d34d241ab7275688e1ab489383c/tokio/src/runtime/scheduler/current_thread.rs:606:57
+  38:     0x563d9c3f72fd - tokio::macros::scoped_tls::ScopedKey<T>::set::h4f970530e57b7b61
+                               at /home/cardigan/Desktop/panic4r/lib-tokio/tokio-1/tokio-df6348fb4a8d9d34d241ab7275688e1ab489383c/tokio/src/macros/scoped_tls.rs:61:9
+  39:     0x563d9c40717f - tokio::runtime::scheduler::current_thread::CoreGuard::enter::h16582de30234a907
+                               at /home/cardigan/Desktop/panic4r/lib-tokio/tokio-1/tokio-df6348fb4a8d9d34d241ab7275688e1ab489383c/tokio/src/runtime/scheduler/current_thread.rs:606:27
+  40:     0x563d9c40740c - tokio::runtime::scheduler::current_thread::CoreGuard::block_on::hd1876e9e297f20cc
+                               at /home/cardigan/Desktop/panic4r/lib-tokio/tokio-1/tokio-df6348fb4a8d9d34d241ab7275688e1ab489383c/tokio/src/runtime/scheduler/current_thread.rs:524:19
+  41:     0x563d9c4063d2 - tokio::runtime::scheduler::current_thread::CurrentThread::block_on::ha7f02ade76b2d25c
+                               at /home/cardigan/Desktop/panic4r/lib-tokio/tokio-1/tokio-df6348fb4a8d9d34d241ab7275688e1ab489383c/tokio/src/runtime/scheduler/current_thread.rs:165:24
+  42:     0x563d9c3ffc7a - tokio::runtime::runtime::Runtime::block_on::h85f1b37da3d88f88
+                               at /home/cardigan/Desktop/panic4r/lib-tokio/tokio-1/tokio-df6348fb4a8d9d34d241ab7275688e1ab489383c/tokio/src/runtime/runtime.rs:279:47
+  43:     0x563d9c3fe9ff - tokio_1::main::h116e245c3ffbb3b8
+                               at /home/cardigan/Desktop/panic4r/lib-tokio/tokio-1/src/main.rs:13:5
+  44:     0x563d9c3f653b - core::ops::function::FnOnce::call_once::hc8a2d579755bfe47
+                               at /rustc/cb4d9a1902b3ea17e93872dafb76d24aa6295c47/library/core/src/ops/function.rs:250:5
+  45:     0x563d9c3fc53e - std::sys_common::backtrace::__rust_begin_short_backtrace::h56b050b082541220
+                               at /rustc/cb4d9a1902b3ea17e93872dafb76d24aa6295c47/library/std/src/sys_common/backtrace.rs:155:18
+  46:     0x563d9c3f7c61 - std::rt::lang_start::{{closure}}::hb4648db3fc35213d
+                               at /rustc/cb4d9a1902b3ea17e93872dafb76d24aa6295c47/library/std/src/rt.rs:166:18
+  47:     0x563d9c490ea1 - core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once::h0362794d0495bd82
+                               at /rustc/cb4d9a1902b3ea17e93872dafb76d24aa6295c47/library/core/src/ops/function.rs:284:13
+  48:     0x563d9c490ea1 - std::panicking::try::do_call::h23e03d8166cd09b6
+                               at /rustc/cb4d9a1902b3ea17e93872dafb76d24aa6295c47/library/std/src/panicking.rs:554:40
+  49:     0x563d9c490ea1 - std::panicking::try::hae6515968253010f
+                               at /rustc/cb4d9a1902b3ea17e93872dafb76d24aa6295c47/library/std/src/panicking.rs:518:19
+  50:     0x563d9c490ea1 - std::panic::catch_unwind::h14e8fe1ccc8636b7
+                               at /rustc/cb4d9a1902b3ea17e93872dafb76d24aa6295c47/library/std/src/panic.rs:142:14
+  51:     0x563d9c490ea1 - std::rt::lang_start_internal::{{closure}}::hc1c668cc9cf5669f
+                               at /rustc/cb4d9a1902b3ea17e93872dafb76d24aa6295c47/library/std/src/rt.rs:148:48
+  52:     0x563d9c490ea1 - std::panicking::try::do_call::h630969571deaccaf
+                               at /rustc/cb4d9a1902b3ea17e93872dafb76d24aa6295c47/library/std/src/panicking.rs:554:40
+  53:     0x563d9c490ea1 - std::panicking::try::he8781e39f356f357
+                               at /rustc/cb4d9a1902b3ea17e93872dafb76d24aa6295c47/library/std/src/panicking.rs:518:19
+  54:     0x563d9c490ea1 - std::panic::catch_unwind::ha79aff0f707b7426
+                               at /rustc/cb4d9a1902b3ea17e93872dafb76d24aa6295c47/library/std/src/panic.rs:142:14
+  55:     0x563d9c490ea1 - std::rt::lang_start_internal::h059daf218d55cc5d
+                               at /rustc/cb4d9a1902b3ea17e93872dafb76d24aa6295c47/library/std/src/rt.rs:148:20
+  56:     0x563d9c3f7c3a - std::rt::lang_start::h21984f41d8b996e0
+                               at /rustc/cb4d9a1902b3ea17e93872dafb76d24aa6295c47/library/std/src/rt.rs:165:17
+  57:     0x563d9c3feaae - main
+  58:     0x7f3bbc445083 - __libc_start_main
+                               at /build/glibc-wuryBv/glibc-2.31/csu/../csu/libc-start.c:308:16
+  59:     0x563d9c3f5b1e - _start
+  60:                0x0 - <unknown>
