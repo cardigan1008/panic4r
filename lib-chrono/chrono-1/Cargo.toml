@@ -6,4 +6,4 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-chrono = {path = "chrono-2afdde8f7f23f087b5027662e2882dba0663fef7"}
+chrono = {path = "chrono-46ad2c2b2c901eb20e43a7fca025aac02605bda4"}
