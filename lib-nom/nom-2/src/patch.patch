@@ -1,0 +1,82 @@
+From 7483885e8598641a6320ffa7d7151a2eb35eba0d Mon Sep 17 00:00:00 2001
+From: Geoffroy Couprie <geo.couprie@gmail.com>
+Date: Wed, 1 May 2019 16:19:48 +0200
+Subject: [PATCH] fix for multibyte characters with take_while_m_n
+
+---
+ src/bytes/complete.rs  | 12 ++++++++++--
+ src/bytes/macros.rs    |  7 +++++++
+ src/bytes/streaming.rs | 12 ++++++++++--
+ 3 files changed, 27 insertions(+), 4 deletions(-)
+
+diff --git a/src/bytes/complete.rs b/src/bytes/complete.rs
+index eff17bf..8573b46 100644
+--- a/src/bytes/complete.rs
++++ b/src/bytes/complete.rs
+@@ -99,10 +99,18 @@ where
+       Some(idx) => {
+         if idx >= m {
+           if idx <= n {
+-            let res: IResult<_, _, Error> = Ok(input.take_split(idx));
++            let res: IResult<_, _, Error> = if let Some(index) = input.slice_index(idx) {
++              Ok(input.take_split(index))
++            } else {
++              Err(Err::Error(Error::from_error_kind(input, ErrorKind::TakeWhileMN)))
++            };
+             res
+           } else {
+-            let res: IResult<_, _, Error> = Ok(input.take_split(n));
++            let res: IResult<_, _, Error> = if let Some(index) = input.slice_index(n) {
++              Ok(input.take_split(index))
++            } else {
++              Err(Err::Error(Error::from_error_kind(input, ErrorKind::TakeWhileMN)))
++            };
+             res
+           }
+         } else {
+diff --git a/src/bytes/macros.rs b/src/bytes/macros.rs
+index a11838a..17a4fd6 100644
+--- a/src/bytes/macros.rs
++++ b/src/bytes/macros.rs
+@@ -880,6 +880,13 @@ mod tests {
+     assert_eq!(g("點點點a"), Ok(("a", "點點點")));
+   }
+ 
++  #[test]
++  fn take_while_m_n_utf8() {
++    named!(parser<&str, &str>, take_while_m_n!(1, 1, |c| c == 'A' || c == '😃'));
++    assert_eq!(parser("A!"), Ok(("!", "A")));
++    assert_eq!(parser("😃!"), Ok(("!", "😃")));
++  }
++
+   #[cfg(nightly)]
+   use test::Bencher;
+ 
+diff --git a/src/bytes/streaming.rs b/src/bytes/streaming.rs
+index 7c15c49..d3fbc13 100644
+--- a/src/bytes/streaming.rs
++++ b/src/bytes/streaming.rs
+@@ -102,10 +102,18 @@ where
+       Some(idx) => {
+         if idx >= m {
+           if idx <= n {
+-            let res: IResult<_, _, Error> = Ok(input.take_split(idx));
++            let res: IResult<_, _, Error> = if let Some(index) = input.slice_index(idx) {
++              Ok(input.take_split(index))
++            } else {
++              Err(Err::Error(Error::from_error_kind(input, ErrorKind::TakeWhileMN)))
++            };
+             res
+           } else {
+-            let res: IResult<_, _, Error> = Ok(input.take_split(n));
++            let res: IResult<_, _, Error> = if let Some(index) = input.slice_index(n) {
++              Ok(input.take_split(index))
++            } else {
++              Err(Err::Error(Error::from_error_kind(input, ErrorKind::TakeWhileMN)))
++            };
+             res
+           }
+         } else {
+-- 
+2.42.0.windows.2
+

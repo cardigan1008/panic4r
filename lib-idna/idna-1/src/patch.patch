@@ -1,0 +1,41 @@
+From 9847084ad9051661873f3c5c5bf3c8dc83233ba3 Mon Sep 17 00:00:00 2001
+From: Valentin Gosu <valentin.gosu@gmail.com>
+Date: Mon, 28 Aug 2023 10:29:37 +0200
+Subject: [PATCH] Fix panic in set_path for file URLs
+
+---
+ url/src/parser.rs | 1 +
+ url/tests/unit.rs | 8 ++++++++
+ 2 files changed, 9 insertions(+)
+
+diff --git a/url/src/parser.rs b/url/src/parser.rs
+index d5ae831..7d94d1d 100644
+--- a/url/src/parser.rs
++++ b/url/src/parser.rs
+@@ -1202,6 +1202,7 @@ impl<'a> Parser<'a> {
+                     _ => {
+                         self.check_url_code_point(c, &input);
+                         if scheme_type.is_file()
++                            && self.serialization.len() > path_start
+                             && is_normalized_windows_drive_letter(
+                                 &self.serialization[path_start + 1..],
+                             )
+diff --git a/url/tests/unit.rs b/url/tests/unit.rs
+index 6cb0f37..c130354 100644
+--- a/url/tests/unit.rs
++++ b/url/tests/unit.rs
+@@ -1298,3 +1298,11 @@ fn test_file_with_drive_and_path() {
+     let url2 = url::Url::join(&url, s2).unwrap();
+     assert_eq!(url2.to_string(), "file:///p:/a");
+ }
++
++#[test]
++fn issue_864() {
++    let mut url = url::Url::parse("file://").unwrap();
++    dbg!(&url);
++    url.set_path("x");
++    dbg!(&url);
++}
+-- 
+2.42.0.windows.2
+

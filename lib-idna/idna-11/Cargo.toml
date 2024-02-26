@@ -1,0 +1,9 @@
+[package]
+name = "idna-11"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+url={path="rust-url-bfa167b4e0253642b6766a7aa74a99df60a94048"}

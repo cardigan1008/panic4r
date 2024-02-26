@@ -1,0 +1,15 @@
+[package]
+name = "tracing-2"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tracing = {path="tracing-2027f727af6f8cb19ab55d5c2001f4c5984376c2/tracing", features = ["attributes"] }
+tracing-opentelemetry = {path="tracing-2027f727af6f8cb19ab55d5c2001f4c5984376c2/tracing-opentelemetry"}
+tracing-error = {path="tracing-2027f727af6f8cb19ab55d5c2001f4c5984376c2/tracing-error"}
+tracing-subscriber = {path="tracing-2027f727af6f8cb19ab55d5c2001f4c5984376c2/tracing-subscriber"}
+opentelemetry = { version = "0.6.0" }
+opentelemetry-jaeger = { version = "0.5.0", features = ["collector_client"] }
+thrift = "0.13.0"

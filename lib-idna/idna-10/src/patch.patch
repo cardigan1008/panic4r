@@ -1,0 +1,77 @@
+From 1f08064eda8c2873bd64e0d092186cdd26ee1c4a Mon Sep 17 00:00:00 2001
+From: Corey Farwell <coreyf@rwell.org>
+Date: Mon, 11 May 2015 08:44:49 -0400
+Subject: [PATCH] Prevent parsing brackets from causing panic
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The code:
+
+```
+Url::parse("http://[]")
+```
+
+The panic:
+
+```
+thread '<main>' panicked at 'index out of bounds: the len is 0 but the index is 0',
+/Users/coreyf/.cargo/registry/src/github.com-1ecc6299db9ec823/url-0.2.34/src/host.rs:104
+```
+
+in addition to:
+
+The code:
+
+```
+Url::parse("http://[:]")
+```
+
+The panic:
+
+```
+/Users/coreyf/.cargo/registry/src/github.com-1ecc6299db9ec823/url-0.2.34/src/host.rs:104
+thread 'tests::url_parsing' panicked at 'index out of bounds: the len is
+1 but the index is 1', src/host.rs:110
+```
+
+Was found using https://github.com/kmcallister/afl.rs 👍
+---
+ src/host.rs         | 5 +++++
+ src/urltestdata.txt | 4 ++++
+ 2 files changed, 9 insertions(+)
+
+diff --git a/src/host.rs b/src/host.rs
+index 98c8bdf..20e8a77 100644
+--- a/src/host.rs
++++ b/src/host.rs
+@@ -101,6 +101,11 @@ impl Ipv6Address {
+         let mut piece_pointer = 0;
+         let mut compress_pointer = None;
+         let mut i = 0;
++
++        if len < 2 {
++            return Err(ParseError::InvalidIpv6Address)
++        }
++
+         if input[0] == b':' {
+             if input[1] != b':' {
+                 return Err(ParseError::InvalidIpv6Address)
+diff --git a/src/urltestdata.txt b/src/urltestdata.txt
+index ce704df..ece4e71 100644
+--- a/src/urltestdata.txt
++++ b/src/urltestdata.txt
+@@ -267,6 +267,10 @@ http://Goo%20\sgoo%7C|.com
+ # This should fail
+ http://GOO\u00a0\u3000goo.com
+ 
++# This should fail
++http://[]
++http://[:]
++
+ # Other types of space (no-break, zero-width, zero-width-no-break) are
+ # name-prepped away to nothing.
+ XFAIL http://GOO\u200b\u2060\ufeffgoo.com  s:http p:/ h:googoo.com
+-- 
+2.42.0.windows.2
+

@@ -1,0 +1,91 @@
+From 28414ed66baaa64bb0bcc905898da9083759de84 Mon Sep 17 00:00:00 2001
+From: Geoffroy Couprie <geo.couprie@gmail.com>
+Date: Mon, 21 Nov 2016 18:50:34 +0100
+Subject: [PATCH] Correctly loop over the chars in a &str instead of indexing
+
+---
+ src/str.rs    |  9 +++++++++
+ src/traits.rs | 39 ++++++++++++++++-----------------------
+ 2 files changed, 25 insertions(+), 23 deletions(-)
+
+diff --git a/src/str.rs b/src/str.rs
+index 7a97961..7485ea7 100644
+--- a/src/str.rs
++++ b/src/str.rs
+@@ -616,6 +616,15 @@ mod test {
+ 
+     }
+ 
++    #[test]
++    fn utf8_indexing() {
++      named!(dot(&str) -> &str,
++        tag_s!(".")
++      );
++
++      dot("點");
++    }
++
+   #[test]
+   fn case_insensitive() {
+     named!(test<&str,&str>, tag_no_case!("ABcd"));
+diff --git a/src/traits.rs b/src/traits.rs
+index a4c2adc..e91e7fa 100644
+--- a/src/traits.rs
++++ b/src/traits.rs
+@@ -320,37 +320,30 @@ impl<'a,'b> Compare<&'b str> for &'a [u8] {
+ impl<'a,'b> Compare<&'b str> for &'a str {
+   #[inline(always)]
+   fn compare(&self, t: &'b str) -> CompareResult {
+-    let len     = self.len();
+-    let blen    = t.len();
+-    let m       = if len < blen { len } else { blen };
+-    let reduced = &self[..m];
+-    let b       = &t[..m];
++    let pos = self.chars().zip(t.chars()).position(|(a,b)| a != b);
+ 
+-    if reduced != b {
+-      CompareResult::Error
+-    } else if m < blen {
+-      CompareResult::Incomplete
+-    } else {
+-      CompareResult::Ok
++    match pos {
++      Some(_) => CompareResult::Error,
++      None    => if self.len() >= t.len() {
++        CompareResult::Ok
++      } else {
++        CompareResult::Incomplete
++      }
+     }
+   }
+ 
+   //FIXME: this version is too simple and does not use the current locale
+   #[inline(always)]
+   fn compare_no_case(&self, t: &'b str) -> CompareResult {
+-    let len     = self.len();
+-    let blen    = t.len();
+-    let m       = if len < blen { len } else { blen };
+-    let reduced = &self[..m];
+-    let b       = &t[..m];
++    let pos = self.to_lowercase().chars().zip(t.to_lowercase().chars()).position(|(a,b)| a != b);
+ 
+-    //println!("compare_no_case({}, {}) => {} / {}", self, t, reduced.to_lowercase(), b.to_lowercase());
+-    if !(reduced.to_lowercase() == b.to_lowercase()) {
+-      CompareResult::Error
+-    } else if m < blen {
+-      CompareResult::Incomplete
+-    } else {
+-      CompareResult::Ok
++    match pos {
++      Some(_) => CompareResult::Error,
++      None    => if self.len() >= t.len() {
++        CompareResult::Ok
++      } else {
++        CompareResult::Incomplete
++      }
+     }
+   }
+ }
+-- 
+2.42.0.windows.2
+

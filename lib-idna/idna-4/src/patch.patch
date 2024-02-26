@@ -1,0 +1,43 @@
+From 9aac190f3bb4892713771b3cd10e1e2ad980094f Mon Sep 17 00:00:00 2001
+From: Dirkjan Ochtman <dirkjan@ochtman.nl>
+Date: Wed, 2 Dec 2020 10:07:44 +0100
+Subject: [PATCH] Fix out of bounds slicing in Url::username()
+
+---
+ url/src/lib.rs    | 5 +++--
+ url/tests/unit.rs | 6 ++++++
+ 2 files changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/url/src/lib.rs b/url/src/lib.rs
+index cdb8cba..25a29d2 100644
+--- a/url/src/lib.rs
++++ b/url/src/lib.rs
+@@ -729,8 +729,9 @@ impl Url {
+     /// # run().unwrap();
+     /// ```
+     pub fn username(&self) -> &str {
+-        if self.has_authority() {
+-            self.slice(self.scheme_end + ("://".len() as u32)..self.username_end)
++        let scheme_separator_len = "://".len() as u32;
++        if self.has_authority() && self.username_end > self.scheme_end + scheme_separator_len {
++            self.slice(self.scheme_end + scheme_separator_len..self.username_end)
+         } else {
+             ""
+         }
+diff --git a/url/tests/unit.rs b/url/tests/unit.rs
+index 21a7194..19ac8d1 100644
+--- a/url/tests/unit.rs
++++ b/url/tests/unit.rs
+@@ -665,3 +665,9 @@ fn test_set_scheme_to_file_with_host() {
+     assert_eq!(url.to_string(), "http://localhost:6767/foo/bar");
+     assert_eq!(result, Err(()));
+ }
++
++#[test]
++fn no_panic() {
++    let mut url = Url::parse("arhttpsps:/.//eom/dae.com/\\\\t\\:").unwrap();
++    url::quirks::set_hostname(&mut url, "//eom/datcom/\\\\t\\://eom/data.cs").unwrap();
++}
+-- 
+2.42.0.windows.2
+

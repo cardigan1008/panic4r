@@ -1,0 +1,115 @@
+From 8ef48471a8f82658fbb2eddad4a785ba54122d2e Mon Sep 17 00:00:00 2001
+From: o0Ignition0o <jeremy.lempereur@gmail.com>
+Date: Mon, 5 Aug 2019 13:23:45 +0200
+Subject: [PATCH] Make sure a windows drive letter segment always ends with a
+ slash.
+
+---
+ src/lib.rs    | 18 ++++++++++++++++++
+ src/parser.rs |  3 ++-
+ tests/unit.rs | 26 ++++++++++++++++++++++++++
+ 3 files changed, 46 insertions(+), 1 deletion(-)
+
+diff --git a/src/lib.rs b/src/lib.rs
+index 95a3695..05d4e56 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -2508,6 +2508,7 @@ fn path_to_file_url_segments_windows(
+     }
+     let mut components = path.components();
+ 
++    let host_start = serialization.len() + 1;
+     let host_end;
+     let host_internal;
+     match components.next() {
+@@ -2534,15 +2535,24 @@ fn path_to_file_url_segments_windows(
+         _ => return Err(()),
+     }
+ 
++    let mut path_only_has_prefix = true;
+     for component in components {
+         if component == Component::RootDir {
+             continue;
+         }
++        path_only_has_prefix = false;
+         // FIXME: somehow work with non-unicode?
+         let component = component.as_os_str().to_str().ok_or(())?;
+         serialization.push('/');
+         serialization.extend(percent_encode(component.as_bytes(), PATH_SEGMENT));
+     }
++    // A windows drive letter must end with a slash.
++    if serialization.len() > host_start
++        && parser::is_windows_drive_letter(&serialization[host_start..])
++        && path_only_has_prefix
++    {
++        serialization.push('/');
++    }
+     Ok((host_end, host_internal))
+ }
+ 
+@@ -2567,6 +2577,14 @@ fn file_url_segments_to_pathbuf(
+         bytes.push(b'/');
+         bytes.extend(percent_decode(segment.as_bytes()));
+     }
++    // A windows drive letter must end with a slash.
++    if bytes.len() > 2 {
++        if matches!(bytes[bytes.len() -2], b'a'..=b'z' | b'A'..=b'Z')
++            && matches!(bytes[bytes.len() - 1], b':' | b'|')
++        {
++            bytes.push(b'/');
++        }
++    }
+     let os_str = OsStr::from_bytes(&bytes);
+     let path = PathBuf::from(os_str);
+     debug_assert!(
+diff --git a/src/parser.rs b/src/parser.rs
+index 2749e5d..179caba 100644
+--- a/src/parser.rs
++++ b/src/parser.rs
+@@ -1571,7 +1571,8 @@ fn is_normalized_windows_drive_letter(segment: &str) -> bool {
+ 
+ /// Wether the scheme is file:, the path has a single segment, and that segment
+ /// is a Windows drive letter
+-fn is_windows_drive_letter(segment: &str) -> bool {
++#[inline]
++pub fn is_windows_drive_letter(segment: &str) -> bool {
+     segment.len() == 2 && starts_with_windows_drive_letter(segment)
+ }
+ 
+diff --git a/tests/unit.rs b/tests/unit.rs
+index 8249382..41d0b82 100644
+--- a/tests/unit.rs
++++ b/tests/unit.rs
+@@ -564,3 +564,29 @@ fn test_options_reuse() {
+     assert_eq!(url.as_str(), "http://mozilla.org/sub/path");
+     assert_eq!(*violations.borrow(), vec!(ExpectedDoubleSlash, Backslash));
+ }
++
++/// https://github.com/servo/rust-url/issues/505
++#[cfg(windows)]
++#[test]
++fn test_url_from_file_path() {
++    use std::path::PathBuf;
++    use url::Url;
++
++    let p = PathBuf::from("c:///");
++    let u = Url::from_file_path(p).unwrap();
++    let path = u.to_file_path().unwrap();
++    assert_eq!("C:\\", path.to_str().unwrap());
++}
++
++/// https://github.com/servo/rust-url/issues/505
++#[cfg(not(windows))]
++#[test]
++fn test_url_from_file_path() {
++    use std::path::PathBuf;
++    use url::Url;
++
++    let p = PathBuf::from("/c:/");
++    let u = Url::from_file_path(p).unwrap();
++    let path = u.to_file_path().unwrap();
++    assert_eq!("/c:/", path.to_str().unwrap());
++}
+-- 
+2.42.0.windows.2
+

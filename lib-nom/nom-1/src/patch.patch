@@ -1,0 +1,58 @@
+From 931bcf0109decd100746297a0d0fa243f8c39e23 Mon Sep 17 00:00:00 2001
+From: Michael Bryant <shadow53@shadow53.com>
+Date: Sun, 15 Jan 2023 11:13:12 -0800
+Subject: [PATCH] avoid panic when counting zero-sized outputs in count()
+ (#1618)
+
+* avoid panic when counting zero-sized outputs in count()
+
+* run cargo fmt
+---
+ src/multi/mod.rs |  3 ++-
+ tests/issues.rs  | 12 ++++++++++++
+ 2 files changed, 14 insertions(+), 1 deletion(-)
+
+diff --git a/src/multi/mod.rs b/src/multi/mod.rs
+index ab068c7..1b4b037 100644
+--- a/src/multi/mod.rs
++++ b/src/multi/mod.rs
+@@ -579,7 +579,8 @@ where
+ {
+   move |i: I| {
+     let mut input = i.clone();
+-    let max_initial_capacity = MAX_INITIAL_CAPACITY_BYTES / crate::lib::std::mem::size_of::<O>();
++    let max_initial_capacity =
++      MAX_INITIAL_CAPACITY_BYTES / crate::lib::std::mem::size_of::<O>().max(1);
+     let mut res = crate::lib::std::vec::Vec::with_capacity(count.min(max_initial_capacity));
+ 
+     for _ in 0..count {
+diff --git a/tests/issues.rs b/tests/issues.rs
+index eca53b5..8728e9d 100644
+--- a/tests/issues.rs
++++ b/tests/issues.rs
+@@ -242,6 +242,7 @@ fn issue_x_looser_fill_bounds() {
+   );
+ }
+ 
++#[test]
+ fn issue_1459_clamp_capacity() {
+   use nom::character::complete::char;
+ 
+@@ -255,3 +256,14 @@ fn issue_1459_clamp_capacity() {
+   let mut parser = count::<_, _, (), _>(char('a'), usize::MAX);
+   assert_eq!(parser("a"), Err(nom::Err::Error(())));
+ }
++
++#[test]
++fn issue_1617_count_parser_returning_zero_size() {
++  use nom::{bytes::complete::tag, combinator::map, error::Error, multi::count};
++
++  // previously, `count()` panicked if the parser had type `O = ()`
++  let parser = map(tag::<_, _, Error<&str>>("abc"), |_| ());
++  // shouldn't panic
++  let result = count(parser, 3)("abcabcabcdef").expect("parsing should succeed");
++  assert_eq!(result, ("def", vec![(), (), ()]));
++}
+-- 
+2.42.0.windows.2
+

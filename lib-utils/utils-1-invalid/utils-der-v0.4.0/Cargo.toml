@@ -1,0 +1,21 @@
+[workspace]
+members = [
+    "base64ct",
+    "blobby",
+    "block-buffer",
+    "block-padding",
+    "collectable",
+    "const-oid",
+    "cpufeatures",
+    "crypto-bigint",
+    "dbl",
+    "der",
+    "der/derive",
+    "hex-literal",
+    "opaque-debug",
+    "pkcs1",
+    "pkcs5",
+    "pkcs8",
+    "spki",
+    "x509"
+]

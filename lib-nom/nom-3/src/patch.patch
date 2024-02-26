@@ -1,0 +1,43 @@
+From 517bc7759c88c4d0083c865c38a1570ea6e5087b Mon Sep 17 00:00:00 2001
+From: Geoffroy Couprie <contact@geoffroycouprie.com>
+Date: Tue, 7 Jan 2020 19:11:19 +0100
+Subject: [PATCH] fix panic in convert_error
+
+---
+ src/error.rs    | 4 ++--
+ tests/issues.rs | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/error.rs b/src/error.rs
+index 24ab754..612d4bd 100644
+--- a/src/error.rs
++++ b/src/error.rs
+@@ -158,10 +158,10 @@ pub fn convert_error(input: &str, e: VerboseError<&str>) -> crate::lib::std::str
+ 
+       // Find the line that includes the subslice:
+       // Find the *last* newline before the substring starts
+-      let line_begin = offset - prefix.iter().rev().position(|&b| b == b'\n').unwrap_or(0);
++      let line_begin = prefix.iter().rev().position(|&b| b == b'\n').map(|pos| offset - pos).unwrap_or(0);
+ 
+       // Find the full line after that newline
+-      let line = input[line_begin..].lines().next().unwrap().trim_end();
++      let line = input[line_begin..].lines().next().unwrap_or(&input[line_begin..]).trim_end();
+ 
+       // The (1-indexed) column number is the offset of our substring into that line
+       let column_number = line.offset(substring) + 1;
+diff --git a/tests/issues.rs b/tests/issues.rs
+index 7b7f032..62a1a01 100644
+--- a/tests/issues.rs
++++ b/tests/issues.rs
+@@ -314,5 +314,5 @@ fn issue_1027_convert_error_panic_nonempty() {
+   };
+ 
+   let msg = convert_error(&input, err);
+-  assert_eq!(msg, "0: at line 0:\na\n ^\nexpected \'b\', got end of input\n\n");
+-}
+\ No newline at end of file
++  assert_eq!(msg, "0: at line 1:\na\n ^\nexpected \'b\', got end of input\n\n");
++}
+-- 
+2.42.0.windows.2
+

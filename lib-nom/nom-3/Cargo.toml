@@ -1,0 +1,9 @@
+[package]
+name = "nom-3"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+nom={path="nom-504ff533ac0eba80792bfdc9e849ad918d32d6bd"}

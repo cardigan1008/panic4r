@@ -1,0 +1,74 @@
+stack backtrace:
+   0:     0x7ff7a4859033 - std::sys_common::backtrace::_print::impl$0::fmt
+                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\sys_common\backtrace.rs:44
+   1:     0x7ff7a4866d2d - core::fmt::rt::Argument::fmt
+                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\core\src\fmt\rt.rs:142
+   2:     0x7ff7a4866d2d - core::fmt::write
+                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\core\src\fmt\mod.rs:1120
+   3:     0x7ff7a48577c1 - std::io::Write::write_fmt<std::sys::windows::stdio::Stderr>
+                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\io\mod.rs:1762
+   4:     0x7ff7a4858e3a - std::sys_common::backtrace::_print
+                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\sys_common\backtrace.rs:47
+   5:     0x7ff7a4858e3a - std::sys_common::backtrace::print
+                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\sys_common\backtrace.rs:34
+   6:     0x7ff7a485aa49 - std::panicking::default_hook::closure$1
+                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\panicking.rs:272
+   7:     0x7ff7a485a70b - std::panicking::default_hook
+                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\panicking.rs:292
+   8:     0x7ff7a485af34 - std::panicking::rust_panic_with_hook
+                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\panicking.rs:779
+   9:     0x7ff7a485ae05 - std::panicking::begin_panic_handler::closure$0   
+                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\panicking.rs:657
+  10:     0x7ff7a48596c9 - std::sys_common::backtrace::__rust_end_short_backtrace<std::panicking::begin_panic_handler::closure_env$0,never$>
+                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\sys_common\backtrace.rs:170
+  11:     0x7ff7a485ab14 - std::panicking::begin_panic_handler
+                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\panicking.rs:645
+  12:     0x7ff7a486b877 - core::panicking::panic_fmt
+                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\core\src\panicking.rs:72
+  13:     0x7ff7a486ba04 - core::panicking::panic_bounds_check
+                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\core\src\panicking.rs:190
+  14:     0x7ff7a484b06f - url::host::Ipv6Address::parse
+                               at D:\rustpanic\panic4r\lib-idna\idna-11\rust-url-bfa167b4e0253642b6766a7aa74a99df60a94048\src\host.rs:105
+  15:     0x7ff7a484ae65 - enum2$<url::host::Host>::parse
+                               at D:\rustpanic\panic4r\lib-idna\idna-11\rust-url-bfa167b4e0253642b6766a7aa74a99df60a94048\src\host.rs:51
+  16:     0x7ff7a4846a19 - url::parser::parse_hostname
+                               at D:\rustpanic\panic4r\lib-idna\idna-11\rust-url-bfa167b4e0253642b6766a7aa74a99df60a94048\src\parser.rs:415
+  17:     0x7ff7a4846531 - url::parser::parse_host
+                               at D:\rustpanic\panic4r\lib-idna\idna-11\rust-url-bfa167b4e0253642b6766a7aa74a99df60a94048\src\parser.rs:379
+  18:     0x7ff7a4842a6c - url::parser::parse_absolute_url
+                               at D:\rustpanic\panic4r\lib-idna\idna-11\rust-url-bfa167b4e0253642b6766a7aa74a99df60a94048\src\parser.rs:177
+  19:     0x7ff7a4841ff0 - url::parser::parse_url
+                               at D:\rustpanic\panic4r\lib-idna\idna-11\rust-url-bfa167b4e0253642b6766a7aa74a99df60a94048\src\parser.rs:134
+  20:     0x7ff7a484113a - url::UrlParser::parse
+                               at D:\rustpanic\panic4r\lib-idna\idna-11\rust-url-bfa167b4e0253642b6766a7aa74a99df60a94048\src\lib.rs:348
+  21:     0x7ff7a48410a5 - url::Url::parse
+                               at D:\rustpanic\panic4r\lib-idna\idna-11\rust-url-bfa167b4e0253642b6766a7aa74a99df60a94048\src\lib.rs:474
+  22:     0x7ff7a484101e - idna_11::main
+                               at D:\rustpanic\panic4r\lib-idna\idna-11\src\main.rs:4
+  23:     0x7ff7a484124b - core::ops::function::FnOnce::call_once<void (*)(),tuple$<> >
+                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\core\src\ops\function.rs:250
+  24:     0x7ff7a484139e - core::hint::black_box
+                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\core\src\hint.rs:286
+  25:     0x7ff7a484139e - std::sys_common::backtrace::__rust_begin_short_backtrace<void (*)(),tuple$<> >
+                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\std\src\sys_common\backtrace.rs:154
+  26:     0x7ff7a48411b1 - std::rt::lang_start::closure$0<tuple$<> >        
+                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\std\src\rt.rs:167
+  27:     0x7ff7a4855de8 - std::rt::lang_start_internal::closure$2
+                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\rt.rs:148
+  28:     0x7ff7a4855de8 - std::panicking::try::do_call
+                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\panicking.rs:552
+  29:     0x7ff7a4855de8 - std::panicking::try
+                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\panicking.rs:516
+  30:     0x7ff7a4855de8 - std::panic::catch_unwind
+                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\panic.rs:142
+  31:     0x7ff7a4855de8 - std::rt::lang_start_internal
+                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\rt.rs:148
+  32:     0x7ff7a484118a - std::rt::lang_start<tuple$<> >
+                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\std\src\rt.rs:166
+  33:     0x7ff7a4841059 - main
+  34:     0x7ff7a486a460 - invoke_main
+                               at D:\a\_work\1\s\src\vctools\crt\vcstartup\src\startup\exe_common.inl:78
+  35:     0x7ff7a486a460 - __scrt_common_main_seh
+                               at D:\a\_work\1\s\src\vctools\crt\vcstartup\src\startup\exe_common.inl:288
+  36:     0x7ff836bc54e0 - BaseThreadInitThunk
+  37:     0x7ff83890485b - RtlUserThreadStart

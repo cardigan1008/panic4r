@@ -1,0 +1,9 @@
+[package]
+name = "uuid-1"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+uuid={path="uuid-7da3f691ad5b16d990e6e1ce0db3d7143f603ad7"}

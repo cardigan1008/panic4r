@@ -1,0 +1,52 @@
+[package]
+name = "clap_mangen"
+version = "0.1.10"
+description = "A manpage generator for clap"
+repository = "https://github.com/clap-rs/clap/tree/master/clap_mangen"
+categories = ["command-line-interface"]
+keywords = [
+  "clap",
+  "cli",
+  "generate",
+  "manpage",
+]
+license = "MIT OR Apache-2.0"
+edition = "2021"
+rust-version = "1.56.1"  # MSRV
+include = [
+  "build.rs",
+  "src/**/*",
+  "Cargo.toml",
+  "LICENSE*",
+  "README.md",
+  "benches/**/*",
+  "examples/**/*"
+]
+
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+
+[package.metadata.release]
+pre-release-replacements = [
+  {file="CHANGELOG.md", search="Unreleased", replace="{{version}}", min=1},
+  {file="CHANGELOG.md", search="\\.\\.\\.HEAD", replace="...{{tag_name}}", exactly=1},
+  {file="CHANGELOG.md", search="ReleaseDate", replace="{{date}}", min=1},
+  {file="CHANGELOG.md", search="<!-- next-header -->", replace="<!-- next-header -->\n## [Unreleased] - ReleaseDate\n", exactly=1},
+  {file="CHANGELOG.md", search="<!-- next-url -->", replace="<!-- next-url -->\n[Unreleased]: https://github.com/clap-rs/clap/compare/{{tag_name}}...HEAD", exactly=1},
+  {file="README.md", search="github.com/clap-rs/clap/blob/[^/]+/", replace="github.com/clap-rs/clap/blob/{{tag_name}}/", exactly=4, prerelease = true},
+]
+
+[lib]
+bench = false
+
+[dependencies]
+roff = "0.2.1"
+clap = { path = "../", version = "3.2.1", default-features = false, features = ["std", "env"] }
+
+[dev-dependencies]
+snapbox = { version = "0.2", features = ["diff"] }
+clap = { path = "../", version = "3.2.1", default-features = false, features = ["std"] }
+
+[features]
+default = []
+debug = ["clap/debug"]

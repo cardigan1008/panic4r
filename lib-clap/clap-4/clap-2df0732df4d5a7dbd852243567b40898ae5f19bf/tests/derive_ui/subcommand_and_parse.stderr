@@ -1,0 +1,5 @@
+error: parse attribute is not allowed for subcommand
+  --> $DIR/subcommand_and_parse.rs:16:24
+   |
+16 |     #[clap(subcommand, parse(from_occurrences))]
+   |                        ^^^^^

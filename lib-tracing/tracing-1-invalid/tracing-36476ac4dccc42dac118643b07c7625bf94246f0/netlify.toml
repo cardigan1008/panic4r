@@ -1,0 +1,11 @@
+[build]
+  command = """
+    rustup install nightly --profile minimal \
+      && cargo doc --no-deps
+    """
+  environment = { RUSTDOCFLAGS= "--cfg docsrs" }
+  publish = "target/doc"
+
+[[redirects]]
+  from = "/"
+  to = "/tracing"

@@ -1,0 +1,11 @@
+[package]
+name = "tracing-1"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+log = "0.4"
+tracing={path="tracing-36476ac4dccc42dac118643b07c7625bf94246f0/tracing"}
+tracing-subscriber = {path="tracing-36476ac4dccc42dac118643b07c7625bf94246f0/tracing-subscriber"}

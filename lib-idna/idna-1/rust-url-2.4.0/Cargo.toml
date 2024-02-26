@@ -1,0 +1,2 @@
+[workspace]
+members = ["url", "form_urlencoded", "idna", "percent_encoding", "data-url"]
