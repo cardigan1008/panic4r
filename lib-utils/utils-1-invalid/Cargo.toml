@@ -6,5 +6,5 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-der={path="utils-der-v0.4.0/der"}
+der={path="utils-16110d9b01d3306f8836f1f9659a5f9c210349de/der"}
 to_vec="0.1.0"
