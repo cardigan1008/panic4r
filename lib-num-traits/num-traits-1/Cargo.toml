@@ -6,4 +6,4 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-num-traits={path="rust-smallvec-0.6.8"}
+num-traits={path="num-traits-58f02a8677c13ad5d46d0eb0698d9052ca70ef73"}

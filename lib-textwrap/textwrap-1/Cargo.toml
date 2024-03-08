@@ -6,4 +6,4 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-textwrap = {path = "textwrap-0.14.0"}
+textwrap = {path = "textwrap-607704a0d6bcf7d64dddad6d5df619dada208ec0"}

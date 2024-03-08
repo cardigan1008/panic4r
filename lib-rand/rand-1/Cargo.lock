@@ -3,15 +3,6 @@
 version = 3
 
 [[package]]
-name = "c2-chacha"
-version = "0.2.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "217192c943108d8b13bac38a1d51df9ce8a407a3f5a71ab633980665e68fbd9a"
-dependencies = [
- "ppv-lite86",
-]
-
-[[package]]
 name = "cfg-if"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -42,9 +33,8 @@ checksum = "5b40af805b3121feab8a3c29f04d8ad262fa8e0561883e7653e024ae4479e6de"
 
 [[package]]
 name = "rand"
-version = "0.7.3"
+version = "0.7.4"
 dependencies = [
- "getrandom",
  "libc",
  "rand_chacha",
  "rand_core",
@@ -60,9 +50,9 @@ dependencies = [
 
 [[package]]
 name = "rand_chacha"
-version = "0.2.1"
+version = "0.2.3"
 dependencies = [
- "c2-chacha",
+ "ppv-lite86",
  "rand_core",
 ]
 
@@ -75,7 +65,7 @@ dependencies = [
 
 [[package]]
 name = "rand_hc"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "rand_core",
 ]

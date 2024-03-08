@@ -6,4 +6,4 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-url={path="rust-url-2.3.1/url"}
+url={path="rust-url-edeaea7f1e8bd08148bcd535f921fbc645bce53e/url"}

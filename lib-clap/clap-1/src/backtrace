@@ -1,96 +1,109 @@
 stack backtrace:
-   0:     0x7ff60e584da3 - std::sys_common::backtrace::_print::impl$0::fmt
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\sys_common\backtrace.rs:44
-   1:     0x7ff60e594a5d - core::fmt::rt::Argument::fmt
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\core\src\fmt\rt.rs:142
-   2:     0x7ff60e594a5d - core::fmt::write
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\core\src\fmt\mod.rs:1120
-   3:     0x7ff60e582e51 - std::io::Write::write_fmt<std::sys::windows::stdio::Stderr>
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\io\mod.rs:1762
-   4:     0x7ff60e584baa - std::sys_common::backtrace::_print
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\sys_common\backtrace.rs:47
-   5:     0x7ff60e584baa - std::sys_common::backtrace::print
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\sys_common\backtrace.rs:34
-   6:     0x7ff60e586ce9 - std::panicking::default_hook::closure$1
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\panicking.rs:272
-   7:     0x7ff60e5869ab - std::panicking::default_hook
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\panicking.rs:292
-   8:     0x7ff60e5871d4 - std::panicking::rust_panic_with_hook
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\panicking.rs:779
-   9:     0x7ff60e58706b - std::panicking::begin_panic_handler::closure$0    
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\panicking.rs:649
-  10:     0x7ff60e585439 - std::sys_common::backtrace::__rust_end_short_backtrace<std::panicking::begin_panic_handler::closure_env$0,never$>
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\sys_common\backtrace.rs:170
-  11:     0x7ff60e586db4 - std::panicking::begin_panic_handler
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\panicking.rs:645
-  12:     0x7ff60e599d37 - core::panicking::panic_fmt
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\core\src\panicking.rs:72
-  13:     0x7ff60e599df2 - core::panicking::panic
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\core\src\panicking.rs:127
-  14:     0x7ff60e49e60e - enum2$<core::option::Option<ref$<clap_builder::builder::arg::Arg> > >::unwrap<ref$<clap_builder::builder::arg::Arg> >
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\core\src\option.rs:931
-  15:     0x7ff60e525699 - clap_builder::parser::parser::impl$1::match_arg_error::closure$0
-                               at D:\rustpanic\panic4r\lib-clap\clap-1\clap-4.4.16\clap_builder\src\parser\parser.rs:517
-  16:     0x7ff60e4db2ef - core::iter::adapters::map::map_fold::closure$0<ref$<clap_builder::util::id::Id>,alloc::string::String,tuple$<>,clap_builder::parser::parser::impl$1::match_arg_error::closure_env$0,core::iter::traits::iterator::Iterator::for_each::call::closure_env$0<alloc
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\core\src\iter\adapters\map.rs:84
-  17:     0x7ff60e4ad041 - core::slice::iter::impl$181::fold<clap_builder::util::id::Id,tuple$<>,core::iter::adapters::map::map_fold::closure_env$0<ref$<clap_builder::util::id::Id>,alloc::string::String,tuple$<>,clap_builder::parser::parser::impl$1::match_arg_error::closure_env$0,c
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\core\src\slice\iter\macros.rs:232
-  18:     0x7ff60e4d4824 - core::iter::adapters::map::impl$2::fold<alloc::string::String,core::slice::iter::Iter<clap_builder::util::id::Id>,clap_builder::parser::parser::impl$1::match_arg_error::closure_env$0,tuple$<>,core::iter::traits::iterator::Iterator::for_each::call::closure
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\core\src\iter\adapters\map.rs:124
-  19:     0x7ff60e4d949d - core::iter::traits::iterator::Iterator::for_each<core::iter::adapters::map::Map<core::slice::iter::Iter<clap_builder::util::id::Id>,clap_builder::parser::parser::impl$1::match_arg_error::closure_env$0>,alloc::vec::impl$19::extend_trusted::closure_env$0<al
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\core\src\iter\traits\iterator.rs:858
-  20:     0x7ff60e47b0df - alloc::vec::Vec<alloc::string::String,alloc::alloc::Global>::extend_trusted<alloc::string::String,alloc::alloc::Global,core::iter::adapters::map::Map<core::slice::iter::Iter<clap_builder::util::id::Id>,clap_builder::parser::parser::impl$1::match_arg_error
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\alloc\src\vec\mod.rs:2885
-  21:     0x7ff60e4889fe - alloc::vec::spec_extend::impl$1::spec_extend<alloc::string::String,core::iter::adapters::map::Map<core::slice::iter::Iter<clap_builder::util::id::Id>,clap_builder::parser::parser::impl$1::match_arg_error::closure_env$0>,alloc::alloc::Global>
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\alloc\src\vec\spec_extend.rs:26
-  22:     0x7ff60e473dbc - alloc::vec::spec_from_iter_nested::impl$1::from_iter<alloc::string::String,core::iter::adapters::map::Map<core::slice::iter::Iter<clap_builder::util::id::Id>,clap_builder::parser::parser::impl$1::match_arg_error::closure_env$0> >
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\alloc\src\vec\spec_from_iter_nested.rs:62
-  23:     0x7ff60e4890e1 - alloc::vec::spec_from_iter::impl$0::from_iter<alloc::string::String,core::iter::adapters::map::Map<core::slice::iter::Iter<clap_builder::util::id::Id>,clap_builder::parser::parser::impl$1::match_arg_error::closure_env$0> >
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\alloc\src\vec\spec_from_iter.rs:33
-  24:     0x7ff60e488657 - alloc::vec::impl$14::from_iter<alloc::string::String,core::iter::adapters::map::Map<core::slice::iter::Iter<clap_builder::util::id::Id>,clap_builder::parser::parser::impl$1::match_arg_error::closure_env$0> >
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\alloc\src\vec\mod.rs:2753
-  25:     0x7ff60e4d8e01 - core::iter::traits::iterator::Iterator::collect<core::iter::adapters::map::Map<core::slice::iter::Iter<clap_builder::util::id::Id>,clap_builder::parser::parser::impl$1::match_arg_error::closure_env$0>,alloc::vec::Vec<alloc::string::String,alloc::alloc::Gl
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\core\src\iter\traits\iterator.rs:2054
-  26:     0x7ff60e5129fb - clap_builder::parser::parser::Parser::match_arg_error
-                               at D:\rustpanic\panic4r\lib-clap\clap-1\clap-4.4.16\clap_builder\src\parser\parser.rs:515
-  27:     0x7ff60e511489 - clap_builder::parser::parser::Parser::get_matches_with
-                               at D:\rustpanic\panic4r\lib-clap\clap-1\clap-4.4.16\clap_builder\src\parser\parser.rs:447
-  28:     0x7ff60e491240 - clap_builder::builder::command::Command::_do_parse
-                               at D:\rustpanic\panic4r\lib-clap\clap-1\clap-4.4.16\clap_builder\src\builder\command.rs:4000
-  29:     0x7ff60e4653c8 - clap_builder::builder::command::Command::try_get_matches_from_mut<std::env::ArgsOs,std::ffi::os_str::OsString>
-                               at D:\rustpanic\panic4r\lib-clap\clap-1\clap-4.4.16\clap_builder\src\builder\command.rs:830
-  30:     0x7ff60e464fde - clap_builder::builder::command::Command::get_matches_from<std::env::ArgsOs,std::ffi::os_str::OsString>
-                               at D:\rustpanic\panic4r\lib-clap\clap-1\clap-4.4.16\clap_builder\src\builder\command.rs:701
-  31:     0x7ff60e463f89 - clap_builder::builder::command::Command::get_matches
-                               at D:\rustpanic\panic4r\lib-clap\clap-1\clap-4.4.16\clap_builder\src\builder\command.rs:610
-  32:     0x7ff60e463589 - clap_builder::derive::Parser::parse<clap_1::Opt>  
-                               at D:\rustpanic\panic4r\lib-clap\clap-1\clap-4.4.16\clap_builder\src\derive.rs:27
-  33:     0x7ff60e465cbc - clap_1::main
-                               at D:\rustpanic\panic4r\lib-clap\clap-1\src\main.rs:25
-  34:     0x7ff60e4613fb - core::ops::function::FnOnce::call_once<void (*)(),tuple$<> >
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\core\src\ops\function.rs:250
-  35:     0x7ff60e465b9e - core::hint::black_box
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\core\src\hint.rs:286
-  36:     0x7ff60e465b9e - std::sys_common::backtrace::__rust_begin_short_backtrace<void (*)(),tuple$<> >
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\std\src\sys_common\backtrace.rs:154
-  37:     0x7ff60e461f41 - std::rt::lang_start::closure$0<tuple$<> >
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\std\src\rt.rs:167
-  38:     0x7ff60e57f1b8 - std::rt::lang_start_internal::closure$2
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\rt.rs:148
-  39:     0x7ff60e57f1b8 - std::panicking::try::do_call
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\panicking.rs:552
-  40:     0x7ff60e57f1b8 - std::panicking::try
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\panicking.rs:516
-  41:     0x7ff60e57f1b8 - std::panic::catch_unwind
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\panic.rs:142
-  42:     0x7ff60e57f1b8 - std::rt::lang_start_internal
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\rt.rs:148
-  43:     0x7ff60e461f1a - std::rt::lang_start<tuple$<> >
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\std\src\rt.rs:166
-  44:     0x7ff60e466fc9 - main
-  45:     0x7ff60e5986f0 - invoke_main
-                               at D:\a\_work\1\s\src\vctools\crt\vcstartup\src\startup\exe_common.inl:78
-  46:     0x7ff60e5986f0 - __scrt_common_main_seh
-                               at D:\a\_work\1\s\src\vctools\crt\vcstartup\src\startup\exe_common.inl:288
-  47:     0x7ffda93b54e0 - BaseThreadInitThunk
-  48:     0x7ffda9bc485b - RtlUserThreadStart
+   0:     0x55d3e2674aa6 - std::backtrace_rs::backtrace::libunwind::trace::hf298c77755f5b12e
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/../../backtrace/src/backtrace/libunwind.rs:104:5
+   1:     0x55d3e2674aa6 - std::backtrace_rs::backtrace::trace_unsynchronized::h4da6a489ce2db74e
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/../../backtrace/src/backtrace/mod.rs:66:5
+   2:     0x55d3e2674aa6 - std::sys_common::backtrace::_print_fmt::h051beca4a6f5cb98
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/sys_common/backtrace.rs:68:5
+   3:     0x55d3e2674aa6 - <std::sys_common::backtrace::_print::DisplayBacktrace as core::fmt::Display>::fmt::hcb86488900881a45
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/sys_common/backtrace.rs:44:22
+   4:     0x55d3e2692c3c - core::fmt::rt::Argument::fmt::haf43875fa4a971bb
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/core/src/fmt/rt.rs:142:9
+   5:     0x55d3e2692c3c - core::fmt::write::h44c7f32ae3be5535
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/core/src/fmt/mod.rs:1120:17
+   6:     0x55d3e2672b8f - std::io::Write::write_fmt::hc3fec0223f64c010
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/io/mod.rs:1846:15
+   7:     0x55d3e2674854 - std::sys_common::backtrace::_print::h7c03376d42fd745a
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/sys_common/backtrace.rs:47:5
+   8:     0x55d3e2674854 - std::sys_common::backtrace::print::h9ff10455f68b06c1
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/sys_common/backtrace.rs:34:9
+   9:     0x55d3e2675d4b - std::panicking::default_hook::{{closure}}::he4f9865f1b72b2d5
+  10:     0x55d3e2675a99 - std::panicking::default_hook::h3d59f13a05d49fe6
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/panicking.rs:292:9
+  11:     0x55d3e26761ed - std::panicking::rust_panic_with_hook::h70f59ab226ae2c5c
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/panicking.rs:782:13
+  12:     0x55d3e2676089 - std::panicking::begin_panic_handler::{{closure}}::h47fc7126fa960711
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/panicking.rs:652:13
+  13:     0x55d3e2674f86 - std::sys_common::backtrace::__rust_end_short_backtrace::h5b94f863278adeaf
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/sys_common/backtrace.rs:171:18
+  14:     0x55d3e2675df4 - rust_begin_unwind
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/panicking.rs:648:5
+  15:     0x55d3e252e155 - core::panicking::panic_fmt::h96a33d9be4ce8c0f
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/core/src/panicking.rs:72:14
+  16:     0x55d3e252e213 - core::panicking::panic::hc66a585cf4bd3ee2
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/core/src/panicking.rs:144:5
+  17:     0x55d3e252e0f6 - core::option::unwrap_failed::h956828a3a6fbeffb
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/core/src/option.rs:1983:5
+  18:     0x55d3e257add2 - core::option::Option<T>::unwrap::hb06466facbdbbc6d
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/core/src/option.rs:932:21
+  19:     0x55d3e257add2 - clap_builder::parser::parser::Parser::match_arg_error::{{closure}}::h18f9fdd90c678d22
+                               at /home/sigger/Documents/panic4r/panic4r/lib-clap/clap-1/clap-cbc9c9dd44fc4be25c196213d508b9d2a9c282f3/clap_builder/src/parser/parser.rs:517:35
+  20:     0x55d3e2548b86 - core::iter::adapters::map::map_fold::{{closure}}::he9d7e2a1f2121b79
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/core/src/iter/adapters/map.rs:89:28
+  21:     0x55d3e25c58d8 - <core::slice::iter::Iter<T> as core::iter::traits::iterator::Iterator>::fold::h477247269134ba2b
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/core/src/slice/iter/macros.rs:232:27
+  22:     0x55d3e2541394 - <core::iter::adapters::map::Map<I,F> as core::iter::traits::iterator::Iterator>::fold::h788fbb9c4c860274
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/core/src/iter/adapters/map.rs:129:9
+  23:     0x55d3e25459e6 - core::iter::traits::iterator::Iterator::for_each::hdb5bb7d78b00da04
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/core/src/iter/traits/iterator.rs:848:9
+  24:     0x55d3e25876b5 - alloc::vec::Vec<T,A>::extend_trusted::h62681ee9a76919bb
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/alloc/src/vec/mod.rs:2962:17
+  25:     0x55d3e2599a4b - <alloc::vec::Vec<T,A> as alloc::vec::spec_extend::SpecExtend<T,I>>::spec_extend::h8e42584229482493
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/alloc/src/vec/spec_extend.rs:26:9
+  26:     0x55d3e258408e - <alloc::vec::Vec<T> as alloc::vec::spec_from_iter_nested::SpecFromIterNested<T,I>>::from_iter::hc25a16d2639091ff
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/alloc/src/vec/spec_from_iter_nested.rs:62:9
+  27:     0x55d3e2599e1e - <alloc::vec::Vec<T> as alloc::vec::spec_from_iter::SpecFromIter<T,I>>::from_iter::h6875c37b6d065a69
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/alloc/src/vec/spec_from_iter.rs:33:9
+  28:     0x55d3e2599717 - <alloc::vec::Vec<T> as core::iter::traits::collect::FromIterator<T>>::from_iter::hf6db9b3b8b67052a
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/alloc/src/vec/mod.rs:2836:9
+  29:     0x55d3e254533e - core::iter::traits::iterator::Iterator::collect::hd65192a6bf70ea19
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/core/src/iter/traits/iterator.rs:2034:9
+  30:     0x55d3e262a0cc - clap_builder::parser::parser::Parser::match_arg_error::h0d9fd9655ec05c73
+                               at /home/sigger/Documents/panic4r/panic4r/lib-clap/clap-1/clap-cbc9c9dd44fc4be25c196213d508b9d2a9c282f3/clap_builder/src/parser/parser.rs:515:21
+  31:     0x55d3e262900a - clap_builder::parser::parser::Parser::get_matches_with::ha919b9adee9c33f8
+                               at /home/sigger/Documents/panic4r/panic4r/lib-clap/clap-1/clap-cbc9c9dd44fc4be25c196213d508b9d2a9c282f3/clap_builder/src/parser/parser.rs:447:28
+  32:     0x55d3e25cee5b - clap_builder::builder::command::Command::_do_parse::h0e4c2edf820d167f
+                               at /home/sigger/Documents/panic4r/panic4r/lib-clap/clap-1/clap-cbc9c9dd44fc4be25c196213d508b9d2a9c282f3/clap_builder/src/builder/command.rs:4000:29
+  33:     0x55d3e2536229 - clap_builder::builder::command::Command::try_get_matches_from_mut::hf4685b1f04064791
+                               at /home/sigger/Documents/panic4r/panic4r/lib-clap/clap-1/clap-cbc9c9dd44fc4be25c196213d508b9d2a9c282f3/clap_builder/src/builder/command.rs:830:9
+  34:     0x55d3e2535c80 - clap_builder::builder::command::Command::get_matches_from::h89317f8575dc0ddb
+                               at /home/sigger/Documents/panic4r/panic4r/lib-clap/clap-1/clap-cbc9c9dd44fc4be25c196213d508b9d2a9c282f3/clap_builder/src/builder/command.rs:701:9
+  35:     0x55d3e2532a28 - clap_builder::builder::command::Command::get_matches::h6eff24359e7f3cb5
+                               at /home/sigger/Documents/panic4r/panic4r/lib-clap/clap-1/clap-cbc9c9dd44fc4be25c196213d508b9d2a9c282f3/clap_builder/src/builder/command.rs:610:9
+  36:     0x55d3e253032d - clap_builder::derive::Parser::parse::h9ba412f20adeac34
+                               at /home/sigger/Documents/panic4r/panic4r/lib-clap/clap-1/clap-cbc9c9dd44fc4be25c196213d508b9d2a9c282f3/clap_builder/src/derive.rs:27:27
+  37:     0x55d3e252e939 - clap_1::main::h22e60787addbabe5
+                               at /home/sigger/Documents/panic4r/panic4r/lib-clap/clap-1/src/main.rs:25:15
+  38:     0x55d3e25338db - core::ops::function::FnOnce::call_once::h667aeef56b72e28b
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/core/src/ops/function.rs:250:5
+  39:     0x55d3e253186e - std::sys_common::backtrace::__rust_begin_short_backtrace::h7448bf2b416434b2
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/sys_common/backtrace.rs:155:18
+  40:     0x55d3e2531401 - std::rt::lang_start::{{closure}}::h09420d72141f8a11
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/rt.rs:166:18
+  41:     0x55d3e266f213 - core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once::h3abf3bc5c821344f
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/core/src/ops/function.rs:284:13
+  42:     0x55d3e266f213 - std::panicking::try::do_call::hb3071568d9e061a2
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/panicking.rs:555:40
+  43:     0x55d3e266f213 - std::panicking::try::hb30aac26558f9f16
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/panicking.rs:519:19
+  44:     0x55d3e266f213 - std::panic::catch_unwind::h8a35c5dec3e3288e
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/panic.rs:142:14
+  45:     0x55d3e266f213 - std::rt::lang_start_internal::{{closure}}::h57f7d3bd6a9269a0
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/rt.rs:148:48
+  46:     0x55d3e266f213 - std::panicking::try::do_call::h60080f38bbb7f07c
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/panicking.rs:555:40
+  47:     0x55d3e266f213 - std::panicking::try::h7552f24642a8f696
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/panicking.rs:519:19
+  48:     0x55d3e266f213 - std::panic::catch_unwind::h5d7d9eee0c94f993
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/panic.rs:142:14
+  49:     0x55d3e266f213 - std::rt::lang_start_internal::h5e62a2694cfd5d4f
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/rt.rs:148:20
+  50:     0x55d3e25313da - std::rt::lang_start::hb48ecb36de7771e8
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/rt.rs:165:17
+  51:     0x55d3e252fd4e - main
+  52:     0x7ff563629d90 - __libc_start_call_main
+                               at ./csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+  53:     0x7ff563629e40 - __libc_start_main_impl
+                               at ./csu/../csu/libc-start.c:392:3
+  54:     0x55d3e252e865 - _start
+  55:                0x0 - <unknown>

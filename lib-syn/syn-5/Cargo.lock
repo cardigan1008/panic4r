@@ -22,7 +22,7 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "1.0.13"
+version = "1.0.14"
 dependencies = [
  "proc-macro2",
  "quote",

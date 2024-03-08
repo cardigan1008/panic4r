@@ -1,0 +1,53 @@
+[package]
+name = "time"
+version = "0.2.24"
+authors = ["Jacob Pratt <the.z.cuber@gmail.com>"]
+edition = "2018"
+repository = "https://github.com/time-rs/time"
+keywords = ["date", "time", "calendar", "duration"]
+categories = ["date-and-time"]
+readme = "README.md"
+license = "MIT OR Apache-2.0"
+description = "Date and time library. Fully interoperable with the standard library. Mostly compatible with #![no_std]."
+build = "build.rs"
+include = ["src/**/*", "LICENSE-*", "README.md", "CHANGELOG.md", "build.rs"]
+
+[package.metadata.docs.rs]
+all-features = true
+targets = ["x86_64-unknown-linux-gnu"]
+rustc-args = ["--cfg",  "__time_02_docs"]
+rustdoc-args = ["--cfg", "__time_02_docs"]
+
+[features]
+default = ["deprecated", "std"]
+deprecated = []
+panicking-api = []
+std = ["libc", "winapi", "stdweb", "standback/std"]
+
+[dependencies]
+const_fn = "0.4.2"
+rand = { version = "0.7", optional = true, default-features = false }
+serde = { version = "1", optional = true, default-features = false, features = ["derive"] }
+standback = { version = "0.2.5", default-features = false }
+time-macros = { version = "0.1", path = "time-macros" }
+
+[workspace]
+members = ["time-macros", "time-macros-impl"]
+
+[target.'cfg(unix)'.dependencies]
+libc = { version = "0.2", optional = true }
+
+[target.'cfg(windows)'.dependencies]
+winapi = { version = "0.3", features = ["minwinbase", "minwindef", "timezoneapi"], optional = true }
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+stdweb = { version = "0.4", default-features = false, optional = true }
+
+[build-dependencies]
+version_check = "0.9"
+
+[dev-dependencies]
+rand = { version = "0.7", default-features = false }
+serde_json = "1"
+standback = "0.2"
+time-macros = { path = "time-macros" }

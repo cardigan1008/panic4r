@@ -6,4 +6,4 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-bytes={path="bytes-0.4.4"}
+bytes={path="bytes-aab71ef82c8a7ad0740f75560afb438480943f0a"}

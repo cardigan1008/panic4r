@@ -1,0 +1,33 @@
+thread 'rustc' panicked at src/librustdoc/tooling/patch_generation/patch.rs:72:22:
+Failed to write to file!: Os { code: 21, kind: IsADirectory, message: "Is a directory" }
+stack backtrace:
+   0:     0x7fb50eb255ff - std::backtrace::Backtrace::create::h1b8f5c38774d6414
+   1:     0x7fb50eb25540 - std::backtrace::Backtrace::force_capture::h47cf519054fee5c0
+   2:     0x7fb50f3dc911 - <alloc[cf9959768ff907d6]::boxed::Box<rustc_driver_impl[4aded971042e97eb]::install_ice_hook::{closure#0}> as core[4aa448b49cab4f5b]::ops::function::Fn<(&dyn for<'a, 'b> core[4aa448b49cab4f5b]::ops::function::Fn<(&'a core[4aa448b49cab4f5b]::panic::panic_info::PanicInfo<'b>,), Output = ()> + core[4aa448b49cab4f5b]::marker::Send + core[4aa448b49cab4f5b]::marker::Sync, &core[4aa448b49cab4f5b]::panic::panic_info::PanicInfo)>>::call
+   3:     0x7fb50eb51928 - std::panicking::rust_panic_with_hook::ha884ac5eeb689ace
+   4:     0x7fb50eb516aa - std::panicking::begin_panic_handler::{{closure}}::h1ce9c66472909920
+   5:     0x7fb50eb505a6 - std::sys_common::backtrace::__rust_end_short_backtrace::hdca70eeac61fb666
+   6:     0x7fb50eb513f4 - rust_begin_unwind
+   7:     0x7fb50eaf9fe5 - core::panicking::panic_fmt::h37cca8453d0448e1
+   8:     0x7fb50eafaa23 - core::result::unwrap_failed::ha2521d48f3383bca
+   9:     0x55bc25008dde - <rustdoc[e439efac6433bb66]::tooling::patch_generation::patch::Transform>::transform
+  10:     0x55bc25201913 - rustdoc[e439efac6433bb66]::tooling::analyze_dependencies
+  11:     0x55bc24f1ac07 - <rustc_interface[218f8a51df864781]::queries::QueryResult<&rustc_middle[4d4e2543b7d1c51a]::ty::context::GlobalCtxt>>::enter::<core[4aa448b49cab4f5b]::result::Result<(), rustc_span[8818a2db959d21a0]::ErrorGuaranteed>, rustdoc[e439efac6433bb66]::tooling_main_args::{closure#1}::{closure#0}::{closure#0}>
+  12:     0x55bc250652dc - <rustc_interface[218f8a51df864781]::interface::Compiler>::enter::<rustdoc[e439efac6433bb66]::tooling_main_args::{closure#1}::{closure#0}, core[4aa448b49cab4f5b]::result::Result<(), rustc_span[8818a2db959d21a0]::ErrorGuaranteed>>
+  13:     0x55bc25045c13 - rustc_interface[218f8a51df864781]::interface::run_compiler::<core[4aa448b49cab4f5b]::result::Result<(), rustc_span[8818a2db959d21a0]::ErrorGuaranteed>, rustdoc[e439efac6433bb66]::tooling_main_args::{closure#1}>::{closure#0}
+  14:     0x55bc2501fe37 - rustc_span[8818a2db959d21a0]::create_session_globals_then::<core[4aa448b49cab4f5b]::result::Result<(), rustc_span[8818a2db959d21a0]::ErrorGuaranteed>, rustc_interface[218f8a51df864781]::util::run_in_thread_pool_with_globals<rustc_interface[218f8a51df864781]::interface::run_compiler<core[4aa448b49cab4f5b]::result::Result<(), rustc_span[8818a2db959d21a0]::ErrorGuaranteed>, rustdoc[e439efac6433bb66]::tooling_main_args::{closure#1}>::{closure#0}, core[4aa448b49cab4f5b]::result::Result<(), rustc_span[8818a2db959d21a0]::ErrorGuaranteed>>::{closure#0}>
+  15:     0x55bc24f01c50 - std[9618f4c9cd593739]::sys_common::backtrace::__rust_begin_short_backtrace::<rustc_interface[218f8a51df864781]::util::run_in_thread_with_globals<rustc_interface[218f8a51df864781]::util::run_in_thread_pool_with_globals<rustc_interface[218f8a51df864781]::interface::run_compiler<core[4aa448b49cab4f5b]::result::Result<(), rustc_span[8818a2db959d21a0]::ErrorGuaranteed>, rustdoc[e439efac6433bb66]::tooling_main_args::{closure#1}>::{closure#0}, core[4aa448b49cab4f5b]::result::Result<(), rustc_span[8818a2db959d21a0]::ErrorGuaranteed>>::{closure#0}, core[4aa448b49cab4f5b]::result::Result<(), rustc_span[8818a2db959d21a0]::ErrorGuaranteed>>::{closure#0}::{closure#0}, core[4aa448b49cab4f5b]::result::Result<(), rustc_span[8818a2db959d21a0]::ErrorGuaranteed>>
+  16:     0x55bc2504ad91 - <<std[9618f4c9cd593739]::thread::Builder>::spawn_unchecked_<rustc_interface[218f8a51df864781]::util::run_in_thread_with_globals<rustc_interface[218f8a51df864781]::util::run_in_thread_pool_with_globals<rustc_interface[218f8a51df864781]::interface::run_compiler<core[4aa448b49cab4f5b]::result::Result<(), rustc_span[8818a2db959d21a0]::ErrorGuaranteed>, rustdoc[e439efac6433bb66]::tooling_main_args::{closure#1}>::{closure#0}, core[4aa448b49cab4f5b]::result::Result<(), rustc_span[8818a2db959d21a0]::ErrorGuaranteed>>::{closure#0}, core[4aa448b49cab4f5b]::result::Result<(), rustc_span[8818a2db959d21a0]::ErrorGuaranteed>>::{closure#0}::{closure#0}, core[4aa448b49cab4f5b]::result::Result<(), rustc_span[8818a2db959d21a0]::ErrorGuaranteed>>::{closure#1} as core[4aa448b49cab4f5b]::ops::function::FnOnce<()>>::call_once::{shim:vtable#0}
+  17:     0x7fb50eb03ca5 - std::sys::pal::unix::thread::Thread::new::thread_start::had56a979e2b57e51
+  18:     0x7fb50e094ac3 - start_thread
+                               at ./nptl/pthread_create.c:442:8
+  19:     0x7fb50e126850 - __GI___clone3
+                               at ./misc/../sysdeps/unix/sysv/linux/x86_64/clone3.S:81
+  20:                0x0 - <unknown>
+
+
+rustc version: 1.78.0-dev
+platform: x86_64-unknown-linux-gnu
+
+query stack during panic:
+end of query stack

@@ -6,4 +6,4 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-regex = {path = "regex-1.8.2"}
+regex = {path = "regex-d555d6122d1d1a354c45361d029571413beca8ef"}

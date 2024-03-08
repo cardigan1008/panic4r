@@ -6,4 +6,4 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-syn = {path = "syn-1.0.38"}
+syn = {path = "syn-0b3145dc6ad4e8b69589f84f5f1a52e1b11342f4"}

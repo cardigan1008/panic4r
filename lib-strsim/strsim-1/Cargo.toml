@@ -6,4 +6,4 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-strsim={path="strsim-rs-0.4.1"}
+strsim={path="strsim-rs-819e3e2fd51bc14386161444f6fbb727e764becb"}

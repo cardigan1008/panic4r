@@ -6,4 +6,4 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-serde_json = {path = "json-1.0.31"}
+serde_json = {path = "json-805f394f8b4165e4f365c27068eedc1d9cb6ac52"}

@@ -6,4 +6,4 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-rand = {path = "rand-0.7.3"}
+rand = {path = "rand-39a37f0ddfb07714b39c1fd9d8d140c6b02b6c53"}

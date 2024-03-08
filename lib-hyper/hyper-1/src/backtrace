@@ -1,190 +1,151 @@
 stack backtrace:
-   0:     0x7ff75ff84b83 - std::sys_common::backtrace::_print::impl$0::fmt
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\sys_common\backtrace.rs:44
-   1:     0x7ff75ff9bb5d - core::fmt::rt::Argument::fmt
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\core\src\fmt\rt.rs:142
-   2:     0x7ff75ff9bb5d - core::fmt::write
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\core\src\fmt\mod.rs:1120
-   3:     0x7ff75ff82071 - std::io::Write::write_fmt<std::sys::windows::stdio::Stderr>
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\io\mod.rs:1762
-   4:     0x7ff75ff8498a - std::sys_common::backtrace::_print
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\sys_common\backtrace.rs:47
-   5:     0x7ff75ff8498a - std::sys_common::backtrace::print
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\sys_common\backtrace.rs:34
-   6:     0x7ff75ff86c79 - std::panicking::default_hook::closure$1
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\panicking.rs:272
-   7:     0x7ff75ff8693b - std::panicking::default_hook
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\panicking.rs:292
-   8:     0x7ff75ff87164 - std::panicking::rust_panic_with_hook
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\panicking.rs:779
-   9:     0x7ff75ff87035 - std::panicking::begin_panic_handler::closure$0   
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\panicking.rs:657
-  10:     0x7ff75ff85219 - std::sys_common::backtrace::__rust_end_short_backtrace<std::panicking::begin_panic_handler::closure_env$0,never$>
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\sys_common\backtrace.rs:170
-  11:     0x7ff75ff86d44 - std::panicking::begin_panic_handler
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\panicking.rs:645
-  12:     0x7ff75ffa3577 - core::panicking::panic_fmt
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\core\src\panicking.rs:72
-  13:     0x7ff75ffa3e14 - core::slice::impl$0::copy_from_slice::len_mismatch_fail
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\core\src\slice\mod.rs:3671
-  14:     0x7ff75ff1b5d8 - core::slice::impl$0::copy_from_slice<u8>
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\core\src\slice\mod.rs:3678
-  15:     0x7ff75fd65267 - hyper::headers::add_chunked
-                               at D:\rustpanic\panic4r\lib-hyper\hyper-3\hyper-1928682b33f98244435ba6d574677546205a15ec\src\headers.rs:120
-  16:     0x7ff75fd818d7 - enum2$<hyper::proto::h1::role::Client>::set_length
-                               at D:\rustpanic\panic4r\lib-hyper\hyper-3\hyper-1928682b33f98244435ba6d574677546205a15ec\src\proto\h1\role.rs:981        
-  17:     0x7ff75fd7c3ef - hyper::proto::h1::role::impl$2::encode
-                               at D:\rustpanic\panic4r\lib-hyper\hyper-3\hyper-1928682b33f98244435ba6d574677546205a15ec\src\proto\h1\role.rs:789        
-  18:     0x7ff75fd06b61 - hyper::proto::h1::role::encode_headers<enum2$<hyper::proto::h1::role::Client> >
-                               at D:\rustpanic\panic4r\lib-hyper\hyper-3\hyper-1928682b33f98244435ba6d574677546205a15ec\src\proto\h1\role.rs:95
-  19:     0x7ff75fcb5eb5 - hyper::proto::h1::conn::Conn<tokio::net::tcp::stream::TcpStream,bytes::bytes::Bytes,enum2$<hyper::proto::h1::role::Client> >::encode_head<tokio::net::tcp::stream::TcpStream,bytes::bytes::Bytes,enum2$<hyper::proto::h1::role::Client> >
-                               at D:\rustpanic\panic4r\lib-hyper\hyper-3\hyper-1928682b33f98244435ba6d574677546205a15ec\src\proto\h1\conn.rs:492        
-  20:     0x7ff75fccaeaa - hyper::proto::h1::conn::Conn<tokio::net::tcp::stream::TcpStream,bytes::bytes::Bytes,enum2$<hyper::proto::h1::role::Client> >::write_full_msg<tokio::net::tcp::stream::TcpStream,bytes::bytes::Bytes,enum2$<hyper::proto::h1::role::Client> >
-                               at D:\rustpanic\panic4r\lib-hyper\hyper-3\hyper-1928682b33f98244435ba6d574677546205a15ec\src\proto\h1\conn.rs:452        
-  21:     0x7ff75fc7cc4c - hyper::proto::h1::dispatch::Dispatcher<hyper::proto::h1::dispatch::Client<hyper::body::body::Body>,hyper::body::body::Body,tokio::net::tcp::stream::TcpStream,enum2$<hyper::proto::h1::role::Client> >::poll_write<hyper::proto::h1::dispatch::Client<hyper::bo
-                               at D:\rustpanic\panic4r\lib-hyper\hyper-3\hyper-1928682b33f98244435ba6d574677546205a15ec\src\proto\h1\dispatch.rs:301    
-  22:     0x7ff75fc8318a - hyper::proto::h1::dispatch::Dispatcher<hyper::proto::h1::dispatch::Client<hyper::body::body::Body>,hyper::body::body::Body,tokio::net::tcp::stream::TcpStream,enum2$<hyper::proto::h1::role::Client> >::poll_loop<hyper::proto::h1::dispatch::Client<hyper::bod
-                               at D:\rustpanic\panic4r\lib-hyper\hyper-3\hyper-1928682b33f98244435ba6d574677546205a15ec\src\proto\h1\dispatch.rs:157    
-  23:     0x7ff75fc77a88 - hyper::proto::h1::dispatch::Dispatcher<hyper::proto::h1::dispatch::Client<hyper::body::body::Body>,hyper::body::body::Body,tokio::net::tcp::stream::TcpStream,enum2$<hyper::proto::h1::role::Client> >::poll_inner<hyper::proto::h1::dispatch::Client<hyper::bo
-                               at D:\rustpanic\panic4r\lib-hyper\hyper-3\hyper-1928682b33f98244435ba6d574677546205a15ec\src\proto\h1\dispatch.rs:133    
-  24:     0x7ff75fc75c2a - hyper::proto::h1::dispatch::Dispatcher<hyper::proto::h1::dispatch::Client<hyper::body::body::Body>,hyper::body::body::Body,tokio::net::tcp::stream::TcpStream,enum2$<hyper::proto::h1::role::Client> >::poll_catch<hyper::proto::h1::dispatch::Client<hyper::bo
-                               at D:\rustpanic\panic4r\lib-hyper\hyper-3\hyper-1928682b33f98244435ba6d574677546205a15ec\src\proto\h1\dispatch.rs:116    
-  25:     0x7ff75fc73d3f - hyper::proto::h1::dispatch::impl$1::poll<hyper::proto::h1::dispatch::Client<hyper::body::body::Body>,hyper::body::body::Body,tokio::net::tcp::stream::TcpStream,enum2$<hyper::proto::h1::role::Client> > 
-                               at D:\rustpanic\panic4r\lib-hyper\hyper-3\hyper-1928682b33f98244435ba6d574677546205a15ec\src\proto\h1\dispatch.rs:420    
-  26:     0x7ff75fcf9d5a - hyper::client::conn::impl$14::poll<tokio::net::tcp::stream::TcpStream,hyper::body::body::Body>
-                               at D:\rustpanic\panic4r\lib-hyper\hyper-3\hyper-1928682b33f98244435ba6d574677546205a15ec\src\client\conn.rs:769
-  27:     0x7ff75fcf98bf - hyper::client::conn::impl$9::poll<tokio::net::tcp::stream::TcpStream,hyper::body::body::Body>
-                               at D:\rustpanic\panic4r\lib-hyper\hyper-3\hyper-1928682b33f98244435ba6d574677546205a15ec\src\client\conn.rs:457
-  28:     0x7ff75fcf64a3 - futures_core::future::impl$2::try_poll<hyper::client::conn::Connection<tokio::net::tcp::stream::TcpStream,hyper::body::body::Body>,tuple$<>,hyper::error::Error>
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\futures-core-0.3.30\src\future.rs:82
-  29:     0x7ff75fbe9325 - futures_util::future::try_future::into_future::impl$2::poll<hyper::client::conn::Connection<tokio::net::tcp::stream::TcpStream,hyper::body::body::Body> >
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\futures-util-0.3.30\src\future\try_future\into_future.rs:34
-  30:     0x7ff75fc32f40 - futures_util::future::future::map::impl$2::poll<futures_util::future::try_future::into_future::IntoFuture<hyper::client::conn::Connection<tokio::net::tcp::stream::TcpStream,hyper::body::body::Body> >,futures_util::fns::MapErrFn<hyper::client::client::impl
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\futures-util-0.3.30\src\future\future\map.rs:55  
-  31:     0x7ff75fc6dc65 - futures_util::future::future::impl$14::poll<futures_util::future::try_future::into_future::IntoFuture<hyper::client::conn::Connection<tokio::net::tcp::stream::TcpStream,hyper::body::body::Body> >,futures_util::fns::MapErrFn<hyper::client::client::impl$3::
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\futures-util-0.3.30\src\lib.rs:91
-  32:     0x7ff75fba9575 - futures_util::future::try_future::impl$54::poll<hyper::client::conn::Connection<tokio::net::tcp::stream::TcpStream,hyper::body::body::Body>,hyper::client::client::impl$3::connect_to::closure$0::closure$0::closure$0::closure_env$0<hyper::client::connect::h
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\futures-util-0.3.30\src\lib.rs:91
-  33:     0x7ff75fc33f60 - futures_util::future::future::map::impl$2::poll<futures_util::future::try_future::MapErr<hyper::client::conn::Connection<tokio::net::tcp::stream::TcpStream,hyper::body::body::Body>,hyper::client::client::impl$3::connect_to::closure$0::closure$0::closure$0
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\futures-util-0.3.30\src\future\future\map.rs:55  
-  34:     0x7ff75fc6da35 - futures_util::future::future::impl$14::poll<futures_util::future::try_future::MapErr<hyper::client::conn::Connection<tokio::net::tcp::stream::TcpStream,hyper::body::body::Body>,hyper::client::client::impl$3::connect_to::closure$0::closure$0::closure$0::cl
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\futures-util-0.3.30\src\lib.rs:91
-  35:     0x7ff75fbba05c - tokio::runtime::task::core::impl$6::poll::closure$0<futures_util::future::future::Map<futures_util::future::try_future::MapErr<hyper::client::conn::Connection<tokio::net::tcp::stream::TcpStream,hyper::body::body::Body>,hyper::client::client::impl$3::conne
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.36.0\src\runtime\task\core.rs:328        
-  36:     0x7ff75fbb78a8 - tokio::loom::std::unsafe_cell::UnsafeCell<enum2$<tokio::runtime::task::core::Stage<futures_util::future::future::Map<futures_util::future::try_future::MapErr<hyper::client::conn::Connection<tokio::net::tcp::stream::TcpStream,hyper::body::body::Body>,hyper
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.36.0\src\loom\std\unsafe_cell.rs:16      
-  37:     0x7ff75fbb78a8 - tokio::runtime::task::core::Core<futures_util::future::future::Map<futures_util::future::try_future::MapErr<hyper::client::conn::Connection<tokio::net::tcp::stream::TcpStream,hyper::body::body::Body>,hyper::client::client::impl$3::connect_to::closure$0::c
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.36.0\src\runtime\task\core.rs:317        
-  38:     0x7ff75fc8fdbf - tokio::runtime::task::harness::poll_future::closure$0<futures_util::future::future::Map<futures_util::future::try_future::MapErr<hyper::client::conn::Connection<tokio::net::tcp::stream::TcpStream,hyper::body::body::Body>,hyper::client::client::impl$3::con
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.36.0\src\runtime\task\harness.rs:485     
-  39:     0x7ff75fbd7cf3 - core::panic::unwind_safe::impl$23::call_once<enum2$<core::task::poll::Poll<tuple$<> > >,tokio::runtime::task::harness::poll_future::closure_env$0<futures_util::future::future::Map<futures_util::future::try_future::MapErr<hyper::client::conn::Connection<to
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\core\src\panic\unwind_safe.rs:272
-  40:     0x7ff75fd15c86 - std::panicking::try::do_call<core::panic::unwind_safe::AssertUnwindSafe<tokio::runtime::task::harness::poll_future::closure_env$0<futures_util::future::future::Map<futures_util::future::try_future::MapErr<hyper::client::conn::Connection<tokio::net::tcp::s
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\std\src\panicking.rs:552
-  41:     0x7ff75fd1ab93 - std::panicking::try::do_catch<core::panic::unwind_safe::AssertUnwindSafe<tokio::runtime::task::harness::poll_future::closure_env$1<enum2$<hyper_3::main::async_block$0::async_block_env$1>,alloc::sync::Arc<tokio::runtime::scheduler::current_thread::Handle,a
-  42:     0x7ff75fd147eb - std::panicking::try<enum2$<core::task::poll::Poll<tuple$<> > >,core::panic::unwind_safe::AssertUnwindSafe<tokio::runtime::task::harness::poll_future::closure_env$0<futures_util::future::future::Map<futures_util::future::try_future::MapErr<hyper::client::c
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\std\src\panicking.rs:516
-  43:     0x7ff75fc1590b - std::panic::catch_unwind<core::panic::unwind_safe::AssertUnwindSafe<tokio::runtime::task::harness::poll_future::closure_env$0<futures_util::future::future::Map<futures_util::future::try_future::MapErr<hyper::client::conn::Connection<tokio::net::tcp::strea
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\std\src\panic.rs:142
-  44:     0x7ff75fc8e556 - tokio::runtime::task::harness::poll_future<futures_util::future::future::Map<futures_util::future::try_future::MapErr<hyper::client::conn::Connection<tokio::net::tcp::stream::TcpStream,hyper::body::body::Body>,hyper::client::client::impl$3::connect_to::cl
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.36.0\src\runtime\task\harness.rs:473     
-  45:     0x7ff75fc91c06 - tokio::runtime::task::harness::Harness<futures_util::future::future::Map<futures_util::future::try_future::MapErr<hyper::client::conn::Connection<tokio::net::tcp::stream::TcpStream,hyper::body::body::Body>,hyper::client::client::impl$3::connect_to::closur
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.36.0\src\runtime\task\harness.rs:208     
-  46:     0x7ff75fc96383 - tokio::runtime::task::harness::Harness<futures_util::future::future::Map<futures_util::future::try_future::MapErr<hyper::client::conn::Connection<tokio::net::tcp::stream::TcpStream,hyper::body::body::Body>,hyper::client::client::impl$3::connect_to::closur
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.36.0\src\runtime\task\harness.rs:153     
-  47:     0x7ff75fc89cdb - tokio::runtime::task::raw::poll<futures_util::future::future::Map<futures_util::future::try_future::MapErr<hyper::client::conn::Connection<tokio::net::tcp::stream::TcpStream,hyper::body::body::Body>,hyper::client::client::impl$3::connect_to::closure$0::cl
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.36.0\src\runtime\task\raw.rs:271
-  48:     0x7ff75fea8d26 - tokio::runtime::task::raw::RawTask::poll
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.36.0\src\runtime\task\raw.rs:201
-  49:     0x7ff75fec0562 - tokio::runtime::task::LocalNotified<alloc::sync::Arc<tokio::runtime::scheduler::multi_thread::handle::Handle,alloc::alloc::Global> >::run<alloc::sync::Arc<tokio::runtime::scheduler::multi_thread::handle::Handle,alloc::alloc::Global> >
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.36.0\src\runtime\task\mod.rs:416
-  50:     0x7ff75fecff2a - tokio::runtime::scheduler::multi_thread::worker::impl$1::run_task::closure$0
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.36.0\src\runtime\scheduler\multi_thread\worker.rs:576
-  51:     0x7ff75fecfd04 - tokio::runtime::coop::with_budget
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.36.0\src\runtime\coop.rs:107
-  52:     0x7ff75fecfd04 - tokio::runtime::coop::budget
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.36.0\src\runtime\coop.rs:73
-  53:     0x7ff75fecfd04 - tokio::runtime::scheduler::multi_thread::worker::Context::run_task
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.36.0\src\runtime\scheduler\multi_thread\worker.rs:575
-  54:     0x7ff75fecf679 - tokio::runtime::scheduler::multi_thread::worker::Context::run
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.36.0\src\runtime\scheduler\multi_thread\worker.rs:526
-  55:     0x7ff75fecf375 - tokio::runtime::scheduler::multi_thread::worker::run::closure$0::closure$0
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.36.0\src\runtime\scheduler\multi_thread\worker.rs:491
-  56:     0x7ff75fefc95b - tokio::runtime::context::scoped::Scoped<enum2$<tokio::runtime::scheduler::Context> >::set<enum2$<tokio::runtime::scheduler::Context>,tokio::runtime::scheduler::multi_thread::worker::run::closure$0::closure_env$0,tuple$<> >
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.36.0\src\runtime\context\scoped.rs:40    
-  57:     0x7ff75fea1cb6 - tokio::runtime::context::set_scheduler::closure$0<tuple$<>,tokio::runtime::scheduler::multi_thread::worker::run::closure$0::closure_env$0>
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.36.0\src\runtime\context.rs:176
-  58:     0x7ff75feee402 - std::thread::local::LocalKey<tokio::runtime::context::Context>::try_with<tokio::runtime::context::Context,tokio::runtime::context::set_scheduler::closure_env$0<tuple$<>,tokio::runtime::scheduler::multi_thread::worker::run::closure$0::closure_env$0>,tuple$
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\std\src\thread\local.rs:270
-  59:     0x7ff75feede7e - std::thread::local::LocalKey<tokio::runtime::context::Context>::with<tokio::runtime::context::Context,tokio::runtime::context::set_scheduler::closure_env$0<tuple$<>,tokio::runtime::scheduler::multi_thread::worker::run::closure$0::closure_env$0>,tuple$<> >
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\std\src\thread\local.rs:246
-  60:     0x7ff75fea1c13 - tokio::runtime::context::set_scheduler<tuple$<>,tokio::runtime::scheduler::multi_thread::worker::run::closure$0::closure_env$0>
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.36.0\src\runtime\context.rs:176
-  61:     0x7ff75fecf231 - tokio::runtime::scheduler::multi_thread::worker::run::closure$0
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.36.0\src\runtime\scheduler\multi_thread\worker.rs:486
-  62:     0x7ff75fefc4a2 - tokio::runtime::context::runtime::enter_runtime<tokio::runtime::scheduler::multi_thread::worker::run::closure_env$0,tuple$<> >
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.36.0\src\runtime\context\runtime.rs:65   
-  63:     0x7ff75feceffc - tokio::runtime::scheduler::multi_thread::worker::run
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.36.0\src\runtime\scheduler\multi_thread\worker.rs:478
-  64:     0x7ff75feceeee - tokio::runtime::scheduler::multi_thread::worker::impl$0::launch::closure$0
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.36.0\src\runtime\scheduler\multi_thread\worker.rs:447
-  65:     0x7ff75fed26fb - tokio::runtime::blocking::task::impl$2::poll<tokio::runtime::scheduler::multi_thread::worker::impl$0::launch::closure_env$0,tuple$<> >
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.36.0\src\runtime\blocking\task.rs:42     
-  66:     0x7ff75fec4a4b - tokio::runtime::task::core::impl$6::poll::closure$0<tokio::runtime::blocking::task::BlockingTask<tokio::runtime::scheduler::multi_thread::worker::impl$0::launch::closure_env$0>,tokio::runtime::blocking::schedule::BlockingSchedule>
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.36.0\src\runtime\task\core.rs:328        
-  67:     0x7ff75fec4938 - tokio::loom::std::unsafe_cell::UnsafeCell<enum2$<tokio::runtime::task::core::Stage<tokio::runtime::blocking::task::BlockingTask<tokio::runtime::scheduler::multi_thread::worker::impl$0::launch::closure_env$0> > > >::with_mut
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.36.0\src\loom\std\unsafe_cell.rs:16      
-  68:     0x7ff75fec4938 - tokio::runtime::task::core::Core<tokio::runtime::blocking::task::BlockingTask<tokio::runtime::scheduler::multi_thread::worker::impl$0::launch::closure_env$0>,tokio::runtime::blocking::schedule::BlockingSchedule>::poll<tokio::runtime::blocking::task::Block
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.36.0\src\runtime\task\core.rs:317        
-  69:     0x7ff75ff0cc0f - tokio::runtime::task::harness::poll_future::closure$0<tokio::runtime::blocking::task::BlockingTask<tokio::runtime::scheduler::multi_thread::worker::impl$0::launch::closure_env$0>,tokio::runtime::blocking::schedule::BlockingSchedule>
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.36.0\src\runtime\task\harness.rs:485     
-  70:     0x7ff75fea3b73 - core::panic::unwind_safe::impl$23::call_once<enum2$<core::task::poll::Poll<tuple$<> > >,tokio::runtime::task::harness::poll_future::closure_env$0<tokio::runtime::blocking::task::BlockingTask<tokio::runtime::scheduler::multi_thread::worker::impl$0::launch:
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\core\src\panic\unwind_safe.rs:272
-  71:     0x7ff75ff0d7e6 - std::panicking::try::do_call<core::panic::unwind_safe::AssertUnwindSafe<tokio::runtime::task::harness::poll_future::closure_env$0<tokio::runtime::blocking::task::BlockingTask<tokio::runtime::scheduler::multi_thread::worker::impl$0::launch::closure_env$0>,
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\std\src\panicking.rs:552
-  72:     0x7ff75ff0dfb3 - std::panicking::try::do_catch<core::panic::unwind_safe::AssertUnwindSafe<tokio::runtime::task::harness::poll_future::closure_env$0<tokio::runtime::blocking::task::BlockingTask<tokio::runtime::scheduler::multi_thread::worker::impl$0::launch::closure_env$0>
-  73:     0x7ff75ff0cffb - std::panicking::try<enum2$<core::task::poll::Poll<tuple$<> > >,core::panic::unwind_safe::AssertUnwindSafe<tokio::runtime::task::harness::poll_future::closure_env$0<tokio::runtime::blocking::task::BlockingTask<tokio::runtime::scheduler::multi_thread::worke
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\std\src\panicking.rs:516
-  74:     0x7ff75fec32fb - std::panic::catch_unwind<core::panic::unwind_safe::AssertUnwindSafe<tokio::runtime::task::harness::poll_future::closure_env$0<tokio::runtime::blocking::task::BlockingTask<tokio::runtime::scheduler::multi_thread::worker::impl$0::launch::closure_env$0>,toki
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\std\src\panic.rs:142
-  75:     0x7ff75ff0ca66 - tokio::runtime::task::harness::poll_future<tokio::runtime::blocking::task::BlockingTask<tokio::runtime::scheduler::multi_thread::worker::impl$0::launch::closure_env$0>,tokio::runtime::blocking::schedule::BlockingSchedule>
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.36.0\src\runtime\task\harness.rs:473     
-  76:     0x7ff75ff0bf96 - tokio::runtime::task::harness::Harness<tokio::runtime::blocking::task::BlockingTask<tokio::runtime::scheduler::multi_thread::worker::impl$0::launch::closure_env$0>,tokio::runtime::blocking::schedule::BlockingSchedule>::poll_inner<tokio::runtime::blocking:
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.36.0\src\runtime\task\harness.rs:208     
-  77:     0x7ff75ff0be83 - tokio::runtime::task::harness::Harness<tokio::runtime::blocking::task::BlockingTask<tokio::runtime::scheduler::multi_thread::worker::impl$0::launch::closure_env$0>,tokio::runtime::blocking::schedule::BlockingSchedule>::poll<tokio::runtime::blocking::task:
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.36.0\src\runtime\task\harness.rs:153     
-  78:     0x7ff75fea8fab - tokio::runtime::task::raw::poll<tokio::runtime::blocking::task::BlockingTask<tokio::runtime::scheduler::multi_thread::worker::impl$0::launch::closure_env$0>,tokio::runtime::blocking::schedule::BlockingSchedule>
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.36.0\src\runtime\task\raw.rs:271
-  79:     0x7ff75fea8d26 - tokio::runtime::task::raw::RawTask::poll
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.36.0\src\runtime\task\raw.rs:201
-  80:     0x7ff75fec0618 - tokio::runtime::task::UnownedTask<tokio::runtime::blocking::schedule::BlockingSchedule>::run<tokio::runtime::blocking::schedule::BlockingSchedule>
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.36.0\src\runtime\task\mod.rs:453
-  81:     0x7ff75fec0a05 - tokio::runtime::blocking::pool::Task::run        
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.36.0\src\runtime\blocking\pool.rs:159    
-  82:     0x7ff75fec26d6 - tokio::runtime::blocking::pool::Inner::run       
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.36.0\src\runtime\blocking\pool.rs:513    
-  83:     0x7ff75fec2471 - tokio::runtime::blocking::pool::impl$6::spawn_thread::closure$0
-                               at C:\Users\lenovo\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.36.0\src\runtime\blocking\pool.rs:471    
-  84:     0x7ff75fea3c79 - core::hint::black_box
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\core\src\hint.rs:286
-  85:     0x7ff75fea3c79 - std::sys_common::backtrace::__rust_begin_short_backtrace<tokio::runtime::blocking::pool::impl$6::spawn_thread::closure_env$0,tuple$<> >
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\std\src\sys_common\backtrace.rs:154
-  86:     0x7ff75fed4ec1 - std::thread::impl$0::spawn_unchecked_::closure$1::closure$0<tokio::runtime::blocking::pool::impl$6::spawn_thread::closure_env$0,tuple$<> >
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\std\src\thread\mod.rs:529
-  87:     0x7ff75fea3b31 - core::panic::unwind_safe::impl$23::call_once<tuple$<>,std::thread::impl$0::spawn_unchecked_::closure$1::closure_env$0<tokio::runtime::blocking::pool::impl$6::spawn_thread::closure_env$0,tuple$<> > >   
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\core\src\panic\unwind_safe.rs:272
-  88:     0x7ff75ff0d655 - std::panicking::try::do_call<core::panic::unwind_safe::AssertUnwindSafe<std::thread::impl$0::spawn_unchecked_::closure$1::closure_env$0<tokio::runtime::blocking::pool::impl$6::spawn_thread::closure_env$0,tuple$<> > >,tuple$<> >
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\std\src\panicking.rs:552
-  89:     0x7ff75ff0dfb3 - std::panicking::try::do_catch<core::panic::unwind_safe::AssertUnwindSafe<tokio::runtime::task::harness::poll_future::closure_env$0<tokio::runtime::blocking::task::BlockingTask<tokio::runtime::scheduler::multi_thread::worker::impl$0::launch::closure_env$0>
-  90:     0x7ff75ff0d414 - std::panicking::try<tuple$<>,core::panic::unwind_safe::AssertUnwindSafe<std::thread::impl$0::spawn_unchecked_::closure$1::closure_env$0<tokio::runtime::blocking::pool::impl$6::spawn_thread::closure_env$0,tuple$<> > > >
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\std\src\panicking.rs:516
-  91:     0x7ff75fed4ce4 - std::panic::catch_unwind
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\std\src\panic.rs:142
-  92:     0x7ff75fed4ce4 - std::thread::impl$0::spawn_unchecked_::closure$1<tokio::runtime::blocking::pool::impl$6::spawn_thread::closure_env$0,tuple$<> >
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\std\src\thread\mod.rs:528
-  93:     0x7ff75feb1b2e - core::ops::function::FnOnce::call_once<std::thread::impl$0::spawn_unchecked_::closure_env$1<tokio::runtime::blocking::pool::impl$6::spawn_thread::closure_env$0,tuple$<> >,tuple$<> >
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\core\src\ops\function.rs:250
-  94:     0x7ff75ff896fc - std::sys::windows::thread::impl$0::new::thread_start
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\sys\windows\thread.rs:58
-  95:     0x7ff836bc54e0 - BaseThreadInitThunk
-  96:     0x7ff83890485b - RtlUserThreadStart
+   0:     0x56159d1d2f96 - std::backtrace_rs::backtrace::libunwind::trace::hf298c77755f5b12e
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/../../backtrace/src/backtrace/libunwind.rs:104:5
+   1:     0x56159d1d2f96 - std::backtrace_rs::backtrace::trace_unsynchronized::h4da6a489ce2db74e
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/../../backtrace/src/backtrace/mod.rs:66:5
+   2:     0x56159d1d2f96 - std::sys_common::backtrace::_print_fmt::h051beca4a6f5cb98
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/sys_common/backtrace.rs:68:5
+   3:     0x56159d1d2f96 - <std::sys_common::backtrace::_print::DisplayBacktrace as core::fmt::Display>::fmt::hcb86488900881a45
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/sys_common/backtrace.rs:44:22
+   4:     0x56159d1f938c - core::fmt::rt::Argument::fmt::haf43875fa4a971bb
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/core/src/fmt/rt.rs:142:9
+   5:     0x56159d1f938c - core::fmt::write::h44c7f32ae3be5535
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/core/src/fmt/mod.rs:1120:17
+   6:     0x56159d1d022f - std::io::Write::write_fmt::hc3fec0223f64c010
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/io/mod.rs:1846:15
+   7:     0x56159d1d2d44 - std::sys_common::backtrace::_print::h7c03376d42fd745a
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/sys_common/backtrace.rs:47:5
+   8:     0x56159d1d2d44 - std::sys_common::backtrace::print::h9ff10455f68b06c1
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/sys_common/backtrace.rs:34:9
+   9:     0x56159d1d439b - std::panicking::default_hook::{{closure}}::he4f9865f1b72b2d5
+  10:     0x56159d1d40e9 - std::panicking::default_hook::h3d59f13a05d49fe6
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/panicking.rs:292:9
+  11:     0x56159d1d483d - std::panicking::rust_panic_with_hook::h70f59ab226ae2c5c
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/panicking.rs:782:13
+  12:     0x56159d15cb38 - std::panicking::begin_panic::{{closure}}::hc80f8c0be3c1ba91
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/panicking.rs:690:9
+  13:     0x56159d1682fa - std::sys_common::backtrace::__rust_end_short_backtrace::h82c49b5a79482732
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/sys_common/backtrace.rs:171:18
+  14:     0x56159d15cad7 - std::panicking::begin_panic::h39629ecb7d3e394c
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/panicking.rs:689:12
+  15:     0x56159cdf6083 - hyper::client::conn::SendRequest<B>::send_request_retryable::{{closure}}::h2834a658a2232896
+                               at /home/sigger/Documents/panic4r/panic4r/lib-hyper/hyper-1/hyper-1928682b33f98244435ba6d574677546205a15ec/src/client/conn.rs:289:35
+  16:     0x56159cdf508f - <T as futures_util::fns::FnOnce1<A>>::call_once::h34fe7e1469027a10
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/fns.rs:15:9
+  17:     0x56159ce7599c - <futures_util::future::future::map::Map<Fut,F> as core::future::future::Future>::poll::hde16616ca47f2508
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/future/map.rs:57:73
+  18:     0x56159cee6931 - <futures_util::future::future::Map<Fut,F> as core::future::future::Future>::poll::h9503a106cc0fc808
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/lib.rs:91:13
+  19:     0x56159cdf3e0c - <futures_util::future::future::flatten::Flatten<Fut,<Fut as core::future::future::Future>::Output> as core::future::future::Future>::poll::h1c7def821aadd644
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/future/flatten.rs:50:36
+  20:     0x56159cee57f1 - <futures_util::future::future::Then<Fut1,Fut2,F> as core::future::future::Future>::poll::h823048df240a81b4
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/lib.rs:91:13
+  21:     0x56159ce26c9a - <futures_util::future::either::Either<A,B> as core::future::future::Future>::poll::h6a2073d582ae8fe9
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/either.rs:109:32
+  22:     0x56159ce26f1a - <futures_util::future::either::Either<A,B> as core::future::future::Future>::poll::ha475abe9a587046d
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/either.rs:109:32
+  23:     0x56159ce2698a - <F as futures_core::future::TryFuture>::try_poll::hd500b5c44f899b9b
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-core-0.3.30/src/future.rs:82:9
+  24:     0x56159ce193f1 - <futures_util::future::try_future::into_future::IntoFuture<Fut> as core::future::future::Future>::poll::hd1fe87f58fffec80
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/try_future/into_future.rs:34:9
+  25:     0x56159ce73132 - <futures_util::future::future::map::Map<Fut,F> as core::future::future::Future>::poll::h33f4421d5d0cbe6f
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/future/map.rs:55:37
+  26:     0x56159cee6ab1 - <futures_util::future::future::Map<Fut,F> as core::future::future::Future>::poll::hd2da2b1b6280b25a
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/lib.rs:91:13
+  27:     0x56159cdbe0f1 - <futures_util::future::try_future::MapErr<Fut,F> as core::future::future::Future>::poll::h1d9e55f998fadb09
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/lib.rs:91:13
+  28:     0x56159cdbfbea - <F as futures_core::future::TryFuture>::try_poll::h5904c2841ecff7c5
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-core-0.3.30/src/future.rs:82:9
+  29:     0x56159ce19231 - <futures_util::future::try_future::into_future::IntoFuture<Fut> as core::future::future::Future>::poll::h212c4d4267e8eef3
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/try_future/into_future.rs:34:9
+  30:     0x56159ce73d92 - <futures_util::future::future::map::Map<Fut,F> as core::future::future::Future>::poll::h6d8b5f485e1f6458
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/future/map.rs:55:37
+  31:     0x56159cee6841 - <futures_util::future::future::Map<Fut,F> as core::future::future::Future>::poll::h814425b354b53c21
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/lib.rs:91:13
+  32:     0x56159cdbdf11 - <futures_util::future::try_future::MapOk<Fut,F> as core::future::future::Future>::poll::h0eff25bb2b73d877
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/lib.rs:91:13
+  33:     0x56159cdbfbba - <F as futures_core::future::TryFuture>::try_poll::h47ccf9bce62e460a
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-core-0.3.30/src/future.rs:82:9
+  34:     0x56159ce19301 - <futures_util::future::try_future::into_future::IntoFuture<Fut> as core::future::future::Future>::poll::h7d03488c11b58a0d
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/try_future/into_future.rs:34:9
+  35:     0x56159ce74da2 - <futures_util::future::future::map::Map<Fut,F> as core::future::future::Future>::poll::hb7cb16c17cf23b46
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/future/map.rs:55:37
+  36:     0x56159cee66f1 - <futures_util::future::future::Map<Fut,F> as core::future::future::Future>::poll::h5b1405a4e049b9a0
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/lib.rs:91:13
+  37:     0x56159cdbe001 - <futures_util::future::try_future::MapOk<Fut,F> as core::future::future::Future>::poll::hc13cf06d0c340bb8
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/lib.rs:91:13
+  38:     0x56159ce26e35 - <futures_util::future::either::Either<A,B> as core::future::future::Future>::poll::h9414294daba75305
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/either.rs:110:33
+  39:     0x56159ce26fb5 - <futures_util::future::either::Either<A,B> as core::future::future::Future>::poll::hb0c230633f1e62bc
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/either.rs:110:33
+  40:     0x56159ce2695a - <F as futures_core::future::TryFuture>::try_poll::hcb00d63dff627bc6
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-core-0.3.30/src/future.rs:82:9
+  41:     0x56159cdfa987 - <futures_util::future::try_future::try_flatten::TryFlatten<Fut,<Fut as futures_core::future::TryFuture>::Ok> as core::future::future::Future>::poll::h7d499416685b50fd
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/try_future/try_flatten.rs:57:41
+  42:     0x56159cdbe2e1 - <futures_util::future::try_future::TryFlatten<Fut1,Fut2> as core::future::future::Future>::poll::h2d782380d011c06f
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/lib.rs:91:13
+  43:     0x56159cdbe471 - <futures_util::future::try_future::AndThen<Fut1,Fut2,F> as core::future::future::Future>::poll::he82bdacc7714b7c5
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/lib.rs:91:13
+  44:     0x56159cd448a6 - hyper::client::client::Client<C,B>::retryably_send_request::{{closure}}::h45a9b00a74202c98
+                               at /home/sigger/Documents/panic4r/panic4r/lib-hyper/hyper-1/hyper-1928682b33f98244435ba6d574677546205a15ec/src/client/client.rs:199:26
+  45:     0x56159cd00683 - <futures_util::future::poll_fn::PollFn<F> as core::future::future::Future>::poll::hd3f4cc4d67234ec5
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/poll_fn.rs:56:9
+  46:     0x56159cf675b4 - <core::pin::Pin<P> as core::future::future::Future>::poll::h41a289f848266e9f
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/core/src/future/future.rs:124:9
+  47:     0x56159cf2dfc5 - <hyper::client::client::ResponseFuture as core::future::future::Future>::poll::h18006b9a93a48396
+                               at /home/sigger/Documents/panic4r/panic4r/lib-hyper/hyper-1/hyper-1928682b33f98244435ba6d574677546205a15ec/src/client/client.rs:588:9
+  48:     0x56159cf15052 - hyper_3::main::{{closure}}::h5626331b3eb205fc
+                               at /home/sigger/Documents/panic4r/panic4r/lib-hyper/hyper-1/src/main.rs:28:40
+  49:     0x56159ceaf504 - tokio::runtime::park::CachedParkThread::block_on::{{closure}}::h6c991c20cbeab3b8
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tokio-1.36.0/src/runtime/park.rs:281:63
+  50:     0x56159ceaeead - tokio::runtime::coop::with_budget::hd247f3fc3e0384b9
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tokio-1.36.0/src/runtime/coop.rs:107:5
+  51:     0x56159ceaeead - tokio::runtime::coop::budget::h37f5369870c2c880
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tokio-1.36.0/src/runtime/coop.rs:73:5
+  52:     0x56159ceaeead - tokio::runtime::park::CachedParkThread::block_on::h957eb5353bc8cda2
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tokio-1.36.0/src/runtime/park.rs:281:31
+  53:     0x56159cdfa545 - tokio::runtime::context::blocking::BlockingRegionGuard::block_on::h344a2816dc475376
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tokio-1.36.0/src/runtime/context/blocking.rs:66:9
+  54:     0x56159ceb4678 - tokio::runtime::scheduler::multi_thread::MultiThread::block_on::{{closure}}::h1d198983ad61f25d
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tokio-1.36.0/src/runtime/scheduler/multi_thread/mod.rs:87:13
+  55:     0x56159ce920dc - tokio::runtime::context::runtime::enter_runtime::hf8a0bcd8b4e67d77
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tokio-1.36.0/src/runtime/context/runtime.rs:65:16
+  56:     0x56159ceb4633 - tokio::runtime::scheduler::multi_thread::MultiThread::block_on::h0e98389a30a67b66
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tokio-1.36.0/src/runtime/scheduler/multi_thread/mod.rs:86:9
+  57:     0x56159ceb601b - tokio::runtime::runtime::Runtime::block_on::h7cdbdebf9f8186ea
+                               at /home/sigger/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tokio-1.36.0/src/runtime/runtime.rs:350:45
+  58:     0x56159cef18ad - hyper_3::main::h9a7cfb9cb961c285
+                               at /home/sigger/Documents/panic4r/panic4r/lib-hyper/hyper-1/src/main.rs:28:5
+  59:     0x56159ce0498b - core::ops::function::FnOnce::call_once::h908fdd30deecdc0a
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/core/src/ops/function.rs:250:5
+  60:     0x56159ce8cd5e - std::sys_common::backtrace::__rust_begin_short_backtrace::h20aa231943e47ddd
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/sys_common/backtrace.rs:155:18
+  61:     0x56159ce93221 - std::rt::lang_start::{{closure}}::h62b25883c11ae404
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/rt.rs:166:18
+  62:     0x56159d1ccbd3 - core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once::h3abf3bc5c821344f
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/core/src/ops/function.rs:284:13
+  63:     0x56159d1ccbd3 - std::panicking::try::do_call::hb3071568d9e061a2
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/panicking.rs:555:40
+  64:     0x56159d1ccbd3 - std::panicking::try::hb30aac26558f9f16
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/panicking.rs:519:19
+  65:     0x56159d1ccbd3 - std::panic::catch_unwind::h8a35c5dec3e3288e
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/panic.rs:142:14
+  66:     0x56159d1ccbd3 - std::rt::lang_start_internal::{{closure}}::h57f7d3bd6a9269a0
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/rt.rs:148:48
+  67:     0x56159d1ccbd3 - std::panicking::try::do_call::h60080f38bbb7f07c
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/panicking.rs:555:40
+  68:     0x56159d1ccbd3 - std::panicking::try::h7552f24642a8f696
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/panicking.rs:519:19
+  69:     0x56159d1ccbd3 - std::panic::catch_unwind::h5d7d9eee0c94f993
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/panic.rs:142:14
+  70:     0x56159d1ccbd3 - std::rt::lang_start_internal::h5e62a2694cfd5d4f
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/rt.rs:148:20
+  71:     0x56159ce931fa - std::rt::lang_start::h7bf02bc2f8a40f68
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/rt.rs:165:17
+  72:     0x56159cef195e - main
+  73:     0x7f3f01a29d90 - __libc_start_call_main
+                               at ./csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+  74:     0x7f3f01a29e40 - __libc_start_main_impl
+                               at ./csu/../csu/libc-start.c:392:3
+  75:     0x56159ccfeec5 - _start
+  76:                0x0 - <unknown>

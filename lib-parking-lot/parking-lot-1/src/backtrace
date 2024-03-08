@@ -1,62 +1,72 @@
 stack backtrace:
-   0:     0x7ff628f4d03a - std::sys_common::backtrace::_print::impl$0::fmt   
-                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33/library\std\src\sys_common\backtrace.rs:44
-   1:     0x7ff628f5c24b - core::fmt::rt::Argument::fmt
-                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33/library\core\src\fmt\rt.rs:138
-   2:     0x7ff628f5c24b - core::fmt::write
-                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33/library\core\src\fmt\mod.rs:1094
-   3:     0x7ff628f4afe1 - std::io::Write::write_fmt<std::sys::windows::stdio::Stderr>
-                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33/library\std\src\io\mod.rs:1714
-   4:     0x7ff628f4cdba - std::sys_common::backtrace::_print
-                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33/library\std\src\sys_common\backtrace.rs:47
-   5:     0x7ff628f4cdba - std::sys_common::backtrace::print
-                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33/library\std\src\sys_common\backtrace.rs:34
-   6:     0x7ff628f4f01a - std::panicking::default_hook::closure$1
-                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33/library\std\src\panicking.rs:270
-   7:     0x7ff628f4ec88 - std::panicking::default_hook
-                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33/library\std\src\panicking.rs:290
-   8:     0x7ff628f4f6ce - std::panicking::rust_panic_with_hook
-                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33/library\std\src\panicking.rs:707
-   9:     0x7ff628f4f5bd - std::panicking::begin_panic_handler::closure$0    
-                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33/library\std\src\panicking.rs:599
-  10:     0x7ff628f4da29 - std::sys_common::backtrace::__rust_end_short_backtrace<std::panicking::begin_panic_handler::closure_env$0,never$>
-                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33/library\std\src\sys_common\backtrace.rs:170
-  11:     0x7ff628f4f2c0 - std::panicking::begin_panic_handler
-                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33/library\std\src\panicking.rs:595
-  12:     0x7ff628f61505 - core::panicking::panic_fmt
-                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33/library\core\src\panicking.rs:67
-  13:     0x7ff628f61958 - core::panicking::assert_failed_inner
-                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33/library\core\src\panicking.rs:269
-  14:     0x7ff628f357d2 - core::panicking::assert_failed<usize,usize>       
-                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33\library\core\src\panicking.rs:229
-  15:     0x7ff628f31575 - lock_api::remutex::RawReentrantMutex<parking_lot::raw_mutex::RawMutex,parking_lot::remutex::RawThreadId>::lock_internal<parking_lot::raw_mutex::RawMutex,parking_lot::remutex::RawThreadId,lock_api::remutex::impl$2::lock::closure_env$0<parking_lot::raw_mute
-                               at D:\rustpanic\panic4r\lib-parking-lot\parking-lot-1\parking_lot-0.12.1\lock_api\src\remutex.rs:102
-  16:     0x7ff628f316d2 - lock_api::remutex::RawReentrantMutex<parking_lot::raw_mutex::RawMutex,parking_lot::remutex::RawThreadId>::lock<parking_lot::raw_mutex::RawMutex,parking_lot::remutex::RawThreadId>
-                               at D:\rustpanic\panic4r\lib-parking-lot\parking-lot-1\parking_lot-0.12.1\lock_api\src\remutex.rs:111
-  17:     0x7ff628f31883 - lock_api::remutex::ReentrantMutex<parking_lot::raw_mutex::RawMutex,parking_lot::remutex::RawThreadId,tuple$<> >::lock<parking_lot::raw_mutex::RawMutex,parking_lot::remutex::RawThreadId,tuple$<> >
-                               at D:\rustpanic\panic4r\lib-parking-lot\parking-lot-1\parking_lot-0.12.1\lock_api\src\remutex.rs:313
-  18:     0x7ff628f352be - parking_lot_1::main::closure$0
-                               at D:\rustpanic\panic4r\lib-parking-lot\parking-lot-1\src\main.rs:12
-  19:     0x7ff628f333ce - std::sys_common::backtrace::__rust_begin_short_backtrace<parking_lot_1::main::closure_env$0,tuple$<> >
-                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33\library\std\src\sys_common\backtrace.rs:154
-  20:     0x7ff628f333ce - std::sys_common::backtrace::__rust_begin_short_backtrace<parking_lot_1::main::closure_env$0,tuple$<> >
-                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33\library\std\src\sys_common\backtrace.rs:154
-  21:     0x7ff628f3478e - std::thread::impl$0::spawn_unchecked_::closure$1::closure$0<parking_lot_1::main::closure_env$0,tuple$<> >
-                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33\library\std\src\thread\mod.rs:529
-  22:     0x7ff628f3190e - core::panic::unwind_safe::impl$23::call_once<tuple$<>,std::thread::impl$0::spawn_unchecked_::closure$1::closure_env$0<parking_lot_1::main::closure_env$0,tuple$<> > >
-                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33\library\core\src\panic\unwind_safe.rs:271
-  23:     0x7ff628f3494b - std::panicking::try::do_call<core::panic::unwind_safe::AssertUnwindSafe<std::thread::impl$0::spawn_unchecked_::closure$1::closure_env$0<parking_lot_1::main::closure_env$0,tuple$<> > >,tuple$<> >
-                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33\library\std\src\panicking.rs:502
-  24:     0x7ff628f34af3 - std::panicking::try::do_catch<core::panic::unwind_safe::AssertUnwindSafe<std::thread::impl$7::drop::closure_env$0<tuple$<> > >,tuple$<> >
-  25:     0x7ff628f3486a - std::panicking::try<tuple$<>,core::panic::unwind_safe::AssertUnwindSafe<std::thread::impl$0::spawn_unchecked_::closure$1::closure_env$0<parking_lot_1::main::closure_env$0,tuple$<> > > >
-                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33\library\std\src\panicking.rs:466
-  26:     0x7ff628f34625 - std::panic::catch_unwind
-                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33\library\std\src\panic.rs:142
-  27:     0x7ff628f34625 - std::thread::impl$0::spawn_unchecked_::closure$1<parking_lot_1::main::closure_env$0,tuple$<> >
-                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33\library\std\src\thread\mod.rs:528
-  28:     0x7ff628f31cce - core::ops::function::FnOnce::call_once<std::thread::impl$0::spawn_unchecked_::closure_env$1<parking_lot_1::main::closure_env$0,tuple$<> >,tuple$<> >
-                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33\library\core\src\ops\function.rs:250
-  29:     0x7ff628f5188c - std::sys::windows::thread::impl$0::new::thread_start
-                               at /rustc/cc66ad468955717ab92600c770da8c1601a4ff33/library\std\src\sys\windows\thread.rs:57
-  30:     0x7ffda93b54e0 - BaseThreadInitThunk
-  31:     0x7ffda9bc485b - RtlUserThreadStart
+   0:     0x561ebac8a776 - std::backtrace_rs::backtrace::libunwind::trace::hf298c77755f5b12e
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/../../backtrace/src/backtrace/libunwind.rs:104:5
+   1:     0x561ebac8a776 - std::backtrace_rs::backtrace::trace_unsynchronized::h4da6a489ce2db74e
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/../../backtrace/src/backtrace/mod.rs:66:5
+   2:     0x561ebac8a776 - std::sys_common::backtrace::_print_fmt::h051beca4a6f5cb98
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/sys_common/backtrace.rs:68:5
+   3:     0x561ebac8a776 - <std::sys_common::backtrace::_print::DisplayBacktrace as core::fmt::Display>::fmt::hcb86488900881a45
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/sys_common/backtrace.rs:44:22
+   4:     0x561ebaca86dc - core::fmt::rt::Argument::fmt::haf43875fa4a971bb
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/core/src/fmt/rt.rs:142:9
+   5:     0x561ebaca86dc - core::fmt::write::h44c7f32ae3be5535
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/core/src/fmt/mod.rs:1120:17
+   6:     0x561ebac8894f - std::io::Write::write_fmt::hc3fec0223f64c010
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/io/mod.rs:1846:15
+   7:     0x561ebac8a524 - std::sys_common::backtrace::_print::h7c03376d42fd745a
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/sys_common/backtrace.rs:47:5
+   8:     0x561ebac8a524 - std::sys_common::backtrace::print::h9ff10455f68b06c1
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/sys_common/backtrace.rs:34:9
+   9:     0x561ebac8bb7b - std::panicking::default_hook::{{closure}}::he4f9865f1b72b2d5
+  10:     0x561ebac8b8c9 - std::panicking::default_hook::h3d59f13a05d49fe6
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/panicking.rs:292:9
+  11:     0x561ebac8c01d - std::panicking::rust_panic_with_hook::h70f59ab226ae2c5c
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/panicking.rs:782:13
+  12:     0x561ebac8bef2 - std::panicking::begin_panic_handler::{{closure}}::h47fc7126fa960711
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/panicking.rs:660:13
+  13:     0x561ebac8ac56 - std::sys_common::backtrace::__rust_end_short_backtrace::h5b94f863278adeaf
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/sys_common/backtrace.rs:171:18
+  14:     0x561ebac8bc24 - rust_begin_unwind
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/panicking.rs:648:5
+  15:     0x561ebac5bca5 - core::panicking::panic_fmt::h96a33d9be4ce8c0f
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/core/src/panicking.rs:72:14
+  16:     0x561ebac5c09b - core::panicking::assert_failed_inner::hef3141f8e1a6c279
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/core/src/panicking.rs:342:17
+  17:     0x561ebac62d9e - core::panicking::assert_failed::h56fd3e307a62305c
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/core/src/panicking.rs:297:5
+  18:     0x561ebac5f933 - lock_api::remutex::RawReentrantMutex<R,G>::lock_internal::hb55a5c03d009b388
+                               at /home/sigger/Documents/panic4r/panic4r/lib-parking-lot/parking-lot-1/parking_lot-04d6cfe2cac1d1db7385623865e9e6ed452ebf50/lock_api/src/remutex.rs:102:13
+  19:     0x561ebac5fa62 - lock_api::remutex::RawReentrantMutex<R,G>::lock::hbcc8737413834a62
+                               at /home/sigger/Documents/panic4r/panic4r/lib-parking-lot/parking-lot-1/parking_lot-04d6cfe2cac1d1db7385623865e9e6ed452ebf50/lock_api/src/remutex.rs:111:9
+  20:     0x561ebac5fc03 - lock_api::remutex::ReentrantMutex<R,G,T>::lock::h5fa2efacb92bf1b3
+                               at /home/sigger/Documents/panic4r/panic4r/lib-parking-lot/parking-lot-1/parking_lot-04d6cfe2cac1d1db7385623865e9e6ed452ebf50/lock_api/src/remutex.rs:313:9
+  21:     0x561ebac60030 - parking_lot_1::main::{{closure}}::h0dda6fcfddc9d344
+                               at /home/sigger/Documents/panic4r/panic4r/lib-parking-lot/parking-lot-1/src/main.rs:12:22
+  22:     0x561ebac5da5e - std::sys_common::backtrace::__rust_begin_short_backtrace::h8829a19d1379a88d
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/sys_common/backtrace.rs:155:18
+  23:     0x561ebac5d8ca - std::thread::Builder::spawn_unchecked_::{{closure}}::{{closure}}::hbbea09a00cc078c6
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/thread/mod.rs:528:17
+  24:     0x561ebac5c78e - <core::panic::unwind_safe::AssertUnwindSafe<F> as core::ops::function::FnOnce<()>>::call_once::hd9a0c1c7f13b33e0
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/core/src/panic/unwind_safe.rs:272:9
+  25:     0x561ebac5fd75 - std::panicking::try::do_call::hb2dd85e57c680a01
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/panicking.rs:555:40
+  26:     0x561ebac5fecb - __rust_try
+  27:     0x561ebac5fc8a - std::panicking::try::h654e188ed9d3e6c7
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/panicking.rs:519:19
+  28:     0x561ebac5d717 - std::panic::catch_unwind::h8aa708247bf723b6
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/panic.rs:142:14
+  29:     0x561ebac5d717 - std::thread::Builder::spawn_unchecked_::{{closure}}::h1a40ce43c4b18766
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/thread/mod.rs:527:30
+  30:     0x561ebac5deee - core::ops::function::FnOnce::call_once{{vtable.shim}}::h72f636d289098f28
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/core/src/ops/function.rs:250:5
+  31:     0x561ebac8de45 - <alloc::boxed::Box<F,A> as core::ops::function::FnOnce<Args>>::call_once::h79a9e4aa91d71737
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/alloc/src/boxed.rs:2016:9
+  32:     0x561ebac8de45 - <alloc::boxed::Box<F,A> as core::ops::function::FnOnce<Args>>::call_once::h6eabe626cfdc74a5
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/alloc/src/boxed.rs:2016:9
+  33:     0x561ebac8de45 - std::sys::pal::unix::thread::Thread::new::thread_start::h8428b71c070d7cf2
+                               at /rustc/3406ada96f8e16e49e947a91db3eba0db45245fa/library/std/src/sys/pal/unix/thread.rs:108:17
+  34:     0x7f32a9894ac3 - start_thread
+                               at ./nptl/pthread_create.c:442:8
+  35:     0x7f32a9926850 - __GI___clone3
+                               at ./misc/../sysdeps/unix/sysv/linux/x86_64/clone3.S:81
+  36:                0x0 - <unknown>
