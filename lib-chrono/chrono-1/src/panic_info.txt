@@ -1,0 +1,1 @@
+thread 'main' panicked at /home/sigger/Documents/panic4r/panic4r/lib-chrono/chrono-1/chrono-46ad2c2b2c901eb20e43a7fca025aac02605bda4/src/datetime/mod.rs:282:14: value can not be represented in a timestamp with nanosecond precision.

@@ -1,0 +1,2 @@
+"thread 'main' panicked at chrono-e39346e2877b3a5445953f2bc5b64263cf46fc72/src/format/parse.rs:589:71:
+byte index 3 is not a char boundary; it is inside 'ø' (bytes 2..4) of `øøø`"

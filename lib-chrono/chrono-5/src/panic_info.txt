@@ -1,0 +1,2 @@
+"thread 'main' panicked at /home/cardigan/Desktop/panic4r/lib-chrono/chrono-5/chrono-e51430f3e1a86d4e51a5598c157b322ed9e21c96/src/naive/datetime/mod.rs:487:21:
+attempt to multiply with overflow"

@@ -1,0 +1,1 @@
+thread 'main' panicked at /home/sigger/Documents/panic4r/panic4r/lib-nom/nom-2/nom-6e1da26c193dbfdb3fd2057bb7048c27f3f2a11b/src/traits.rs:433:11: byte index 1 is not a char boundary; it is inside '😃' (bytes 0..4) of `😃!`

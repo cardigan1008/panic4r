@@ -1,0 +1,2 @@
+"thread 'main' panicked at chrono-e9067a5a3e684f1069f9d627e57ea7d536398e2e/src/format/scan.rs:173:44:
+byte index 3 is not a char boundary; it is inside 'Ž' (bytes 2..4) of `YAŽA Šander``"

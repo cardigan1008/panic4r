@@ -1,0 +1,4 @@
+"thread 'main' panicked at src/main.rs:10:5:
+assertion `left == right` failed
+  left: 0
+ right: 6"

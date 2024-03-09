@@ -1,0 +1,1 @@
+thread 'main' panicked at src/main.rs:5:40: called `Result::unwrap()` on an `Err` value: InvalidDomainCharacter

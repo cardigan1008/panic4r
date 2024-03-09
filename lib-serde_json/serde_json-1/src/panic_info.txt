@@ -1,0 +1,1 @@
+thread 'main' panicked at /home/sigger/Documents/panic4r/panic4r/lib-serde_json/serde_json-1/json-2f812d0363034efc0f65ffbd35168d99d458aedb/src/read.rs:590:39: called `Result::unwrap()` on an `Err` value: Utf8Error { valid_up_to: 1, error_len: Some(1) }

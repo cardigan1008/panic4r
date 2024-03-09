@@ -1,0 +1,1 @@
+thread 'main' panicked at rust-url-6865d52fe424d84b9068d946f6893c52dfa43e5b/url/src/path_segments.rs:126:34: byte index 5 is out of bounds of `m://`

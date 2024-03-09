@@ -1,0 +1,1 @@
+thread 'main' panicked at num-traits-58f02a8677c13ad5d46d0eb0698d9052ca70ef73/src/lib.rs:355:1: byte index 1 is not a char boundary; it is inside '™' (bytes 0..3) of `™0.2`

@@ -1,0 +1,13 @@
+"thread 'main' panicked at chrono-e9067a5a3e684f1069f9d627e57ea7d536398e2e/src/format/scan.rs:173:44:
+byte index 3 is not a char boundary; it is inside '\u{3000}' (bytes 1..4) of `　m@J　　m
+                                                                                        !
+
+
+
+
+
+                                                                                         %A
+
+                                                                                           SU
+
+                                                                                             `"

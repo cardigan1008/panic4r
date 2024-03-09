@@ -1,0 +1,1 @@
+thread 'main' panicked at /home/sigger/Documents/panic4r/panic4r/lib-hyper/hyper-1/hyper-1928682b33f98244435ba6d574677546205a15ec/src/client/conn.rs:289:35: dispatch dropped without returning error

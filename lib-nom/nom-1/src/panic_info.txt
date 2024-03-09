@@ -1,0 +1,1 @@
+thread 'main' panicked at /home/sigger/Documents/panic4r/panic4r/lib-nom/nom-1/nom-6923bacfd4e7496f56de787071bd221fef86faf4/src/multi/mod.rs:582:32: attempt to divide by zero

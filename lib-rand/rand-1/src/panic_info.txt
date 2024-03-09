@@ -1,0 +1,1 @@
+thread 'main' panicked at /home/sigger/Documents/panic4r/panic4r/lib-rand/rand-1/rand-39a37f0ddfb07714b39c1fd9d8d140c6b02b6c53/src/distributions/uniform.rs:821:1: Uniform::new called with `low >= high`

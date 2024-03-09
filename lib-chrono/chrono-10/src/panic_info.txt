@@ -1,0 +1,2 @@
+"thread 'main' panicked at /home/cardigan/Desktop/panic4r/lib-chrono/chrono-10/chrono-ea6412b3da34f216e3874b9d80dc95313118e894/src/round.rs:188:26:
+attempt to calculate the remainder with a divisor of zero"
