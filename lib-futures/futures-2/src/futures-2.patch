@@ -1,0 +1,65 @@
+From 391d89ef64f558a1f0caf88e62b27357f536cb97 Mon Sep 17 00:00:00 2001
+From: Bill Fraser <bill.fraser@gmail.com>
+Date: Wed, 23 Feb 2022 04:22:06 -0800
+Subject: [PATCH] FuturesUnordered: fix partial iteration (#2574)
+
+The IntoIter impl advances the head pointer every iteration, but this breaks the linked list invariant that the head's prev should be null.
+
+If the iteration is not done to completion, on subsequent drop, FuturesUnordered::unlink relies on this broken invariant and ends up panicking.
+
+The fix is to maintain the `head->prev == null` invariant while iterating. Also added a test for this bug.
+---
+ futures-util/src/stream/futures_unordered/iter.rs |  4 ++++
+ futures/tests/stream_futures_unordered.rs         | 14 ++++++++++++++
+ 2 files changed, 18 insertions(+)
+
+diff --git a/futures-util/src/stream/futures_unordered/iter.rs b/futures-util/src/stream/futures_unordered/iter.rs
+index 04db5ee7..20248c70 100644
+--- a/futures-util/src/stream/futures_unordered/iter.rs
++++ b/futures-util/src/stream/futures_unordered/iter.rs
+@@ -2,6 +2,7 @@ use super::task::Task;
+ use super::FuturesUnordered;
+ use core::marker::PhantomData;
+ use core::pin::Pin;
++use core::ptr;
+ use core::sync::atomic::Ordering::Relaxed;
+ 
+ /// Mutable iterator over all futures in the unordered set.
+@@ -58,6 +59,9 @@ impl<Fut: Unpin> Iterator for IntoIter<Fut> {
+             // valid `next_all` checks can be skipped.
+             let next = (**task).next_all.load(Relaxed);
+             *task = next;
++            if !task.is_null() {
++                *(**task).prev_all.get() = ptr::null_mut();
++            }
+             self.len -= 1;
+             Some(future)
+         }
+diff --git a/futures/tests/stream_futures_unordered.rs b/futures/tests/stream_futures_unordered.rs
+index 8ddd62f4..844f1325 100644
+--- a/futures/tests/stream_futures_unordered.rs
++++ b/futures/tests/stream_futures_unordered.rs
+@@ -261,6 +261,20 @@ fn into_iter_len() {
+     assert!(into_iter.next().is_none());
+ }
+ 
++#[test]
++fn into_iter_partial() {
++    let stream = vec![future::ready(1), future::ready(2), future::ready(3), future::ready(4)]
++        .into_iter()
++        .collect::<FuturesUnordered<_>>();
++
++    let mut into_iter = stream.into_iter();
++    assert!(into_iter.next().is_some());
++    assert!(into_iter.next().is_some());
++    assert!(into_iter.next().is_some());
++    assert_eq!(into_iter.len(), 1);
++    // don't panic when iterator is dropped before completing
++}
++
+ #[test]
+ fn futures_not_moved_after_poll() {
+     // Future that will be ready after being polled twice,
+-- 
+2.34.1
+

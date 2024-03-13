@@ -1,0 +1,8 @@
+[package]
+name = "futures-5"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+crossbeam-utils = "0.8.19"
+futures={path="futures-rs-7340d3d5d6fe8082a73069582b048ebaef6626b1/futures"}

@@ -1,0 +1,109 @@
+From 76672516d3e82cde655fc924b5df6c2ae8d7a778 Mon Sep 17 00:00:00 2001
+From: Taiki Endo <te316e89@gmail.com>
+Date: Mon, 2 Nov 2020 01:38:00 +0900
+Subject: [PATCH] Fix panic in some TryStreamExt combinators (#2250)
+
+---
+ .../src/stream/try_stream/try_filter_map.rs   |  3 +-
+ .../src/stream/try_stream/try_skip_while.rs   |  5 ++-
+ .../src/stream/try_stream/try_take_while.rs   |  5 ++-
+ futures/tests/try_stream.rs                   | 38 +++++++++++++++++++
+ 4 files changed, 46 insertions(+), 5 deletions(-)
+ create mode 100644 futures/tests/try_stream.rs
+
+diff --git a/futures-util/src/stream/try_stream/try_filter_map.rs b/futures-util/src/stream/try_stream/try_filter_map.rs
+index 6c1e48fd..b02e9ee2 100644
+--- a/futures-util/src/stream/try_stream/try_filter_map.rs
++++ b/futures-util/src/stream/try_stream/try_filter_map.rs
+@@ -66,8 +66,9 @@ impl<St, Fut, F, T> Stream for TryFilterMap<St, Fut, F>
+         Poll::Ready(loop {
+             if let Some(p) = this.pending.as_mut().as_pin_mut() {
+                 // We have an item in progress, poll that until it's done
+-                let item = ready!(p.try_poll(cx)?);
++                let res = ready!(p.try_poll(cx));
+                 this.pending.set(None);
++                let item = res?;
+                 if item.is_some() {
+                     break item.map(Ok);
+                 }
+diff --git a/futures-util/src/stream/try_stream/try_skip_while.rs b/futures-util/src/stream/try_stream/try_skip_while.rs
+index 35759d04..b359ae79 100644
+--- a/futures-util/src/stream/try_stream/try_skip_while.rs
++++ b/futures-util/src/stream/try_stream/try_skip_while.rs
+@@ -74,9 +74,10 @@ impl<St, Fut, F> Stream for TrySkipWhile<St, Fut, F>
+ 
+         Poll::Ready(loop {
+             if let Some(fut) = this.pending_fut.as_mut().as_pin_mut() {
+-                let skipped = ready!(fut.try_poll(cx)?);
+-                let item = this.pending_item.take();
++                let res = ready!(fut.try_poll(cx));
+                 this.pending_fut.set(None);
++                let skipped = res?;
++                let item = this.pending_item.take();
+                 if !skipped {
+                     *this.done_skipping = true;
+                     break item.map(Ok);
+diff --git a/futures-util/src/stream/try_stream/try_take_while.rs b/futures-util/src/stream/try_stream/try_take_while.rs
+index 16bfb204..e1ffffd4 100644
+--- a/futures-util/src/stream/try_stream/try_take_while.rs
++++ b/futures-util/src/stream/try_stream/try_take_while.rs
+@@ -76,9 +76,10 @@ where
+ 
+         Poll::Ready(loop {
+             if let Some(fut) = this.pending_fut.as_mut().as_pin_mut() {
+-                let take = ready!(fut.try_poll(cx)?);
+-                let item = this.pending_item.take();
++                let res = ready!(fut.try_poll(cx));
+                 this.pending_fut.set(None);
++                let take = res?;
++                let item = this.pending_item.take();
+                 if take {
+                     break item.map(Ok);
+                 } else {
+diff --git a/futures/tests/try_stream.rs b/futures/tests/try_stream.rs
+new file mode 100644
+index 00000000..194e74db
+--- /dev/null
++++ b/futures/tests/try_stream.rs
+@@ -0,0 +1,38 @@
++use futures::{
++    stream::{self, StreamExt, TryStreamExt},
++    task::Poll,
++};
++use futures_test::task::noop_context;
++
++#[test]
++fn try_filter_map_after_err() {
++    let cx = &mut noop_context();
++    let mut s = stream::iter(1..=3)
++        .map(Ok)
++        .try_filter_map(|v| async move { Err::<Option<()>, _>(v) })
++        .filter_map(|r| async move { r.ok() })
++        .boxed();
++    assert_eq!(Poll::Ready(None), s.poll_next_unpin(cx));
++}
++
++#[test]
++fn try_skip_while_after_err() {
++    let cx = &mut noop_context();
++    let mut s = stream::iter(1..=3)
++        .map(Ok)
++        .try_skip_while(|_| async move { Err::<_, ()>(()) })
++        .filter_map(|r| async move { r.ok() })
++        .boxed();
++    assert_eq!(Poll::Ready(None), s.poll_next_unpin(cx));
++}
++
++#[test]
++fn try_take_while_after_err() {
++    let cx = &mut noop_context();
++    let mut s = stream::iter(1..=3)
++        .map(Ok)
++        .try_take_while(|_| async move { Err::<_, ()>(()) })
++        .filter_map(|r| async move { r.ok() })
++        .boxed();
++    assert_eq!(Poll::Ready(None), s.poll_next_unpin(cx));
++}
+-- 
+2.34.1
+

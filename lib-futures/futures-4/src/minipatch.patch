@@ -1,0 +1,15 @@
+diff --git a/futures-util/src/stream/try_stream/try_filter_map.rs b/futures-util/src/stream/try_stream/try_filter_map.rs
+index 6c1e48fd..b02e9ee2 100644
+--- a/futures-util/src/stream/try_stream/try_filter_map.rs
++++ b/futures-util/src/stream/try_stream/try_filter_map.rs
+@@ -66,8 +66,9 @@ impl<St, Fut, F, T> Stream for TryFilterMap<St, Fut, F>
+         Poll::Ready(loop {
+             if let Some(p) = this.pending.as_mut().as_pin_mut() {
+                 // We have an item in progress, poll that until it's done
+-                let item = ready!(p.try_poll(cx)?);
++                let res = ready!(p.try_poll(cx));
+                 this.pending.set(None);
++                let item = res?;
+                 if item.is_some() {
+                     break item.map(Ok);
+                 }
