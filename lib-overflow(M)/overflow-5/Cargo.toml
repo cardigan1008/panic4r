@@ -1,7 +1,0 @@
-[package]
-name = "overflow-5"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-sub_assign_lib ={ path = "overflow-5"}

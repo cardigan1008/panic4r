@@ -1,7 +1,0 @@
-[package]
-name = "overflow-7"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-shl_lib = { path = "overflow-7" }
