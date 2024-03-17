@@ -1,0 +1,7 @@
+[package]
+name = "overflow-4"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+add_assign_lib = { path = "overflow-4" }
