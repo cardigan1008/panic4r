@@ -1,0 +1,8 @@
+workspace = { members = ["index-4"] }
+[package]
+name = "index-3"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+index_3 = { path = "index-3" }

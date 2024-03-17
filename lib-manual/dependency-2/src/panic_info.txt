@@ -1,0 +1,2 @@
+thread 'main' panicked at dependency-2/dep.rs:11:15:
+attempt to add with overflow
