@@ -1,0 +1,2 @@
+thread 'main' panicked at overflow-15/overflow-sub-assign.rs:4:5:
+attempt to subtract with overflow
