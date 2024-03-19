@@ -1,0 +1,7 @@
+[package]
+name = "explicit-1"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+explicit_1 ={ path = "explicit-1"}
