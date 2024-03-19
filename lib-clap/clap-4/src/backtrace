@@ -1,88 +1,58 @@
 stack backtrace:
-   0:     0x7ff7bd2e6e03 - std::sys_common::backtrace::_print::impl$0::fmt
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\sys_common\backtrace.rs:44
-   1:     0x7ff7bd2f79bd - core::fmt::rt::Argument::fmt
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\core\src\fmt\rt.rs:142
-   2:     0x7ff7bd2f79bd - core::fmt::write
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\core\src\fmt\mod.rs:1120
-   3:     0x7ff7bd2e4eb1 - std::io::Write::write_fmt<std::sys::windows::stdio::Stderr>       
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\io\mod.rs:1762
-   4:     0x7ff7bd2e6c0a - std::sys_common::backtrace::_print
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\sys_common\backtrace.rs:47
-   5:     0x7ff7bd2e6c0a - std::sys_common::backtrace::print
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\sys_common\backtrace.rs:34
-   6:     0x7ff7bd2e8d49 - std::panicking::default_hook::closure$1
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\panicking.rs:272
-   7:     0x7ff7bd2e8a0b - std::panicking::default_hook
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\panicking.rs:292
-   8:     0x7ff7bd2e9234 - std::panicking::rust_panic_with_hook
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\panicking.rs:779
-   9:     0x7ff7bd2e9105 - std::panicking::begin_panic_handler::closure$0
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\panicking.rs:657
-  10:     0x7ff7bd2e7499 - std::sys_common::backtrace::__rust_end_short_backtrace<std::panicking::begin_panic_handler::closure_env$0,never$>
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\sys_common\backtrace.rs:170
-  11:     0x7ff7bd2e8e14 - std::panicking::begin_panic_handler
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\panicking.rs:645
-  12:     0x7ff7bd2fe997 - core::panicking::panic_fmt
-/                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\core\src\panicking.rs:72
-  13:     0x7ff7bd2fe952 - core::panicking::panic_display
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\core\src\panicking.rs:178
-  14:     0x7ff7bd2fe952 - core::panicking::panic_str
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\core\src\panicking.rs:152
-  15:     0x7ff7bd2fe952 - core::option::expect_failed
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\core\src\option.rs:1985
-  16:     0x7ff7bd1b9470 - enum2$<core::option::Option<ref$<clap::builder::arg::Arg> > >::expect<ref$<clap::builder::arg::Arg> >
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\core\src\option.rs:894
-  17:     0x7ff7bd1c2ad1 - clap::builder::command::impl$4::get_arg_conflicts_with::closure$0 
-                               at D:\rustpanic\panic4r\lib-clap\clap-4\clap-2df0732df4d5a7dbd852243567b40898ae5f19bf\src\builder\command.rs:3562
-  18:     0x7ff7bd1f4faf - core::iter::adapters::map::map_fold::closure$0<ref$<clap::util::id::Id>,ref$<clap::builder::arg::Arg>,tuple$<>,clap::builder::command::impl$4::get_arg_conflicts_with::closure_env$0,core::iter::traits::iterator::Iterator::for_each::call::closure_env$0<ref$
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\core\src\iter\adapters\map.rs:84
-  19:     0x7ff7bd1dba41 - core::slice::iter::impl$181::fold<clap::util::id::Id,tuple$<>,core::iter::adapters::map::map_fold::closure_env$0<ref$<clap::util::id::Id>,ref$<clap::builder::arg::Arg>,tuple$<>,clap::builder::command::impl$4::get_arg_conflicts_with::closure_env$0,core::it
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\core\src\slice\iter\macros.rs:232
-  20:     0x7ff7bd1ee284 - core::iter::adapters::map::impl$2::fold<ref$<clap::builder::arg::Arg>,core::slice::iter::Iter<clap::util::id::Id>,clap::builder::command::impl$4::get_arg_conflicts_with::closure_env$0,tuple$<>,core::iter::traits::iterator::Iterator::for_each::call::closur
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\core\src\iter\adapters\map.rs:124
-  21:     0x7ff7bd1f2a2d - core::iter::traits::iterator::Iterator::for_each<core::iter::adapters::map::Map<core::slice::iter::Iter<clap::util::id::Id>,clap::builder::command::impl$4::get_arg_conflicts_with::closure_env$0>,alloc::vec::impl$19::extend_trusted::closure_env$0<ref$<clap
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\core\src\iter\traits\iterator.rs:858
-  22:     0x7ff7bd192e2f - alloc::vec::Vec<ref$<clap::builder::arg::Arg>,alloc::alloc::Global>::extend_trusted<ref$<clap::builder::arg::Arg>,alloc::alloc::Global,core::iter::adapters::map::Map<core::slice::iter::Iter<clap::util::id::Id>,clap::builder::command::impl$4::get_arg_confl
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\alloc\src\vec\mod.rs:2885
-  23:     0x7ff7bd1a25ce - alloc::vec::spec_extend::impl$1::spec_extend<ref$<clap::builder::arg::Arg>,core::iter::adapters::map::Map<core::slice::iter::Iter<clap::util::id::Id>,clap::builder::command::impl$4::get_arg_conflicts_with::closure_env$0>,alloc::alloc::Global>
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\alloc\src\vec\spec_extend.rs:26
-  24:     0x7ff7bd18ee1c - alloc::vec::spec_from_iter_nested::impl$1::from_iter<ref$<clap::builder::arg::Arg>,core::iter::adapters::map::Map<core::slice::iter::Iter<clap::util::id::Id>,clap::builder::command::impl$4::get_arg_conflicts_with::closure_env$0> >
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\alloc\src\vec\spec_from_iter_nested.rs:62
-  25:     0x7ff7bd1a30d1 - alloc::vec::spec_from_iter::impl$0::from_iter<ref$<clap::builder::arg::Arg>,core::iter::adapters::map::Map<core::slice::iter::Iter<clap::util::id::Id>,clap::builder::command::impl$4::get_arg_conflicts_with::closure_env$0> >
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\alloc\src\vec\spec_from_iter.rs:33
-  26:     0x7ff7bd1a1a47 - alloc::vec::impl$14::from_iter<ref$<clap::builder::arg::Arg>,core::iter::adapters::map::Map<core::slice::iter::Iter<clap::util::id::Id>,clap::builder::command::impl$4::get_arg_conflicts_with::closure_env$0> >
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\alloc\src\vec\mod.rs:2753
-  27:     0x7ff7bd1f2221 - core::iter::traits::iterator::Iterator::collect<core::iter::adapters::map::Map<core::slice::iter::Iter<clap::util::id::Id>,clap::builder::command::impl$4::get_arg_conflicts_with::closure_env$0>,alloc::vec::Vec<ref$<clap::builder::arg::Arg>,alloc::alloc::G
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\core\src\iter\traits\iterator.rs:2054
-  28:     0x7ff7bd1b0504 - clap::builder::command::App::get_arg_conflicts_with
-                               at D:\rustpanic\panic4r\lib-clap\clap-4\clap-2df0732df4d5a7dbd852243567b40898ae5f19bf\src\builder\command.rs:3559
-  29:     0x7ff7bd182ec5 - clap_4::main
-                               at D:\rustpanic\panic4r\lib-clap\clap-4\src\main.rs:19
-/  30:     0x7ff7bd1836fb - core::ops::function::FnOnce::call_once<void (*)(),tuple$<> >      
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\core\src\ops\function.rs:250
-  31:     0x7ff7bd1836be - core::hint::black_box
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\core\src\hint.rs:286
-  32:     0x7ff7bd1836be - std::sys_common::backtrace::__rust_begin_short_backtrace<void (*)(),tuple$<> >
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\std\src\sys_common\backtrace.rs:154
-  33:     0x7ff7bd1852e1 - std::rt::lang_start::closure$0<tuple$<> >
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\std\src\rt.rs:167
-  34:     0x7ff7bd2e1a78 - std::rt::lang_start_internal::closure$2
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\rt.rs:148
-  35:     0x7ff7bd2e1a78 - std::panicking::try::do_call
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\panicking.rs:552
-  36:     0x7ff7bd2e1a78 - std::panicking::try
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\panicking.rs:516
-  37:     0x7ff7bd2e1a78 - std::panic::catch_unwind
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\panic.rs:142
-  38:     0x7ff7bd2e1a78 - std::rt::lang_start_internal
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112/library\std\src\rt.rs:148
-  39:     0x7ff7bd1852ba - std::rt::lang_start<tuple$<> >
-                               at /rustc/82e1608dfa6e0b5569232559e3d385fea5a93112\library\std\src\rt.rs:166
-  40:     0x7ff7bd1831d9 - main
-  41:     0x7ff7bd2fd250 - invoke_main
-                               at D:\a\_work\1\s\src\vctools\crt\vcstartup\src\startup\exe_common.inl:78
-  42:     0x7ff7bd2fd250 - __scrt_common_main_seh
-                               at D:\a\_work\1\s\src\vctools\crt\vcstartup\src\startup\exe_common.inl:288
-  43:     0x7ffc3a6754e0 - BaseThreadInitThunk
-  44:     0x7ffc3bbc485b - RtlUserThreadStart
+   0:     0x5d2f84e5b997 - <std::sys_common::backtrace::_print::DisplayBacktrace as core::fmt::Display>::fmt::ha80944df92d6f3f3
+   1:     0x5d2f84e7aaa0 - core::fmt::write::h5f308fd0cfeb0a12
+   2:     0x5d2f84e5327f - std::io::Write::write_fmt::h1a828915edd6751d
+   3:     0x5d2f84e5b764 - std::sys_common::backtrace::print::hbe7adb6d6bb0b3fe
+   4:     0x5d2f84e5c46a - std::panicking::default_hook::{{closure}}::h09dbcd74f2e707cb
+   5:     0x5d2f84e5c182 - std::panicking::default_hook::h6e5704c17d785d80
+   6:     0x5d2f84e5c978 - std::panicking::rust_panic_with_hook::ha884ac5eeb689ace
+   7:     0x5d2f84e5c85a - std::panicking::begin_panic_handler::{{closure}}::h1ce9c66472909920
+   8:     0x5d2f84e5bbc6 - std::sys_common::backtrace::__rust_end_short_backtrace::hdca70eeac61fb666
+   9:     0x5d2f84e5c5a4 - rust_begin_unwind
+  10:     0x5d2f84cd57e5 - core::panicking::panic_fmt::h37cca8453d0448e1
+  11:     0x5d2f84cd60c3 - core::option::expect_failed::h51ff943688be124b
+  12:     0x5d2f84cdee52 - core::option::Option<T>::expect::hc5510334940cd901
+                               at /home/sigger/Documents/rustgra1/rustc-graph/library/core/src/option.rs:894:21
+  13:     0x5d2f84d46e03 - clap::builder::command::App::get_arg_conflicts_with::{{closure}}::he1c99082cdaec6f3
+                               at /home/sigger/Documents/panic4r/panic4r/lib-clap/clap-4/clap-2df0732df4d5a7dbd852243567b40898ae5f19bf/src/builder/command.rs:3562:21
+  14:     0x5d2f84d4205b - core::iter::adapters::map::map_fold::{{closure}}::he64ce55a9e773f0e
+                               at /home/sigger/Documents/rustgra1/rustc-graph/library/core/src/iter/adapters/map.rs:89:28
+  15:     0x5d2f84cf1513 - <core::slice::iter::Iter<T> as core::iter::traits::iterator::Iterator>::fold::h9d09da4bb72eaf84
+                               at /home/sigger/Documents/rustgra1/rustc-graph/library/core/src/slice/iter/macros.rs:232:27
+  16:     0x5d2f84d3a3b4 - <core::iter::adapters::map::Map<I,F> as core::iter::traits::iterator::Iterator>::fold::h6436852ed3d7d8f7
+                               at /home/sigger/Documents/rustgra1/rustc-graph/library/core/src/iter/adapters/map.rs:129:9
+  17:     0x5d2f84d3eb86 - core::iter::traits::iterator::Iterator::for_each::h4430949f21de367e
+                               at /home/sigger/Documents/rustgra1/rustc-graph/library/core/src/iter/traits/iterator.rs:858:9
+  18:     0x5d2f84d08847 - alloc::vec::Vec<T,A>::extend_trusted::h4dbf2018d1c2bf8e
+                               at /home/sigger/Documents/rustgra1/rustc-graph/library/alloc/src/vec/mod.rs:2962:17
+  19:     0x5d2f84d1a51b - <alloc::vec::Vec<T,A> as alloc::vec::spec_extend::SpecExtend<T,I>>::spec_extend::h7d18ed9b30354e86
+                               at /home/sigger/Documents/rustgra1/rustc-graph/library/alloc/src/vec/spec_extend.rs:26:9
+  20:     0x5d2f84d01ba2 - <alloc::vec::Vec<T> as alloc::vec::spec_from_iter_nested::SpecFromIterNested<T,I>>::from_iter::h92c2d5e32538f67b
+                               at /home/sigger/Documents/rustgra1/rustc-graph/library/alloc/src/vec/spec_from_iter_nested.rs:62:9
+  21:     0x5d2f84d1a9fe - <alloc::vec::Vec<T> as alloc::vec::spec_from_iter::SpecFromIter<T,I>>::from_iter::h63e3e4dbf535eb25
+                               at /home/sigger/Documents/rustgra1/rustc-graph/library/alloc/src/vec/spec_from_iter.rs:33:9
+  22:     0x5d2f84d19a77 - <alloc::vec::Vec<T> as core::iter::traits::collect::FromIterator<T>>::from_iter::h6c91b0268ce7a82c
+                               at /home/sigger/Documents/rustgra1/rustc-graph/library/alloc/src/vec/mod.rs:2836:9
+  23:     0x5d2f84d3e75e - core::iter::traits::iterator::Iterator::collect::hcf6692ddf2a54e46
+                               at /home/sigger/Documents/rustgra1/rustc-graph/library/core/src/iter/traits/iterator.rs:2054:9
+  24:     0x5d2f84d857ef - clap::builder::command::App::get_arg_conflicts_with::hcae53fcf92b6b7da
+                               at /home/sigger/Documents/panic4r/panic4r/lib-clap/clap-4/clap-2df0732df4d5a7dbd852243567b40898ae5f19bf/src/builder/command.rs:3559:13
+  25:     0x5d2f84cd6899 - clap_4::main::h96445e3ef805e9f1
+                               at /home/sigger/Documents/panic4r/panic4r/lib-clap/clap-4/src/main.rs:19:33
+  26:     0x5d2f84cd7e3b - core::ops::function::FnOnce::call_once::h7609a6604aa67194
+                               at /home/sigger/Documents/rustgra1/rustc-graph/library/core/src/ops/function.rs:250:5
+  27:     0x5d2f84cd9c3e - std::sys_common::backtrace::__rust_begin_short_backtrace::hd8e60d3947a5b86c
+                               at /home/sigger/Documents/rustgra1/rustc-graph/library/std/src/sys_common/backtrace.rs:155:18
+  28:     0x5d2f84cd6bf1 - std::rt::lang_start::{{closure}}::hd04038cf5d15a9db
+                               at /home/sigger/Documents/rustgra1/rustc-graph/library/std/src/rt.rs:166:18
+  29:     0x5d2f84e5c4a4 - std::panicking::try::hd8575d7224f78e94
+  30:     0x5d2f84e4ba9b - std::rt::lang_start_internal::hd215535d1218f83f
+  31:     0x5d2f84cd6bca - std::rt::lang_start::h85ba3c678c4dd7e4
+                               at /home/sigger/Documents/rustgra1/rustc-graph/library/std/src/rt.rs:165:17
+  32:     0x5d2f84cd6a9e - main
+  33:     0x72e788829d90 - __libc_start_call_main
+                               at ./csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+  34:     0x72e788829e40 - __libc_start_main_impl
+                               at ./csu/../csu/libc-start.c:392:3
+  35:     0x5d2f84cd60f5 - _start
+  36:                0x0 - <unknown>

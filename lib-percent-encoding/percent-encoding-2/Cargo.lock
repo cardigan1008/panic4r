@@ -3,6 +3,14 @@
 version = 3
 
 [[package]]
+name = "form_urlencoded"
+version = "1.0.0"
+dependencies = [
+ "matches",
+ "percent-encoding",
+]
+
+[[package]]
 name = "idna"
 version = "0.2.0"
 dependencies = [
@@ -60,8 +68,9 @@ dependencies = [
 
 [[package]]
 name = "url"
-version = "2.1.1"
+version = "2.2.0"
 dependencies = [
+ "form_urlencoded",
  "idna",
  "matches",
  "percent-encoding",
