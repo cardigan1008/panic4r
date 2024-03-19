@@ -1,15 +1,6 @@
-// Copyright 2016 The rust-url developers.
-//
-// Licensed under the Apache License, Version 2.0 <LICENSE-APACHE or
-// http://www.apache.org/licenses/LICENSE-2.0> or the MIT license
-// <LICENSE-MIT or http://opensource.org/licenses/MIT>, at your
-// option. This file may not be copied, modified, or distributed
-// except according to those terms.
-
 use crate::parser::{self, to_u32, SchemeType};
 use crate::Url;
 use std::str;
-
 /// Exposes methods to manipulate the path of an URL that is not cannot-be-base.
 ///
 /// The path always starts with a `/` slash, and is made of slash-separated segments.
@@ -40,18 +31,15 @@ pub struct PathSegmentsMut<'a> {
     after_path: String,
     old_after_path_position: u32,
 }
-
-// Not re-exported outside the crate
 pub fn new(url: &mut Url) -> PathSegmentsMut<'_> {
     let after_path = url.take_after_path();
     let old_after_path_position = to_u32(url.serialization.len()).unwrap();
-    // Special urls always have a non empty path
     if SchemeType::from(url.scheme()).is_special() {
         debug_assert!(url.byte_at(url.path_start) == b'/');
     } else {
         debug_assert!(
-            url.serialization.len() == url.path_start as usize
-                || url.byte_at(url.path_start) == b'/'
+            url.serialization.len() == url.path_start as usize || url.byte_at(url
+            .path_start) == b'/'
         );
     }
     PathSegmentsMut {
@@ -61,14 +49,11 @@ pub fn new(url: &mut Url) -> PathSegmentsMut<'_> {
         after_path,
     }
 }
-
 impl<'a> Drop for PathSegmentsMut<'a> {
     fn drop(&mut self) {
-        self.url
-            .restore_after_path(self.old_after_path_position, &self.after_path)
+        self.url.restore_after_path(self.old_after_path_position, &self.after_path)
     }
 }
-
 impl<'a> PathSegmentsMut<'a> {
     /// Remove all segments in the path, leaving the minimal `url.path() == "/"`.
     ///
@@ -93,7 +78,6 @@ impl<'a> PathSegmentsMut<'a> {
         self.url.serialization.truncate(self.after_first_slash);
         self
     }
-
     /// Remove the last segment of this URL’s path if it is empty,
     /// except if these was only one segment to begin with.
     ///
@@ -123,27 +107,27 @@ impl<'a> PathSegmentsMut<'a> {
     /// # run().unwrap();
     /// ```
     pub fn pop_if_empty(&mut self) -> &mut Self {
-        if self.url.serialization[self.after_first_slash..].ends_with('/') {
+        if self.after_first_slash < self.url.serialization.len()
+            && self.url.serialization[self.after_first_slash..].ends_with('/')
+        {
             self.url.serialization.pop();
         }
         self
     }
-
     /// Remove the last segment of this URL’s path.
     ///
     /// If the path only has one segment, make it empty such that `url.path() == "/"`.
     ///
     /// Returns `&mut Self` so that method calls can be chained.
     pub fn pop(&mut self) -> &mut Self {
-        let last_slash = self.url.serialization[self.after_first_slash..]
+        let last_slash = self
+            .url
+            .serialization[self.after_first_slash..]
             .rfind('/')
             .unwrap_or(0);
-        self.url
-            .serialization
-            .truncate(self.after_first_slash + last_slash);
+        self.url.serialization.truncate(self.after_first_slash + last_slash);
         self
     }
-
     /// Append the given segment at the end of this URL’s path.
     ///
     /// See the documentation for `.extend()`.
@@ -152,7 +136,6 @@ impl<'a> PathSegmentsMut<'a> {
     pub fn push(&mut self, segment: &str) -> &mut Self {
         self.extend(Some(segment))
     }
-
     /// Append each segment from the given iterator at the end of this URL’s path.
     ///
     /// Each segment is percent-encoded like in `Url::parse` or `Url::join`,
@@ -213,28 +196,29 @@ impl<'a> PathSegmentsMut<'a> {
     {
         let scheme_type = SchemeType::from(self.url.scheme());
         let path_start = self.url.path_start as usize;
-        self.url.mutate(|parser| {
-            parser.context = parser::Context::PathSegmentSetter;
-            for segment in segments {
-                let segment = segment.as_ref();
-                if matches!(segment, "." | "..") {
-                    continue;
+        self.url
+            .mutate(|parser| {
+                parser.context = parser::Context::PathSegmentSetter;
+                for segment in segments {
+                    let segment = segment.as_ref();
+                    if matches!(segment, "." | "..") {
+                        continue;
+                    }
+                    if parser.serialization.len() > path_start + 1
+                        || parser.serialization.len() == path_start
+                    {
+                        parser.serialization.push('/');
+                    }
+                    let mut has_host = true;
+                    parser
+                        .parse_path(
+                            scheme_type,
+                            &mut has_host,
+                            path_start,
+                            parser::Input::new(segment),
+                        );
                 }
-                if parser.serialization.len() > path_start + 1
-                    // Non special url's path might still be empty
-                    || parser.serialization.len() == path_start
-                {
-                    parser.serialization.push('/');
-                }
-                let mut has_host = true; // FIXME account for this?
-                parser.parse_path(
-                    scheme_type,
-                    &mut has_host,
-                    path_start,
-                    parser::Input::new(segment),
-                );
-            }
-        });
+            });
         self
     }
 }

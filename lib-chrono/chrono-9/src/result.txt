@@ -1,0 +1,20 @@
+Ranked fault locations:
+Rank 1: FaultLoc {
+    ident: "round",
+    line_num: 196,
+    col_num: 35,
+    file_path: "src/round.rs",
+    is_dep: false,
+    depth: 1,
+    score: 2.0,
+}
+Rank 2: FaultLoc {
+    ident: "naive",
+    line_num: 164,
+    col_num: 8,
+    file_path: "src/round.rs",
+    is_dep: false,
+    depth: 2,
+    score: 1.0,
+}
+Ranked patches:

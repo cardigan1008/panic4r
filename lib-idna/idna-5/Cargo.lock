@@ -4,7 +4,7 @@ version = 3
 
 [[package]]
 name = "idna"
-version = "0.1.5"
+version = "0.2.0"
 dependencies = [
  "matches",
  "unicode-bidi",
@@ -26,7 +26,7 @@ checksum = "2532096657941c2fea9c289d370a250971c689d4f143798ff67113ec042024a5"
 
 [[package]]
 name = "percent-encoding"
-version = "1.0.2"
+version = "2.1.0"
 
 [[package]]
 name = "tinyvec"
@@ -60,7 +60,7 @@ dependencies = [
 
 [[package]]
 name = "url"
-version = "1.7.2"
+version = "2.1.0"
 dependencies = [
  "idna",
  "matches",
