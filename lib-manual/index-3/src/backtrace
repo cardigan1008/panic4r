@@ -1,0 +1,32 @@
+stack backtrace:
+   0:     0x55ca92c9abb7 - <std::sys_common::backtrace::_print::DisplayBacktrace as core::fmt::Display>::fmt::ha80944df92d6f3f3
+   1:     0x55ca92cb8e30 - core::fmt::write::h5f308fd0cfeb0a12
+   2:     0x55ca92c9318f - std::io::Write::write_fmt::h1a828915edd6751d
+   3:     0x55ca92c9a984 - std::sys_common::backtrace::print::hbe7adb6d6bb0b3fe
+   4:     0x55ca92c9b68a - std::panicking::default_hook::{{closure}}::h09dbcd74f2e707cb
+   5:     0x55ca92c9b3a2 - std::panicking::default_hook::h6e5704c17d785d80
+   6:     0x55ca92c9bb98 - std::panicking::rust_panic_with_hook::ha884ac5eeb689ace
+   7:     0x55ca92c9ba7a - std::panicking::begin_panic_handler::{{closure}}::h1ce9c66472909920
+   8:     0x55ca92c9ade6 - std::sys_common::backtrace::__rust_end_short_backtrace::hdca70eeac61fb666
+   9:     0x55ca92c9b7c4 - rust_begin_unwind
+  10:     0x55ca92c7f0a5 - core::panicking::panic_fmt::h37cca8453d0448e1
+  11:     0x55ca92c7f282 - core::panicking::panic_bounds_check::h3b5ab787add07baa
+  12:     0x55ca92c7fb5f - index_3::index::h1bcfed155ced1ca9
+                               at /home/cardigan/panic4r/lib-manual/index-3/index-3/index.rs:8:5
+  13:     0x55ca92c7fa07 - index_3::main::hf6376a6f62e1b708
+                               at /home/cardigan/panic4r/lib-manual/index-3/src/main.rs:4:5
+  14:     0x55ca92c7f9db - core::ops::function::FnOnce::call_once::hd323547620bc5ef3
+                               at /home/cardigan/rustc-graph/library/core/src/ops/function.rs:250:5
+  15:     0x55ca92c7f95e - std::sys_common::backtrace::__rust_begin_short_backtrace::h22aa59bc71c82753
+                               at /home/cardigan/rustc-graph/library/std/src/sys_common/backtrace.rs:155:18
+  16:     0x55ca92c7fa91 - std::rt::lang_start::{{closure}}::h71c2ce51c1c3a9e3
+                               at /home/cardigan/rustc-graph/library/std/src/rt.rs:166:18
+  17:     0x55ca92c9b6c4 - std::panicking::try::hd8575d7224f78e94
+  18:     0x55ca92c8ba2b - std::rt::lang_start_internal::hd215535d1218f83f
+  19:     0x55ca92c7fa6a - std::rt::lang_start::h496a0f7dd9ecc110
+                               at /home/cardigan/rustc-graph/library/std/src/rt.rs:165:17
+  20:     0x55ca92c7fa2e - main
+  21:     0x7f84ea8e6083 - __libc_start_main
+                               at /build/glibc-wuryBv/glibc-2.31/csu/../csu/libc-start.c:308:16
+  22:     0x55ca92c7f88e - _start
+  23:                0x0 - <unknown>

@@ -1,0 +1,41 @@
+stack backtrace:
+   0:     0x55a7e05d3d47 - <std::sys_common::backtrace::_print::DisplayBacktrace as core::fmt::Display>::fmt::ha80944df92d6f3f3
+   1:     0x55a7e05f1fc0 - core::fmt::write::h5f308fd0cfeb0a12
+   2:     0x55a7e05cc31f - std::io::Write::write_fmt::h1a828915edd6751d
+   3:     0x55a7e05d3b14 - std::sys_common::backtrace::print::hbe7adb6d6bb0b3fe
+   4:     0x55a7e05d481a - std::panicking::default_hook::{{closure}}::h09dbcd74f2e707cb
+   5:     0x55a7e05d4532 - std::panicking::default_hook::h6e5704c17d785d80
+   6:     0x55a7e05d4d28 - std::panicking::rust_panic_with_hook::ha884ac5eeb689ace
+   7:     0x55a7e05d4c0a - std::panicking::begin_panic_handler::{{closure}}::h1ce9c66472909920
+   8:     0x55a7e05d3f76 - std::sys_common::backtrace::__rust_end_short_backtrace::hdca70eeac61fb666
+   9:     0x55a7e05d4954 - rust_begin_unwind
+  10:     0x55a7e05b80a5 - core::panicking::panic_fmt::h37cca8453d0448e1
+  11:     0x55a7e05b8592 - core::slice::index::slice_end_index_len_fail::h9224062543218f06
+  12:     0x55a7e05b8ca4 - <core::ops::range::Range<usize> as core::slice::index::SliceIndex<[T]>>::index::h5d540155a65ffe0a
+                               at /home/cardigan/rustc-graph/library/core/src/slice/index.rs:394:13
+  13:     0x55a7e05b8ceb - <core::ops::range::RangeTo<usize> as core::slice::index::SliceIndex<[T]>>::index::h2986a1547e5b1900
+                               at /home/cardigan/rustc-graph/library/core/src/slice/index.rs:441:9
+  14:     0x55a7e05b8bac - core::slice::index::<impl core::ops::index::Index<I> for [T]>::index::hf7eb7d58061dc36e
+                               at /home/cardigan/rustc-graph/library/core/src/slice/index.rs:18:9
+  15:     0x55a7e05b8b72 - core::array::<impl core::ops::index::Index<I> for [T; N]>::index::hd69d0286422948d7
+                               at /home/cardigan/rustc-graph/library/core/src/array/mod.rs:348:9
+  16:     0x55a7e05b8b3c - index_8::index::ha7cfc38d1700fb21
+                               at /home/cardigan/panic4r/lib-manual/index-8/index-8/index.rs:4:14
+  17:     0x55a7e05b8957 - index_8::main::hff2990114c0c47bc
+                               at /home/cardigan/panic4r/lib-manual/index-8/src/main.rs:4:5
+  18:     0x55a7e05b89ab - core::ops::function::FnOnce::call_once::h5bd6b28bdf6c364e
+                               at /home/cardigan/rustc-graph/library/core/src/ops/function.rs:250:5
+  19:     0x55a7e05b8a1e - std::sys_common::backtrace::__rust_begin_short_backtrace::h370d6a54e73af4e2
+                               at /home/cardigan/rustc-graph/library/std/src/sys_common/backtrace.rs:155:18
+  20:     0x55a7e05b8a91 - std::rt::lang_start::{{closure}}::h6294b2853e7b6f42
+                               at /home/cardigan/rustc-graph/library/std/src/rt.rs:166:18
+  21:     0x55a7e05d4854 - std::panicking::try::hd8575d7224f78e94
+  22:     0x55a7e05c4bbb - std::rt::lang_start_internal::hd215535d1218f83f
+  23:     0x55a7e05b8a6a - std::rt::lang_start::h403a923cd9083b73
+                               at /home/cardigan/rustc-graph/library/std/src/rt.rs:165:17
+  24:     0x55a7e05b897e - main
+  25:     0x7f6fac41c083 - __libc_start_main
+                               at /build/glibc-wuryBv/glibc-2.31/csu/../csu/libc-start.c:308:16
+  26:     0x55a7e05b888e - _start
+  27:                0x0 - <unknown>
+  

@@ -1,0 +1,7 @@
+[package]
+name = "overflow-2"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+sub_lib ={ path = "overflow-2"}

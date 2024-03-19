@@ -1,0 +1,7 @@
+[package]
+name = "zero-2"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+div_assign_lib ={ path = "zero-2"}

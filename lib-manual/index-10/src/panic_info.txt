@@ -1,0 +1,2 @@
+thread 'main' panicked at index-10/index.rs:7:22:
+slice index starts at 1 but ends at 0
