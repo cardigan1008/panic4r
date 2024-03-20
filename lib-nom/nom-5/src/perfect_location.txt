@@ -1,2 +1,2 @@
-src/str.r
-src/traits.rs 
+src/traits.rs:323:5
+src/traits.rs:341:5
