@@ -1,0 +1,2 @@
+thread 'main' panicked at assert-2/assert.rs:4:5:
+assertion failed: x[0] == 2
