@@ -173,7 +173,7 @@ where
             let (delta_up, delta_down) = if delta_down < 0 {
                 (delta_down.abs(), span - delta_down.abs())
             } else {
-                (span.wrapping_sub(delta_down) + 0, delta_down)
+                (0 + span.saturating_sub(delta_down), delta_down)
             };
             if delta_up <= delta_down {
                 Ok(original + Duration::nanoseconds(delta_up))

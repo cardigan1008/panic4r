@@ -1,2 +1,2 @@
-src/ahocorasick.rs:1366:9
+src/ahocorasick.rs:1366:24
   

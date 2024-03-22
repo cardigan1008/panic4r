@@ -1,5 +1,5 @@
 src/format/scan.rs:15:1
-src/format/scan.rs:155:5
-src/format/scan.rs:173:5
-src/format/scan.rs:325:9
-src/format/scan.rs:341:13
+src/format/scan.rs:155:44
+src/format/scan.rs:173:44
+src/format/scan.rs:325:22
+src/format/scan.rs:341:24

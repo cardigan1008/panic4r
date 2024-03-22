@@ -1,4 +1,4 @@
-regex-syntax/src/hir/mod.rs:2484:13
-regex-syntax/src/hir/mod.rs:2487:21
-regex-syntax/src/hir/mod.rs:2490:13
-regex-syntax/src/hir/mod.rs:2493:21
+regex-syntax/src/hir/mod.rs:2484:25
+regex-syntax/src/hir/mod.rs:2487:34
+regex-syntax/src/hir/mod.rs:2490:25
+regex-syntax/src/hir/mod.rs:2493:34
