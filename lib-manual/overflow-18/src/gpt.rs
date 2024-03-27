@@ -1,4 +1,4 @@
-pub fn make_31() -> i32 {
+pub fn make_31() -> u32 {
     let mut x = 0;
 
     for _ in 0..32 {
@@ -8,12 +8,12 @@ pub fn make_31() -> i32 {
     x
 }
 
-pub fn shl_assign(mut x: i32) -> i32 {
+pub fn shl_assign(mut x: u32) -> u32 {
     x <<= make_31();
 
     x
 }
 
 fn main() {
-    let _: i32 = shl_assign(1);
+    let _: u32 = shl_assign(1);
 }

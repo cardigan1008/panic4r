@@ -1,5 +1,5 @@
 mod offset;
 
-pub fn shl(x: i32) -> i32 {
+pub fn shl(x: u32) -> u32 {
     x << offset::make_31()
 }

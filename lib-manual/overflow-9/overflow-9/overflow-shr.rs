@@ -1,4 +1,4 @@
-fn make_31() -> i32 {
+fn make_31() -> u32 {
     let mut x = 0;
 
     for _ in 0..32 {
@@ -8,6 +8,6 @@ fn make_31() -> i32 {
     x
 }
 
-pub fn shr(x: i32) -> i32 {
+pub fn shr(x: u32) -> u32 {
     x >> make_31()
 }
