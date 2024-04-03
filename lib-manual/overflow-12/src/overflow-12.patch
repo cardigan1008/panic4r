@@ -1,0 +1,11 @@
+diff --git a/lib-manual/overflow-12/overflow-12/overflow-sub.rs b/lib-manual/overflow-12/overflow-12/overflow-sub.rs
+index d49cb13..81dab11 100644
+--- a/lib-manual/overflow-12/overflow-12/overflow-sub.rs
++++ b/lib-manual/overflow-12/overflow-12/overflow-sub.rs
+@@ -1,5 +1,5 @@
+ pub mod one;
+ 
+ pub fn sub(x: i32) -> i32 {
+-    x - one::one()
++    x.saturating_sub(one::one())
+ }
