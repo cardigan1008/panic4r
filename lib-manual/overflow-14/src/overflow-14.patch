@@ -1,0 +1,13 @@
+diff --git a/lib-manual/overflow-14/overflow-14/overflow.rs b/lib-manual/overflow-14/overflow-14/overflow.rs
+index e8f1567..f5c90ea 100644
+--- a/lib-manual/overflow-14/overflow-14/overflow.rs
++++ b/lib-manual/overflow-14/overflow-14/overflow.rs
+@@ -1,7 +1,7 @@
+ pub mod one;
+ 
+ pub fn add_assign(mut x: i32) -> i32 {
+-    x += one::one();
++    x.saturating_add(one::one());
+ 
+     x
+ }
