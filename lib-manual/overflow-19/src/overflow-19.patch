@@ -1,0 +1,12 @@
+diff --git a/lib-manual/overflow-19/overflow-19/overflow-shr.rs b/lib-manual/overflow-19/overflow-19/overflow-shr.rs
+index 7a9dbea..f89ca06 100644
+--- a/lib-manual/overflow-19/overflow-19/overflow-shr.rs
++++ b/lib-manual/overflow-19/overflow-19/overflow-shr.rs
+@@ -1,5 +1,5 @@
+ mod offset;
+ 
+ pub fn shr(x: u32) -> u32 {
+-    x >> offset::make_31()
++    x.wrapping_shr(offset::make_31())
+ }
+\ No newline at end of file
