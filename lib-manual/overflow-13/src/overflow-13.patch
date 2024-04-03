@@ -1,0 +1,11 @@
+diff --git a/lib-manual/overflow-13/overflow-13/overflow-mul.rs b/lib-manual/overflow-13/overflow-13/overflow-mul.rs
+index 889b48b..800d47e 100644
+--- a/lib-manual/overflow-13/overflow-13/overflow-mul.rs
++++ b/lib-manual/overflow-13/overflow-13/overflow-mul.rs
+@@ -1,5 +1,5 @@
+ pub mod two;
+ 
+ pub fn mul(x: i32) -> i32 {
+-    x * two::two()
++    x.saturating_mul(two::two())
+ }
