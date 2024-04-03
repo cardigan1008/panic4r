@@ -1,0 +1,13 @@
+diff --git a/lib-manual/index-6/index-6/index.rs b/lib-manual/index-6/index-6/index.rs
+index 5dce336..5b9ccb0 100644
+--- a/lib-manual/index-6/index-6/index.rs
++++ b/lib-manual/index-6/index-6/index.rs
+@@ -3,7 +3,7 @@ pub fn one() -> usize {
+ }
+ pub fn index() -> i32 {
+     let x = [0];
+-    if x[one()] > 0 {
++    if one() < x.len() && x[one()] > 0 {
+         return 1;
+     } else {
+         return 0;
