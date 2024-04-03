@@ -1,0 +1,14 @@
+diff --git a/lib-manual/overflow-16/overflow-16/overflow-mul-assign.rs b/lib-manual/overflow-16/overflow-16/overflow-mul-assign.rs
+index bf2ddfa..776c926 100644
+--- a/lib-manual/overflow-16/overflow-16/overflow-mul-assign.rs
++++ b/lib-manual/overflow-16/overflow-16/overflow-mul-assign.rs
+@@ -1,7 +1,7 @@
+ pub mod two;
+ 
+ pub fn mul_assign(mut x: i32) -> i32 {
+-    x *= two::two();
++    x.saturating_mul(two::two());
+     
+     x
+ }
+\ No newline at end of file
