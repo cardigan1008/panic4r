@@ -1,0 +1,12 @@
+diff --git a/lib-manual/zero-2/zero-2/div-assign-by-zero.rs b/lib-manual/zero-2/zero-2/div-assign-by-zero.rs
+index 31bf672..075ea8c 100644
+--- a/lib-manual/zero-2/zero-2/div-assign-by-zero.rs
++++ b/lib-manual/zero-2/zero-2/div-assign-by-zero.rs
+@@ -1,5 +1,5 @@
+ pub fn div_assign(mut x: i32, y: i32) -> i32 {
+-    x /= y;
++    x /= y.max(1);
+ 
+     x
+ }
+\ No newline at end of file
