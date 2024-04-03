@@ -1,0 +1,11 @@
+diff --git a/lib-manual/overflow-4/overflow-4/overflow-add-assign.rs b/lib-manual/overflow-4/overflow-4/overflow-add-assign.rs
+index e37496b..8c486c8 100644
+--- a/lib-manual/overflow-4/overflow-4/overflow-add-assign.rs
++++ b/lib-manual/overflow-4/overflow-4/overflow-add-assign.rs
+@@ -1,5 +1,5 @@
+ pub fn add_assign(mut x: i32) -> i32 {
+-    x += 1;
++    x.saturating_add(1);
+     
+     x
+ }
