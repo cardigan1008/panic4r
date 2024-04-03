@@ -1,0 +1,13 @@
+diff --git a/lib-manual/overflow-10/overflow-10/overflow-shr-assign.rs b/lib-manual/overflow-10/overflow-10/overflow-shr-assign.rs
+index 23be424..cf9c110 100644
+--- a/lib-manual/overflow-10/overflow-10/overflow-shr-assign.rs
++++ b/lib-manual/overflow-10/overflow-10/overflow-shr-assign.rs
+@@ -9,7 +9,7 @@ fn make_31() -> u32 {
+ }
+ 
+ pub fn shr_assign(mut x: u32) -> u32 {
+-    x >>= make_31();
++    x.wrapping_shr(make_31());
+ 
+     x
+ }
