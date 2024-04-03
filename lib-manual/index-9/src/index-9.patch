@@ -1,0 +1,13 @@
+diff --git a/lib-manual/index-9/index-9/index.rs b/lib-manual/index-9/index-9/index.rs
+index aecd647..4f2439e 100644
+--- a/lib-manual/index-9/index-9/index.rs
++++ b/lib-manual/index-9/index-9/index.rs
+@@ -1,5 +1,8 @@
+ pub fn index() {
+     let x: [i32; 2] = [0, 1];
+     let a = 3;
++    if a >= x.len() {
++        return;
++    }
+     let _ = x[a..];
+ }
