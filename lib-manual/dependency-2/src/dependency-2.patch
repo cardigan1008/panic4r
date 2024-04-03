@@ -1,0 +1,11 @@
+diff --git a/lib-manual/dependency-2/dependency-2/dep.rs b/lib-manual/dependency-2/dependency-2/dep.rs
+index 07a729b..c9b85c8 100644
+--- a/lib-manual/dependency-2/dependency-2/dep.rs
++++ b/lib-manual/dependency-2/dependency-2/dep.rs
+@@ -8,5 +8,5 @@ pub fn dep() {
+     let x: [i32; 2] = [1, 2];
+     let one = One { one: x[1] };
+     let y: i32 = 2147483646;
+-    let dep = y + one.one;
++    let dep = y.saturating_add(one.one);
+ }
