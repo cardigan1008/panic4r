@@ -1,0 +1,13 @@
+diff --git a/lib-manual/overflow-18/overflow-18/overflow-shl-assign.rs b/lib-manual/overflow-18/overflow-18/overflow-shl-assign.rs
+index 58e3a2a..6b0ec70 100644
+--- a/lib-manual/overflow-18/overflow-18/overflow-shl-assign.rs
++++ b/lib-manual/overflow-18/overflow-18/overflow-shl-assign.rs
+@@ -1,7 +1,7 @@
+ mod offset;
+ 
+ pub fn shl_assign(mut x: u32) -> u32 {
+-    x <<= offset::make_31();
++    x.wrapping_shl(offset::make_31());
+ 
+     x
+ }
