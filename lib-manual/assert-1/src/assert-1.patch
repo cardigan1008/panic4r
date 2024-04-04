@@ -6,7 +6,7 @@ index da63129..c63ede7 100644
  pub fn one() -> i32 {
      let x = [1, 2, 3, 4];
  
--    x[2]
-+    x[1]
+-    x[1]
++    x[0]
  }
 \ No newline at end of file
