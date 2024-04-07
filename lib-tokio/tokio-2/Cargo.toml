@@ -4,4 +4,4 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-tokio={path="/home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-2/tokio-3a4aef17b2c70d255affa51eb473efcf703896e4/tokio", features = ["full"]}
+tokio={path="tokio-3a4aef17b2c70d255affa51eb473efcf703896e4/tokio", features = ["full"]}
