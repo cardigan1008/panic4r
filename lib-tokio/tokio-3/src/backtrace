@@ -1,0 +1,107 @@
+stack backtrace:
+   0:     0x610d02e371a4 - std::backtrace_rs::backtrace::libunwind::trace::hcc77c014d9978d03
+                               at /rustc/b6d2d841bcf4b77343b159f134c7d39c2dd4ceaa/library/std/src/../../backtrace/src/backtrace/libunwind.rs:104:5
+   1:     0x610d02e371a4 - std::backtrace_rs::backtrace::trace_unsynchronized::h15792e544fd6f166
+                               at /rustc/b6d2d841bcf4b77343b159f134c7d39c2dd4ceaa/library/std/src/../../backtrace/src/backtrace/mod.rs:66:5
+   2:     0x610d02e371a4 - std::sys_common::backtrace::_print_fmt::h2480fb6611db3053
+                               at /rustc/b6d2d841bcf4b77343b159f134c7d39c2dd4ceaa/library/std/src/sys_common/backtrace.rs:68:5
+   3:     0x610d02e371a4 - <std::sys_common::backtrace::_print::DisplayBacktrace as core::fmt::Display>::fmt::ha97bf258e1d4438c
+                               at /rustc/b6d2d841bcf4b77343b159f134c7d39c2dd4ceaa/library/std/src/sys_common/backtrace.rs:44:22
+   4:     0x610d02e5622c - core::fmt::rt::Argument::fmt::he11d9c961cf51dcd
+                               at /rustc/b6d2d841bcf4b77343b159f134c7d39c2dd4ceaa/library/core/src/fmt/rt.rs:142:9
+   5:     0x610d02e5622c - core::fmt::write_internal::hf9ef4296ae0bd7d3
+                               at /rustc/b6d2d841bcf4b77343b159f134c7d39c2dd4ceaa/library/core/src/fmt/mod.rs:1126:17
+   6:     0x610d02e34cd7 - core::fmt::write::h3db9b551700d09c0
+                               at /rustc/b6d2d841bcf4b77343b159f134c7d39c2dd4ceaa/library/core/src/fmt/mod.rs:1108:67
+   7:     0x610d02e34cd7 - std::io::Write::write_fmt::h29a9d19e57f82b3e
+                               at /rustc/b6d2d841bcf4b77343b159f134c7d39c2dd4ceaa/library/std/src/io/mod.rs:1846:15
+   8:     0x610d02e36f54 - std::sys_common::backtrace::_print::hf6ecc4ba09dd50b6
+                               at /rustc/b6d2d841bcf4b77343b159f134c7d39c2dd4ceaa/library/std/src/sys_common/backtrace.rs:47:5
+   9:     0x610d02e36f54 - std::sys_common::backtrace::print::he0eaa4b183ad9827
+                               at /rustc/b6d2d841bcf4b77343b159f134c7d39c2dd4ceaa/library/std/src/sys_common/backtrace.rs:34:9
+  10:     0x610d02e3847b - std::panicking::default_hook::{{closure}}::h2a85e1ec0777f4f1
+  11:     0x610d02e381d7 - std::panicking::default_hook::he82e2b7fda046534
+                               at /rustc/b6d2d841bcf4b77343b159f134c7d39c2dd4ceaa/library/std/src/panicking.rs:292:9
+  12:     0x610d02e3894d - std::panicking::rust_panic_with_hook::h85182fbf43dfff97
+                               at /rustc/b6d2d841bcf4b77343b159f134c7d39c2dd4ceaa/library/std/src/panicking.rs:779:13
+  13:     0x610d02e387e9 - std::panicking::begin_panic_handler::{{closure}}::h059dfbb9b366aa7e
+                               at /rustc/b6d2d841bcf4b77343b159f134c7d39c2dd4ceaa/library/std/src/panicking.rs:649:13
+  14:     0x610d02e37676 - std::sys_common::backtrace::__rust_end_short_backtrace::h8c0d99dc2e2bf16c
+                               at /rustc/b6d2d841bcf4b77343b159f134c7d39c2dd4ceaa/library/std/src/sys_common/backtrace.rs:171:18
+  15:     0x610d02e38524 - rust_begin_unwind
+                               at /rustc/b6d2d841bcf4b77343b159f134c7d39c2dd4ceaa/library/std/src/panicking.rs:645:5
+  16:     0x610d02d5ee35 - core::panicking::panic_fmt::h44599ec5d12220e7
+                               at /rustc/b6d2d841bcf4b77343b159f134c7d39c2dd4ceaa/library/core/src/panicking.rs:72:14
+  17:     0x610d02d5eef3 - core::panicking::panic::h3b883d7a510536c5
+                               at /rustc/b6d2d841bcf4b77343b159f134c7d39c2dd4ceaa/library/core/src/panicking.rs:144:5
+  18:     0x610d02d8e74e - tokio::runtime::time::entry::StateCell::set_expiration::hea7352306c8099d2
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-3/tokio-cb18b0a231828a3e65d3f64c6d2744751c6b30ed/tokio/src/runtime/time/entry.rs:239:9
+  19:     0x610d02d8e9e0 - tokio::runtime::time::entry::TimerShared::set_expiration::h206903b4a4d3977a
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-3/tokio-cb18b0a231828a3e65d3f64c6d2744751c6b30ed/tokio/src/runtime/time/entry.rs:427:9
+  20:     0x610d02d8efc4 - tokio::runtime::time::entry::TimerHandle::set_expiration::hbadcf2a9e2171c57
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-3/tokio-cb18b0a231828a3e65d3f64c6d2744751c6b30ed/tokio/src/runtime/time/entry.rs:594:9
+  21:     0x610d02dcea53 - tokio::runtime::time::<impl tokio::runtime::time::handle::Handle>::reregister::h2db18ebcaaedfa39
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-3/tokio-cb18b0a231828a3e65d3f64c6d2744751c6b30ed/tokio/src/runtime/time/mod.rs:362:17
+  22:     0x610d02d8edf0 - tokio::runtime::time::entry::TimerEntry::reset::h0435a46cd67ff4b1
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-3/tokio-cb18b0a231828a3e65d3f64c6d2744751c6b30ed/tokio/src/runtime/time/entry.rs:542:17
+  23:     0x610d02d8eeb3 - tokio::runtime::time::entry::TimerEntry::poll_elapsed::h96cfac619646b642
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-3/tokio-cb18b0a231828a3e65d3f64c6d2744751c6b30ed/tokio/src/runtime/time/entry.rs:558:13
+  24:     0x610d02d8f3d6 - tokio::time::sleep::Sleep::poll_elapsed::ha03e823227821137
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-3/tokio-cb18b0a231828a3e65d3f64c6d2744751c6b30ed/tokio/src/time/sleep.rs:415:22
+  25:     0x610d02d8f4c0 - <tokio::time::sleep::Sleep as core::future::future::Future>::poll::h454b0563e913fcd6
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-3/tokio-cb18b0a231828a3e65d3f64c6d2744751c6b30ed/tokio/src/time/sleep.rs:447:22
+  26:     0x610d02d5fe40 - tokio_3::main::{{closure}}::hf67d462cf2405c75
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-3/src/main.rs:4:29
+  27:     0x610d02d608d4 - tokio::runtime::park::CachedParkThread::block_on::{{closure}}::h88985ccbab51a31b
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-3/tokio-cb18b0a231828a3e65d3f64c6d2744751c6b30ed/tokio/src/runtime/park.rs:283:63
+  28:     0x610d02d60717 - tokio::runtime::coop::with_budget::h73fe2979fce5433b
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-3/tokio-cb18b0a231828a3e65d3f64c6d2744751c6b30ed/tokio/src/runtime/coop.rs:107:5
+  29:     0x610d02d60717 - tokio::runtime::coop::budget::h418d8e5ae9d69191
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-3/tokio-cb18b0a231828a3e65d3f64c6d2744751c6b30ed/tokio/src/runtime/coop.rs:73:5
+  30:     0x610d02d60717 - tokio::runtime::park::CachedParkThread::block_on::hdf808c16f30c3821
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-3/tokio-cb18b0a231828a3e65d3f64c6d2744751c6b30ed/tokio/src/runtime/park.rs:283:31
+  31:     0x610d02d63b11 - tokio::runtime::context::blocking::BlockingRegionGuard::block_on::h2259a5ca58b21de3
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-3/tokio-cb18b0a231828a3e65d3f64c6d2744751c6b30ed/tokio/src/runtime/context/blocking.rs:66:9
+  32:     0x610d02d60d36 - tokio::runtime::scheduler::multi_thread::MultiThread::block_on::{{closure}}::had8fd9f049994eea
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-3/tokio-cb18b0a231828a3e65d3f64c6d2744751c6b30ed/tokio/src/runtime/scheduler/multi_thread/mod.rs:87:13
+  33:     0x610d02d610b6 - tokio::runtime::context::runtime::enter_runtime::h39eb50cbfd237809
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-3/tokio-cb18b0a231828a3e65d3f64c6d2744751c6b30ed/tokio/src/runtime/context/runtime.rs:65:16
+  34:     0x610d02d60cf1 - tokio::runtime::scheduler::multi_thread::MultiThread::block_on::hda22edee6fb3fba8
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-3/tokio-cb18b0a231828a3e65d3f64c6d2744751c6b30ed/tokio/src/runtime/scheduler/multi_thread/mod.rs:86:9
+  35:     0x610d02d60a72 - tokio::runtime::runtime::Runtime::block_on::h5590bb76a0a4fd44
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-3/tokio-cb18b0a231828a3e65d3f64c6d2744751c6b30ed/tokio/src/runtime/runtime.rs:313:45
+  36:     0x610d02d5fbcd - tokio_3::main::h45b3e8a4be5b1959
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-3/src/main.rs:4:5
+  37:     0x610d02d6165b - core::ops::function::FnOnce::call_once::h9fa60896d6812169
+                               at /rustc/b6d2d841bcf4b77343b159f134c7d39c2dd4ceaa/library/core/src/ops/function.rs:250:5
+  38:     0x610d02d5f68e - std::sys_common::backtrace::__rust_begin_short_backtrace::h9d877513e9785864
+                               at /rustc/b6d2d841bcf4b77343b159f134c7d39c2dd4ceaa/library/std/src/sys_common/backtrace.rs:155:18
+  39:     0x610d02d615d1 - std::rt::lang_start::{{closure}}::h9a1557be6c09f1e7
+                               at /rustc/b6d2d841bcf4b77343b159f134c7d39c2dd4ceaa/library/std/src/rt.rs:166:18
+  40:     0x610d02e31ff3 - core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once::h0f2eb77d2e0c66c5
+                               at /rustc/b6d2d841bcf4b77343b159f134c7d39c2dd4ceaa/library/core/src/ops/function.rs:284:13
+  41:     0x610d02e31ff3 - std::panicking::try::do_call::hd62ec4959e7c80b8
+                               at /rustc/b6d2d841bcf4b77343b159f134c7d39c2dd4ceaa/library/std/src/panicking.rs:552:40
+  42:     0x610d02e31ff3 - std::panicking::try::h464929e5a32937eb
+                               at /rustc/b6d2d841bcf4b77343b159f134c7d39c2dd4ceaa/library/std/src/panicking.rs:516:19
+  43:     0x610d02e31ff3 - std::panic::catch_unwind::h387b67fdae24e80a
+                               at /rustc/b6d2d841bcf4b77343b159f134c7d39c2dd4ceaa/library/std/src/panic.rs:146:14
+  44:     0x610d02e31ff3 - std::rt::lang_start_internal::{{closure}}::h3cae3ef5072d8fdb
+                               at /rustc/b6d2d841bcf4b77343b159f134c7d39c2dd4ceaa/library/std/src/rt.rs:148:48
+  45:     0x610d02e31ff3 - std::panicking::try::do_call::hd22e45e5e37774e1
+                               at /rustc/b6d2d841bcf4b77343b159f134c7d39c2dd4ceaa/library/std/src/panicking.rs:552:40
+  46:     0x610d02e31ff3 - std::panicking::try::hbd1b487e0694c337
+                               at /rustc/b6d2d841bcf4b77343b159f134c7d39c2dd4ceaa/library/std/src/panicking.rs:516:19
+  47:     0x610d02e31ff3 - std::panic::catch_unwind::hcbc77135efa8fb67
+                               at /rustc/b6d2d841bcf4b77343b159f134c7d39c2dd4ceaa/library/std/src/panic.rs:146:14
+  48:     0x610d02e31ff3 - std::rt::lang_start_internal::hc2d17c08c66606ed
+                               at /rustc/b6d2d841bcf4b77343b159f134c7d39c2dd4ceaa/library/std/src/rt.rs:148:20
+  49:     0x610d02d615aa - std::rt::lang_start::he0a59c9b647dbb30
+                               at /rustc/b6d2d841bcf4b77343b159f134c7d39c2dd4ceaa/library/std/src/rt.rs:165:17
+  50:     0x610d02d5fc7e - main
+  51:     0x7d5d76a29d90 - __libc_start_call_main
+                               at ./csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+  52:     0x7d5d76a29e40 - __libc_start_main_impl
+                               at ./csu/../csu/libc-start.c:392:3
+  53:     0x610d02d5f555 - _start
+  54:                0x0 - <unknown>
