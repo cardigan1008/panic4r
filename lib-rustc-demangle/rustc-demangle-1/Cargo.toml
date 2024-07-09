@@ -1,0 +1,7 @@
+[package]
+name = "rustc-demangle-1"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+rustc-demangle = {path = "rustc-demangle-48646c6c429b1fff5d274cc19224631b437031c9"}

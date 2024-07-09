@@ -1,0 +1,2 @@
+thread 'main' panicked at object-ac5e8e2b848b86cba49ff2bc2629e0b4d41ebe39/src/write/macho.rs:338:9:
+assertion failed: segment_file_size as u64 <= address

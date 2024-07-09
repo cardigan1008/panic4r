@@ -1,0 +1,7 @@
+[package]
+name = "httparse-1"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+httparse = {path = "httparse-5bc674970dec6ed9c44bf5e1260224523f102423" }

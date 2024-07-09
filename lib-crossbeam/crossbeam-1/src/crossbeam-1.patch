@@ -1,0 +1,143 @@
+From e7b5922ec9da940d2630099c5d6b4877d2463de4 Mon Sep 17 00:00:00 2001
+From: Tianion <110658525+Tianion@users.noreply.github.com>
+Date: Fri, 19 Apr 2024 09:39:28 +0800
+Subject: [PATCH] skiplist: Fix #1023 (#1101)
+
+---
+ crossbeam-skiplist/src/base.rs  | 40 ++++++++++-----------------------
+ crossbeam-skiplist/tests/map.rs | 21 +++++++++++++++++
+ crossbeam-skiplist/tests/set.rs | 21 +++++++++++++++++
+ 3 files changed, 54 insertions(+), 28 deletions(-)
+
+diff --git a/crossbeam-skiplist/src/base.rs b/crossbeam-skiplist/src/base.rs
+index adee384..8041718 100644
+--- a/crossbeam-skiplist/src/base.rs
++++ b/crossbeam-skiplist/src/base.rs
+@@ -871,33 +871,17 @@ where
+             // the lifetime of the guard.
+             let guard = &*(guard as *const _);
+ 
+-            let mut search;
+-            loop {
+-                // First try searching for the key.
+-                // Note that the `Ord` implementation for `K` may panic during the search.
+-                search = self.search_position(&key, guard);
+-
+-                let r = match search.found {
+-                    Some(r) => r,
+-                    None => break,
+-                };
++            // First try searching for the key.
++            // Note that the `Ord` implementation for `K` may panic during the search.
++            let mut search = self.search_position(&key, guard);
++            if let Some(r) = search.found {
+                 let replace = replace(&r.value);
+-                if replace {
+-                    // If a node with the key was found and we should replace it, mark its tower
+-                    // and then repeat the search.
+-                    if r.mark_tower() {
+-                        self.hot_data.len.fetch_sub(1, Ordering::Relaxed);
+-                    }
+-                } else {
++                if !replace {
+                     // If a node with the key was found and we're not going to replace it, let's
+                     // try returning it as an entry.
+                     if let Some(e) = RefEntry::try_acquire(self, r) {
+                         return e;
+                     }
+-
+-                    // If we couldn't increment the reference count, that means someone has just
+-                    // now removed the node.
+-                    break;
+                 }
+             }
+ 
+@@ -937,6 +921,12 @@ where
+                     )
+                     .is_ok()
+                 {
++                    // This node has been abandoned
++                    if let Some(r) = search.found {
++                        if r.mark_tower() {
++                            self.hot_data.len.fetch_sub(1, Ordering::Relaxed);
++                        }
++                    }
+                     break;
+                 }
+ 
+@@ -956,13 +946,7 @@ where
+ 
+                 if let Some(r) = search.found {
+                     let replace = replace(&r.value);
+-                    if replace {
+-                        // If a node with the key was found and we should replace it, mark its
+-                        // tower and then repeat the search.
+-                        if r.mark_tower() {
+-                            self.hot_data.len.fetch_sub(1, Ordering::Relaxed);
+-                        }
+-                    } else {
++                    if !replace {
+                         // If a node with the key was found and we're not going to replace it,
+                         // let's try returning it as an entry.
+                         if let Some(e) = RefEntry::try_acquire(self, r) {
+diff --git a/crossbeam-skiplist/tests/map.rs b/crossbeam-skiplist/tests/map.rs
+index 57c819d..e5145fb 100644
+--- a/crossbeam-skiplist/tests/map.rs
++++ b/crossbeam-skiplist/tests/map.rs
+@@ -920,3 +920,24 @@ fn clear() {
+     assert!(s.is_empty());
+     assert_eq!(s.len(), 0);
+ }
++
++// https://github.com/crossbeam-rs/crossbeam/issues/1023
++#[test]
++fn concurrent_insert_get_same_key() {
++    use std::sync::Arc;
++    let map: Arc<SkipMap<u32, ()>> = Arc::new(SkipMap::new());
++    let len = 10_0000;
++    let key = 0;
++    map.insert(0, ());
++
++    let getter = map.clone();
++    let handle = std::thread::spawn(move || {
++        for _ in 0..len {
++            map.insert(0, ());
++        }
++    });
++    for _ in 0..len {
++        assert!(getter.get(&key).is_some());
++    }
++    handle.join().unwrap()
++}
+diff --git a/crossbeam-skiplist/tests/set.rs b/crossbeam-skiplist/tests/set.rs
+index b6987b8..ab76900 100644
+--- a/crossbeam-skiplist/tests/set.rs
++++ b/crossbeam-skiplist/tests/set.rs
+@@ -692,3 +692,24 @@ fn clear() {
+     assert!(s.is_empty());
+     assert_eq!(s.len(), 0);
+ }
++
++// https://github.com/crossbeam-rs/crossbeam/issues/1023
++#[test]
++fn concurrent_insert_get_same_key() {
++    use std::sync::Arc;
++    let set: Arc<SkipSet<u32>> = Arc::new(SkipSet::new());
++    let len = 10_0000;
++    let key = 0;
++    set.insert(0);
++
++    let getter = set.clone();
++    let handle = std::thread::spawn(move || {
++        for _ in 0..len {
++            set.insert(0);
++        }
++    });
++    for _ in 0..len {
++        assert!(getter.get(&key).is_some());
++    }
++    handle.join().unwrap()
++}
+-- 
+2.25.1
+

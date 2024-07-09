@@ -1,0 +1,251 @@
+From 74b8694568d8eb936e339a7d726bda46881dcd9d Mon Sep 17 00:00:00 2001
+From: Quentin Santos <qsantos@qsantos.fr>
+Date: Sun, 5 Mar 2023 16:42:38 +0100
+Subject: [PATCH] Fix anarchist URL where path starts with // (#817)
+
+* Handle null host with leading empty path segment
+
+* Disable failing test
+
+* Fix invariants of anarchist URLs + empty segment
+
+* Handle empty leading segment in relative paths
+
+* Handle case where input starts with a slash
+
+* Unify handling of leading empty path segment
+
+* Avoid casting back and forth between u32 and usize
+
+* Fix use of .get() that should never fail
+---
+ url/src/lib.rs             |  9 +++++++-
+ url/src/parser.rs          | 46 +++++++++++++++++++++++++++++++++++---
+ url/src/slicing.rs         |  9 +++++++-
+ url/tests/unit.rs          | 10 +++++++++
+ url/tests/urltestdata.json | 11 ---------
+ 5 files changed, 69 insertions(+), 16 deletions(-)
+
+diff --git a/url/src/lib.rs b/url/src/lib.rs
+index 0be004e..7624b6f 100644
+--- a/url/src/lib.rs
++++ b/url/src/lib.rs
+@@ -683,7 +683,14 @@ impl Url {
+             assert_eq!(self.host_end, self.scheme_end + 1);
+             assert_eq!(self.host, HostInternal::None);
+             assert_eq!(self.port, None);
+-            assert_eq!(self.path_start, self.scheme_end + 1);
++            if self.path().starts_with("//") {
++                // special case when first path segment is empty
++                assert_eq!(self.byte_at(self.scheme_end + 1), b'/');
++                assert_eq!(self.byte_at(self.scheme_end + 2), b'.');
++                assert_eq!(self.path_start, self.scheme_end + 3);
++            } else {
++                assert_eq!(self.path_start, self.scheme_end + 1);
++            }
+         }
+         if let Some(start) = self.query_start {
+             assert!(start >= self.path_start);
+diff --git a/url/src/parser.rs b/url/src/parser.rs
+index 458d3a9..ca0865c 100644
+--- a/url/src/parser.rs
++++ b/url/src/parser.rs
+@@ -474,9 +474,8 @@ impl<'a> Parser<'a> {
+         let host = HostInternal::None;
+         let port = None;
+         let remaining = if let Some(input) = input.split_prefix('/') {
+-            let path_start = self.serialization.len();
+             self.serialization.push('/');
+-            self.parse_path(scheme_type, &mut false, path_start, input)
++            self.parse_path(scheme_type, &mut false, path_start as usize, input)
+         } else {
+             self.parse_cannot_be_a_base_path(input)
+         };
+@@ -1354,9 +1353,50 @@ impl<'a> Parser<'a> {
+         host_end: u32,
+         host: HostInternal,
+         port: Option<u16>,
+-        path_start: u32,
++        mut path_start: u32,
+         remaining: Input<'_>,
+     ) -> ParseResult<Url> {
++        // Special case for anarchist URL's with a leading empty path segment
++        // This prevents web+demo:/.//not-a-host/ or web+demo:/path/..//not-a-host/,
++        // when parsed and then serialized, from ending up as web+demo://not-a-host/
++        // (they end up as web+demo:/.//not-a-host/).
++        //
++        // If url’s host is null, url does not have an opaque path,
++        // url’s path’s size is greater than 1, and url’s path[0] is the empty string,
++        // then append U+002F (/) followed by U+002E (.) to output.
++        let scheme_end_as_usize = scheme_end as usize;
++        let path_start_as_usize = path_start as usize;
++        if path_start_as_usize == scheme_end_as_usize + 1 {
++            // Anarchist URL
++            if self.serialization[path_start_as_usize..].starts_with("//") {
++                // Case 1: The base URL did not have an empty path segment, but the resulting one does
++                // Insert the "/." prefix
++                self.serialization.insert_str(path_start_as_usize, "/.");
++                path_start += 2;
++            }
++            assert!(!self.serialization[scheme_end_as_usize..].starts_with("://"));
++        } else if path_start_as_usize == scheme_end_as_usize + 3
++            && &self.serialization[scheme_end_as_usize..path_start_as_usize] == ":/."
++        {
++            // Anarchist URL with leading empty path segment
++            // The base URL has a "/." between the host and the path
++            assert_eq!(self.serialization.as_bytes()[path_start_as_usize], b'/');
++            if self
++                .serialization
++                .as_bytes()
++                .get(path_start_as_usize + 1)
++                .copied()
++                != Some(b'/')
++            {
++                // Case 2: The base URL had an empty path segment, but the resulting one does not
++                // Remove the "/." prefix
++                self.serialization
++                    .replace_range(scheme_end_as_usize..path_start_as_usize, ":");
++                path_start -= 2;
++            }
++            assert!(!self.serialization[scheme_end_as_usize..].starts_with("://"));
++        }
++
+         let (query_start, fragment_start) =
+             self.parse_query_and_fragment(scheme_type, scheme_end, remaining)?;
+         Ok(Url {
+diff --git a/url/src/slicing.rs b/url/src/slicing.rs
+index a90337b..c2e441e 100644
+--- a/url/src/slicing.rs
++++ b/url/src/slicing.rs
+@@ -149,7 +149,14 @@ impl Url {
+                 }
+             }
+ 
+-            Position::AfterPort => self.path_start as usize,
++            Position::AfterPort => {
++                if let Some(port) = self.port {
++                    debug_assert!(self.byte_at(self.host_end) == b':');
++                    self.host_end as usize + ":".len() + port.to_string().len()
++                } else {
++                    self.host_end as usize
++                }
++            }
+ 
+             Position::BeforePath => self.path_start as usize,
+ 
+diff --git a/url/tests/unit.rs b/url/tests/unit.rs
+index d27016b..5affa16 100644
+--- a/url/tests/unit.rs
++++ b/url/tests/unit.rs
+@@ -954,6 +954,16 @@ fn no_panic() {
+     url::quirks::set_hostname(&mut url, "//eom/datcom/\\\\t\\://eom/data.cs").unwrap();
+ }
+ 
++#[test]
++fn test_null_host_with_leading_empty_path_segment() {
++    // since Note in item 3 of URL serializing in the URL Standard
++    // https://url.spec.whatwg.org/#url-serializing
++    let url = Url::parse("m:/.//\\").unwrap();
++    let encoded = url.as_str();
++    let reparsed = Url::parse(encoded).unwrap();
++    assert_eq!(reparsed, url);
++}
++
+ #[test]
+ fn pop_if_empty_in_bounds() {
+     let mut url = Url::parse("m://").unwrap();
+diff --git a/url/tests/urltestdata.json b/url/tests/urltestdata.json
+index e440be2..53d0368 100644
+--- a/url/tests/urltestdata.json
++++ b/url/tests/urltestdata.json
+@@ -7487,7 +7487,6 @@
+     "hash": ""
+   },
+   "Serialize /. in path",
+-  "skip next",
+   {
+     "input": "non-spec:/.//",
+     "base": "about:blank",
+@@ -7502,7 +7501,6 @@
+     "search": "",
+     "hash": ""
+   },
+-  "skip next",
+   {
+     "input": "non-spec:/..//",
+     "base": "about:blank",
+@@ -7517,7 +7515,6 @@
+     "search": "",
+     "hash": ""
+   },
+-  "skip next",
+   {
+     "input": "non-spec:/a/..//",
+     "base": "about:blank",
+@@ -7532,7 +7529,6 @@
+     "search": "",
+     "hash": ""
+   },
+-  "skip next",
+   {
+     "input": "non-spec:/.//path",
+     "base": "about:blank",
+@@ -7547,7 +7543,6 @@
+     "search": "",
+     "hash": ""
+   },
+-  "skip next",
+   {
+     "input": "non-spec:/..//path",
+     "base": "about:blank",
+@@ -7562,7 +7557,6 @@
+     "search": "",
+     "hash": ""
+   },
+-  "skip next",
+   {
+     "input": "non-spec:/a/..//path",
+     "base": "about:blank",
+@@ -7592,7 +7586,6 @@
+     "search": "",
+     "hash": ""
+   },
+-  "skip next",
+   {
+     "input": "/..//path",
+     "base": "non-spec:/p",
+@@ -7607,7 +7600,6 @@
+     "search": "",
+     "hash": ""
+   },
+-  "skip next",
+   {
+     "input": "..//path",
+     "base": "non-spec:/p",
+@@ -7622,7 +7614,6 @@
+     "search": "",
+     "hash": ""
+   },
+-  "skip next",
+   {
+     "input": "a/..//path",
+     "base": "non-spec:/p",
+@@ -7637,7 +7628,6 @@
+     "search": "",
+     "hash": ""
+   },
+-  "skip next",
+   {
+     "input": "",
+     "base": "non-spec:/..//p",
+@@ -7652,7 +7642,6 @@
+     "search": "",
+     "hash": ""
+   },
+-  "skip next",
+   {
+     "input": "path",
+     "base": "non-spec:/..//p",
+-- 
+2.25.1
+

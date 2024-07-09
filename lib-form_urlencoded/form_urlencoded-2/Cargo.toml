@@ -1,0 +1,7 @@
+[package]
+name = "form_urlencoded-2"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+url = {path = "rust-url-31bc0da54c659094dacb1434996f10ed1b46b5ae/url"}

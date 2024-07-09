@@ -1,0 +1,15 @@
+[package]
+name = "rustls-connect-tests"
+version = "0.0.1"
+edition = "2021"
+license = "Apache-2.0 OR ISC OR MIT"
+description = "Rustls connectivity based integration tests."
+publish = false
+
+[dependencies]
+rustls = { path = "../rustls", features = [ "logging" ]}
+
+[dev-dependencies]
+hickory-resolver = { version = "0.24", features = ["dns-over-https-rustls", "webpki-roots"] }
+regex = "1.0"
+ring = "0.17"

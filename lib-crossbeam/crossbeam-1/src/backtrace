@@ -1,0 +1,62 @@
+stack backtrace:
+   0:     0x5653e3549086 - std::backtrace_rs::backtrace::libunwind::trace::h24a2eb3edb39d0f3
+                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/../../backtrace/src/backtrace/libunwind.rs:104:5
+   1:     0x5653e3549086 - std::backtrace_rs::backtrace::trace_unsynchronized::h9690b32974005e28
+                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/../../backtrace/src/backtrace/mod.rs:66:5
+   2:     0x5653e3549086 - std::sys_common::backtrace::_print_fmt::h50333491dc4fc462
+                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/sys_common/backtrace.rs:68:5
+   3:     0x5653e3549086 - <std::sys_common::backtrace::_print::DisplayBacktrace as core::fmt::Display>::fmt::he8279f297710df71
+                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/sys_common/backtrace.rs:44:22
+   4:     0x5653e356702c - core::fmt::rt::Argument::fmt::h4c6b6c3e0f65b4f1
+                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/core/src/fmt/rt.rs:142:9
+   5:     0x5653e356702c - core::fmt::write::h361c1f46d14a47aa
+                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/core/src/fmt/mod.rs:1120:17
+   6:     0x5653e354729f - std::io::Write::write_fmt::h50b711f125b80c24
+                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/io/mod.rs:1846:15
+   7:     0x5653e3548e34 - std::sys_common::backtrace::_print::hb7c6965646d03340
+                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/sys_common/backtrace.rs:47:5
+   8:     0x5653e3548e34 - std::sys_common::backtrace::print::h2d4726478ed3fcc3
+                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/sys_common/backtrace.rs:34:9
+   9:     0x5653e354a47b - std::panicking::default_hook::{{closure}}::h349609a89998c39e
+  10:     0x5653e354a1d7 - std::panicking::default_hook::h56f95df654325ad9
+                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/panicking.rs:292:9
+  11:     0x5653e354a91d - std::panicking::rust_panic_with_hook::h98b728a1b3f62701
+                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/panicking.rs:779:13
+  12:     0x5653e354a7f2 - std::panicking::begin_panic_handler::{{closure}}::h3998c72d5aeca2ca
+                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/panicking.rs:657:13
+  13:     0x5653e3549566 - std::sys_common::backtrace::__rust_end_short_backtrace::h4da7fe95a2aa1e6f
+                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/sys_common/backtrace.rs:171:18
+  14:     0x5653e354a524 - rust_begin_unwind
+                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/panicking.rs:645:5
+  15:     0x5653e3515ca5 - core::panicking::panic_fmt::h9fa2a341c4c930d8
+                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/core/src/panicking.rs:72:14
+  16:     0x5653e3518dd2 - crossbeam_skiplist_1::main::{{closure}}::h2dc6521a397c26bd
+                               at /home/lhw/rusttest/lib-crossbeam-skiplist/crossbeam-skiplist-1/src/main.rs:16:17
+  17:     0x5653e351824e - std::sys_common::backtrace::__rust_begin_short_backtrace::h609f9e484b01f1bf
+                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/sys_common/backtrace.rs:155:18
+  18:     0x5653e35175ca - std::thread::Builder::spawn_unchecked_::{{closure}}::{{closure}}::hc5bbccfe5ca445f6
+                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/thread/mod.rs:528:17
+  19:     0x5653e351ca9e - <core::panic::unwind_safe::AssertUnwindSafe<F> as core::ops::function::FnOnce<()>>::call_once::hff184ec473ba05f3
+                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/core/src/panic/unwind_safe.rs:272:9
+  20:     0x5653e351e015 - std::panicking::try::do_call::h2a1efcf3eccbc477
+                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/panicking.rs:552:40
+  21:     0x5653e351e16b - __rust_try
+  22:     0x5653e351dfaa - std::panicking::try::hd000a54c7929c73d
+                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/panicking.rs:516:19
+  23:     0x5653e3517417 - std::panic::catch_unwind::ha2326119def62697
+                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/panic.rs:146:14
+  24:     0x5653e3517417 - std::thread::Builder::spawn_unchecked_::{{closure}}::hb34b3ca75131b2a0
+                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/thread/mod.rs:527:30
+  25:     0x5653e351acfe - core::ops::function::FnOnce::call_once{{vtable.shim}}::hdacf4dbb3b3cb092
+                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/core/src/ops/function.rs:250:5
+  26:     0x5653e354c855 - <alloc::boxed::Box<F,A> as core::ops::function::FnOnce<Args>>::call_once::ha3a4cbec15749b2e
+                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/alloc/src/boxed.rs:2016:9
+  27:     0x5653e354c855 - <alloc::boxed::Box<F,A> as core::ops::function::FnOnce<Args>>::call_once::hd028220884208def
+                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/alloc/src/boxed.rs:2016:9
+  28:     0x5653e354c855 - std::sys::pal::unix::thread::Thread::new::thread_start::h5ade3076536764ff
+                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/sys/pal/unix/thread.rs:108:17
+  29:     0x7f8732e0f609 - start_thread
+                               at /build/glibc-wuryBv/glibc-2.31/nptl/pthread_create.c:477:8
+  30:     0x7f8732d2e353 - clone
+                               at /build/glibc-wuryBv/glibc-2.31/misc/../sysdeps/unix/sysv/linux/x86_64/clone.S:95
+  31:                0x0 - <unknown>

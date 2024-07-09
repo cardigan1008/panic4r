@@ -1,0 +1,7 @@
+[package]
+name = "object-1"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+object = {path = "object-ac5e8e2b848b86cba49ff2bc2629e0b4d41ebe39",features = ["write_core"]}

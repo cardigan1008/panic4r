@@ -1,0 +1,8 @@
+[package]
+name = "rustls-1"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+rustls = {path = "rustls-546a85d91277a1009d199aa1e2829ecf153e2631/rustls",features = ["ring"]}
+webpki-roots = "0.26"

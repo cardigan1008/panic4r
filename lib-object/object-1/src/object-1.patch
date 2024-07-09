@@ -1,0 +1,136 @@
+From 60c9721884055533e54084c00fd03e88c1dc1cc1 Mon Sep 17 00:00:00 2001
+From: Philip Craig <philipjcraig@gmail.com>
+Date: Mon, 5 Jun 2023 16:46:30 +1000
+Subject: [PATCH] write/macho: ensure padding matches for section file offset
+ and address (#553)
+
+---
+ src/write/macho.rs        | 30 ++++++++-------------------
+ tests/round_trip/macho.rs | 43 +++++++++++++++++++++++++++++++++++++--
+ 2 files changed, 50 insertions(+), 23 deletions(-)
+
+diff --git a/src/write/macho.rs b/src/write/macho.rs
+index 0e082b6..e3ce55b 100644
+--- a/src/write/macho.rs
++++ b/src/write/macho.rs
+@@ -303,39 +303,29 @@ impl<'a> Object<'a> {
+         let sizeofcmds = offset - command_offset;
+ 
+         // Calculate size of section data.
+-        let mut segment_file_offset = None;
++        // Section data can immediately follow the load commands without any alignment padding.
++        let segment_file_offset = offset;
+         let mut section_offsets = vec![SectionOffsets::default(); self.sections.len()];
+         let mut address = 0;
+         for (index, section) in self.sections.iter().enumerate() {
+             section_offsets[index].index = 1 + index;
+             if !section.is_bss() {
+-                let len = section.data.len();
+-                if len != 0 {
+-                    offset = align(offset, section.align as usize);
+-                    section_offsets[index].offset = offset;
+-                    if segment_file_offset.is_none() {
+-                        segment_file_offset = Some(offset);
+-                    }
+-                    offset += len;
+-                } else {
+-                    section_offsets[index].offset = offset;
+-                }
+                 address = align_u64(address, section.align);
+                 section_offsets[index].address = address;
++                section_offsets[index].offset = segment_file_offset + address as usize;
+                 address += section.size;
+             }
+         }
++        let segment_file_size = address as usize;
++        offset += address as usize;
+         for (index, section) in self.sections.iter().enumerate() {
+-            if section.kind.is_bss() {
+-                assert!(section.data.is_empty());
++            if section.is_bss() {
++                debug_assert!(section.data.is_empty());
+                 address = align_u64(address, section.align);
+                 section_offsets[index].address = address;
+                 address += section.size;
+             }
+         }
+-        let segment_file_offset = segment_file_offset.unwrap_or(offset);
+-        let segment_file_size = offset - segment_file_offset;
+-        debug_assert!(segment_file_size as u64 <= address);
+ 
+         // Count symbols and add symbol strings to strtab.
+         let mut strtab = StringTable::default();
+@@ -537,10 +527,8 @@ impl<'a> Object<'a> {
+ 
+         // Write section data.
+         for (index, section) in self.sections.iter().enumerate() {
+-            let len = section.data.len();
+-            if len != 0 {
+-                write_align(buffer, section.align as usize);
+-                debug_assert_eq!(section_offsets[index].offset, buffer.len());
++            if !section.is_bss() {
++                buffer.resize(section_offsets[index].offset);
+                 buffer.write_bytes(&section.data);
+             }
+         }
+diff --git a/tests/round_trip/macho.rs b/tests/round_trip/macho.rs
+index ca3ad5c..f45d3db 100644
+--- a/tests/round_trip/macho.rs
++++ b/tests/round_trip/macho.rs
+@@ -1,8 +1,9 @@
+ use object::read::macho::MachHeader;
+-use object::{macho, write, Architecture, BinaryFormat, Endianness};
++use object::read::{Object, ObjectSection};
++use object::{macho, read, write, Architecture, BinaryFormat, Endianness};
+ 
+-#[test]
+ // Test that segment size is valid when the first section needs alignment.
++#[test]
+ fn issue_286_segment_file_size() {
+     let mut object = write::Object::new(
+         BinaryFormat::MachO,
+@@ -22,3 +23,41 @@ fn issue_286_segment_file_size() {
+     assert_eq!(segment.vmsize.get(endian), 30);
+     assert_eq!(segment.filesize.get(endian), 30);
+ }
++
++// We were emitting section file alignment padding that didn't match the address alignment padding.
++#[test]
++fn issue_552_section_file_alignment() {
++    let mut object = write::Object::new(
++        BinaryFormat::MachO,
++        Architecture::X86_64,
++        Endianness::Little,
++    );
++
++    // Odd number of sections ensures that the starting file offset is not a multiple of 32.
++    // Length of 32 ensures that the file offset of the end of this section is still not a
++    // multiple of 32.
++    let section = object.add_section(vec![], vec![], object::SectionKind::ReadOnlyDataWithRel);
++    object.append_section_data(section, &vec![0u8; 32], 1);
++
++    // Address is already aligned correctly, so there must not any padding,
++    // even though file offset is not aligned.
++    let section = object.add_section(vec![], vec![], object::SectionKind::ReadOnlyData);
++    object.append_section_data(section, &vec![0u8; 1], 32);
++
++    let section = object.add_section(vec![], vec![], object::SectionKind::Text);
++    object.append_section_data(section, &vec![0u8; 1], 1);
++
++    let bytes = &*object.write().unwrap();
++    let object = read::File::parse(bytes).unwrap();
++    let mut sections = object.sections();
++
++    let section = sections.next().unwrap();
++    assert_eq!(section.file_range(), Some((368, 32)));
++    assert_eq!(section.address(), 0);
++    assert_eq!(section.size(), 32);
++
++    let section = sections.next().unwrap();
++    assert_eq!(section.file_range(), Some((400, 1)));
++    assert_eq!(section.address(), 32);
++    assert_eq!(section.size(), 1);
++}
+-- 
+2.25.1
+

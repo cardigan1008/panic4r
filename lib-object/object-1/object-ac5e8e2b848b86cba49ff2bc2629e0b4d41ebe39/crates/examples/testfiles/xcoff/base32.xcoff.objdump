@@ -1,0 +1,159 @@
+Format: Xcoff Big-endian 32-bit
+Kind: Executable
+Architecture: PowerPc
+Flags: Xcoff { f_flags: 1002 }
+Relative Address Base: 0
+Entry Address: 20000710
+1: Section { name: ".text", address: 10000128, size: 4c9, align: 5, kind: Text, flags: Xcoff { s_flags: 20 } }
+2: Section { name: ".data", address: 200005f1, size: 1b7, align: 3, kind: Data, flags: Xcoff { s_flags: 40 } }
+3: Section { name: ".bss", address: 200007a8, size: 0, align: 4, kind: UninitializedData, flags: Xcoff { s_flags: 80 } }
+4: Section { name: ".loader", address: 0, size: 37a, align: 4, kind: Metadata, flags: Xcoff { s_flags: 1000 } }
+
+Symbols
+0: Symbol { name: "errno", address: 0, size: 0, kind: Unknown, section: Undefined, scope: Unknown, weak: false, flags: Xcoff { n_sclass: 2, x_smtyp: 0, x_smclas: 5, containing_csect: None } }
+2: Symbol { name: "exit", address: 0, size: 0, kind: Unknown, section: Undefined, scope: Unknown, weak: false, flags: Xcoff { n_sclass: 2, x_smtyp: 0, x_smclas: a, containing_csect: None } }
+4: Symbol { name: "atexit", address: 0, size: 0, kind: Unknown, section: Undefined, scope: Unknown, weak: false, flags: Xcoff { n_sclass: 2, x_smtyp: 0, x_smclas: a, containing_csect: None } }
+6: Symbol { name: "printf", address: 0, size: 0, kind: Unknown, section: Undefined, scope: Unknown, weak: false, flags: Xcoff { n_sclass: 2, x_smtyp: 0, x_smclas: a, containing_csect: None } }
+8: Symbol { name: "__run_final_dtors", address: 0, size: 0, kind: Unknown, section: Undefined, scope: Unknown, weak: false, flags: Xcoff { n_sclass: 2, x_smtyp: 0, x_smclas: a, containing_csect: None } }
+10: Symbol { name: "__run_initial_ctors", address: 0, size: 0, kind: Unknown, section: Undefined, scope: Unknown, weak: false, flags: Xcoff { n_sclass: 2, x_smtyp: 0, x_smclas: a, containing_csect: None } }
+12: Symbol { name: "__mod_init", address: 0, size: 0, kind: Unknown, section: Undefined, scope: Unknown, weak: false, flags: Xcoff { n_sclass: 2, x_smtyp: 0, x_smclas: a, containing_csect: None } }
+14: Symbol { name: "__crt0v", address: 0, size: 0, kind: Unknown, section: Undefined, scope: Unknown, weak: false, flags: Xcoff { n_sclass: 2, x_smtyp: 0, x_smclas: 5, containing_csect: None } }
+16: Symbol { name: "__malloc_user_defined_name", address: 0, size: 0, kind: Unknown, section: Undefined, scope: Unknown, weak: false, flags: Xcoff { n_sclass: 2, x_smtyp: 0, x_smclas: 5, containing_csect: None } }
+18: Symbol { name: "TOC", address: 20000748, size: 0, kind: Data, section: Section(SectionIndex(2)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 6b, x_smtyp: 11, x_smclas: f, containing_csect: None } }
+20: Symbol { name: "__crt0v", address: 20000770, size: 4, kind: Data, section: Section(SectionIndex(2)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 6b, x_smtyp: 11, x_smclas: 3, containing_csect: None } }
+22: Symbol { name: "__mod_init", address: 20000774, size: 4, kind: Data, section: Section(SectionIndex(2)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 6b, x_smtyp: 11, x_smclas: 3, containing_csect: None } }
+24: Symbol { name: "crt0_data", address: 20000778, size: 4, kind: Data, section: Section(SectionIndex(2)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 6b, x_smtyp: 11, x_smclas: 3, containing_csect: None } }
+26: Symbol { name: "__run_final_dtors", address: 2000077c, size: 4, kind: Data, section: Section(SectionIndex(2)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 6b, x_smtyp: 11, x_smclas: 3, containing_csect: None } }
+28: Symbol { name: "_$STATIC", address: 20000780, size: 4, kind: Data, section: Section(SectionIndex(2)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 6b, x_smtyp: 11, x_smclas: 3, containing_csect: None } }
+30: Symbol { name: "__C_runtime_termination", address: 20000784, size: 4, kind: Data, section: Section(SectionIndex(2)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 6b, x_smtyp: 11, x_smclas: 3, containing_csect: None } }
+32: Symbol { name: "atexit", address: 20000788, size: 4, kind: Data, section: Section(SectionIndex(2)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 6b, x_smtyp: 11, x_smclas: 3, containing_csect: None } }
+34: Symbol { name: "_cdtors", address: 2000078c, size: 4, kind: Data, section: Section(SectionIndex(2)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 6b, x_smtyp: 11, x_smclas: 3, containing_csect: None } }
+36: Symbol { name: "__run_initial_ctors", address: 20000790, size: 4, kind: Data, section: Section(SectionIndex(2)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 6b, x_smtyp: 11, x_smclas: 3, containing_csect: None } }
+38: Symbol { name: "exit", address: 20000794, size: 4, kind: Data, section: Section(SectionIndex(2)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 6b, x_smtyp: 11, x_smclas: 3, containing_csect: None } }
+40: Symbol { name: "__malloc_user_defined_name", address: 20000798, size: 4, kind: Data, section: Section(SectionIndex(2)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 6b, x_smtyp: 11, x_smclas: 3, containing_csect: None } }
+42: Symbol { name: "errno", address: 2000079c, size: 4, kind: Data, section: Section(SectionIndex(2)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 6b, x_smtyp: 11, x_smclas: 3, containing_csect: None } }
+44: Symbol { name: ".rodata.str1.1L...str", address: 200007a0, size: 4, kind: Data, section: Section(SectionIndex(2)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 6b, x_smtyp: 11, x_smclas: 3, containing_csect: None } }
+46: Symbol { name: "printf", address: 200007a4, size: 4, kind: Data, section: Section(SectionIndex(2)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 6b, x_smtyp: 11, x_smclas: 3, containing_csect: None } }
+48: Symbol { name: " ", address: 0, size: 0, kind: File, section: None, scope: Compilation, weak: false, flags: Xcoff { n_sclass: 67, x_smtyp: 0, x_smclas: 0, containing_csect: None } }
+49: Symbol { name: "crt0main.s", address: 0, size: 0, kind: File, section: None, scope: Compilation, weak: false, flags: Xcoff { n_sclass: 67, x_smtyp: 0, x_smclas: 0, containing_csect: None } }
+50: Symbol { name: ".__start", address: 10000128, size: a5, kind: Text, section: Section(SectionIndex(1)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 6b, x_smtyp: 11, x_smclas: 0, containing_csect: None } }
+52: Symbol { name: ".__start", address: 10000128, size: 0, kind: Text, section: Section(SectionIndex(1)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 2, x_smtyp: 2, x_smclas: 0, containing_csect: Some(SymbolIndex(32)) } }
+54: Symbol { name: "__start", address: 20000710, size: 8, kind: Data, section: Section(SectionIndex(2)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 2, x_smtyp: 11, x_smclas: a, containing_csect: None } }
+56: Symbol { name: "crt0_data", address: 200005f4, size: 2c, kind: Data, section: Section(SectionIndex(2)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 6b, x_smtyp: 11, x_smclas: 5, containing_csect: None } }
+58: Symbol { name: "p_xargc", address: 2000074c, size: 4, kind: Data, section: Section(SectionIndex(2)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 2, x_smtyp: 13, x_smclas: 10, containing_csect: None } }
+60: Symbol { name: "p_xargv", address: 20000764, size: 4, kind: Data, section: Section(SectionIndex(2)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 2, x_smtyp: 13, x_smclas: 10, containing_csect: None } }
+62: Symbol { name: "p_xrcfg", address: 20000768, size: 4, kind: Data, section: Section(SectionIndex(2)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 2, x_smtyp: 13, x_smclas: 10, containing_csect: None } }
+64: Symbol { name: "p_xrc", address: 2000076c, size: 4, kind: Data, section: Section(SectionIndex(2)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 2, x_smtyp: 13, x_smclas: 10, containing_csect: None } }
+66: Symbol { name: "_malloc_user_defined_name", address: 20000748, size: 4, kind: Data, section: Section(SectionIndex(2)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 2, x_smtyp: 13, x_smclas: 10, containing_csect: None } }
+68: Symbol { name: "../../../../../../../src/bos/usr/ccs/lib/libc/__threads_init.c", address: 0, size: 0, kind: File, section: None, scope: Compilation, weak: false, flags: Xcoff { n_sclass: 67, x_smtyp: 0, x_smclas: 0, containing_csect: None } }
+72: Symbol { name: "", address: 100001e0, size: 160, kind: Text, section: Section(SectionIndex(1)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 6b, x_smtyp: 29, x_smclas: 0, containing_csect: None } }
+74: Symbol { name: ".__threads_init", address: 100001e0, size: 0, kind: Text, section: Section(SectionIndex(1)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 2, x_smtyp: 2, x_smclas: 0, containing_csect: Some(SymbolIndex(48)) } }
+76: Symbol { name: ".__threads_init@AF2_1", address: 10000220, size: 0, kind: Text, section: Section(SectionIndex(1)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 6b, x_smtyp: 2, x_smclas: 0, containing_csect: Some(SymbolIndex(48)) } }
+78: Symbol { name: "_$STATIC", address: 20000620, size: 59, kind: Data, section: Section(SectionIndex(2)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 6b, x_smtyp: 19, x_smclas: 5, containing_csect: None } }
+80: Symbol { name: "__threads_init", address: 20000718, size: c, kind: Data, section: Section(SectionIndex(2)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 2, x_smtyp: 11, x_smclas: a, containing_csect: None } }
+82: Symbol { name: "__pth_init_routine", address: 20000750, size: 4, kind: Data, section: Section(SectionIndex(2)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 2, x_smtyp: 13, x_smclas: 10, containing_csect: None } }
+84: Symbol { name: "_bsd_init_routine", address: 20000754, size: 4, kind: Data, section: Section(SectionIndex(2)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 2, x_smtyp: 13, x_smclas: 10, containing_csect: None } }
+86: Symbol { name: "_xti_tli_init_routine", address: 20000758, size: 4, kind: Data, section: Section(SectionIndex(2)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 2, x_smtyp: 13, x_smclas: 10, containing_csect: None } }
+88: Symbol { name: "_nsl_init_routine", address: 2000075c, size: 4, kind: Data, section: Section(SectionIndex(2)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 2, x_smtyp: 13, x_smclas: 10, containing_csect: None } }
+90: Symbol { name: "__dce_compat_init_routine", address: 20000760, size: 4, kind: Data, section: Section(SectionIndex(2)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 2, x_smtyp: 13, x_smclas: 10, containing_csect: None } }
+92: Symbol { name: "../../../../../../../src/bos/usr/ccs/lib/libc/POWER/crti.C", address: 0, size: 0, kind: File, section: None, scope: Compilation, weak: false, flags: Xcoff { n_sclass: 67, x_smtyp: 0, x_smclas: 0, containing_csect: None } }
+96: Symbol { name: "", address: 10000340, size: 178, kind: Text, section: Section(SectionIndex(1)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 6b, x_smtyp: 19, x_smclas: 0, containing_csect: None } }
+98: Symbol { name: ".__User_sinit_begin", address: 10000340, size: 0, kind: Text, section: Section(SectionIndex(1)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 2, x_smtyp: 2, x_smclas: 0, containing_csect: Some(SymbolIndex(60)) } }
+100: Symbol { name: ".__C_runtime_termination", address: 10000368, size: 0, kind: Text, section: Section(SectionIndex(1)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 2, x_smtyp: 2, x_smclas: 0, containing_csect: Some(SymbolIndex(60)) } }
+102: Symbol { name: ".__C_runtime_startup", address: 100003b8, size: 0, kind: Text, section: Section(SectionIndex(1)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 2, x_smtyp: 2, x_smclas: 0, containing_csect: Some(SymbolIndex(60)) } }
+104: Symbol { name: ".__dftdt__L304e4b28c42_5CatchFv", address: 10000440, size: 0, kind: Text, section: Section(SectionIndex(1)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 6b, x_smtyp: 2, x_smclas: 0, containing_csect: Some(SymbolIndex(60)) } }
+106: Symbol { name: "_$STATIC", address: 20000680, size: 81, kind: Data, section: Section(SectionIndex(2)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 6b, x_smtyp: 19, x_smclas: 5, containing_csect: None } }
+108: Symbol { name: "__dftdt__L304e4b28c42_5CatchFv", address: 20000730, size: c, kind: Data, section: Section(SectionIndex(2)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 6b, x_smtyp: 11, x_smclas: a, containing_csect: None } }
+110: Symbol { name: "__C_runtime_termination", address: 2000073c, size: c, kind: Data, section: Section(SectionIndex(2)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 2, x_smtyp: 11, x_smclas: a, containing_csect: None } }
+112: Symbol { name: "__C_runtime_startup", address: 20000724, size: c, kind: Data, section: Section(SectionIndex(2)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 2, x_smtyp: 11, x_smclas: a, containing_csect: None } }
+114: Symbol { name: "_cdtors", address: 20000708, size: 8, kind: Data, section: Section(SectionIndex(2)), scope: Dynamic, weak: true, flags: Xcoff { n_sclass: 6f, x_smtyp: 19, x_smclas: 5, containing_csect: None } }
+116: Symbol { name: "__C_runtime_pstartup", address: 2000067c, size: 4, kind: Data, section: Section(SectionIndex(2)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 2, x_smtyp: 11, x_smclas: 5, containing_csect: None } }
+118: Symbol { name: "base.c", address: 0, size: 0, kind: File, section: None, scope: Compilation, weak: false, flags: Xcoff { n_sclass: 67, x_smtyp: 0, x_smclas: 0, containing_csect: None } }
+121: Symbol { name: ".text", address: 10000560, size: 5b, kind: Text, section: Section(SectionIndex(1)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 6b, x_smtyp: 29, x_smclas: 0, containing_csect: None } }
+123: Symbol { name: ".main", address: 10000560, size: 0, kind: Text, section: Section(SectionIndex(1)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 2, x_smtyp: 2, x_smclas: 0, containing_csect: Some(SymbolIndex(79)) } }
+125: Symbol { name: ".rodata.str1.1L...str", address: 100005e4, size: d, kind: Data, section: Section(SectionIndex(1)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 6b, x_smtyp: 11, x_smclas: 1, containing_csect: None } }
+127: Symbol { name: "glink.s", address: 0, size: 0, kind: File, section: None, scope: Compilation, weak: false, flags: Xcoff { n_sclass: 67, x_smtyp: 0, x_smclas: 0, containing_csect: None } }
+128: Symbol { name: ".exit", address: 10000530, size: 28, kind: Text, section: Section(SectionIndex(1)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 6b, x_smtyp: 11, x_smclas: 6, containing_csect: None } }
+130: Symbol { name: ".exit", address: 10000530, size: 0, kind: Text, section: Section(SectionIndex(1)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 2, x_smtyp: 2, x_smclas: 6, containing_csect: Some(SymbolIndex(80)) } }
+132: Symbol { name: "glink.s", address: 0, size: 0, kind: File, section: None, scope: Compilation, weak: false, flags: Xcoff { n_sclass: 67, x_smtyp: 0, x_smclas: 0, containing_csect: None } }
+133: Symbol { name: ".__run_final_dtors", address: 100004b8, size: 28, kind: Text, section: Section(SectionIndex(1)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 6b, x_smtyp: 11, x_smclas: 6, containing_csect: None } }
+135: Symbol { name: ".__run_final_dtors", address: 100004b8, size: 0, kind: Text, section: Section(SectionIndex(1)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 2, x_smtyp: 2, x_smclas: 6, containing_csect: Some(SymbolIndex(85)) } }
+137: Symbol { name: "glink.s", address: 0, size: 0, kind: File, section: None, scope: Compilation, weak: false, flags: Xcoff { n_sclass: 67, x_smtyp: 0, x_smclas: 0, containing_csect: None } }
+138: Symbol { name: ".atexit", address: 100004e0, size: 28, kind: Text, section: Section(SectionIndex(1)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 6b, x_smtyp: 11, x_smclas: 6, containing_csect: None } }
+140: Symbol { name: ".atexit", address: 100004e0, size: 0, kind: Text, section: Section(SectionIndex(1)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 2, x_smtyp: 2, x_smclas: 6, containing_csect: Some(SymbolIndex(8a)) } }
+142: Symbol { name: "glink.s", address: 0, size: 0, kind: File, section: None, scope: Compilation, weak: false, flags: Xcoff { n_sclass: 67, x_smtyp: 0, x_smclas: 0, containing_csect: None } }
+143: Symbol { name: ".__run_initial_ctors", address: 10000508, size: 28, kind: Text, section: Section(SectionIndex(1)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 6b, x_smtyp: 11, x_smclas: 6, containing_csect: None } }
+145: Symbol { name: ".__run_initial_ctors", address: 10000508, size: 0, kind: Text, section: Section(SectionIndex(1)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 2, x_smtyp: 2, x_smclas: 6, containing_csect: Some(SymbolIndex(8f)) } }
+147: Symbol { name: "glink.s", address: 0, size: 0, kind: File, section: None, scope: Compilation, weak: false, flags: Xcoff { n_sclass: 67, x_smtyp: 0, x_smclas: 0, containing_csect: None } }
+148: Symbol { name: ".printf", address: 100005bc, size: 28, kind: Text, section: Section(SectionIndex(1)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 6b, x_smtyp: 11, x_smclas: 6, containing_csect: None } }
+150: Symbol { name: ".printf", address: 100005bc, size: 0, kind: Text, section: Section(SectionIndex(1)), scope: Dynamic, weak: false, flags: Xcoff { n_sclass: 2, x_smtyp: 2, x_smclas: 6, containing_csect: Some(SymbolIndex(94)) } }
+
+.text relocations
+(1000012a, Relocation { kind: Got, encoding: Generic, size: 10, target: Symbol(SymbolIndex(42)), addend: 0, implicit_addend: true })
+(1000012e, Relocation { kind: Got, encoding: Generic, size: 10, target: Symbol(SymbolIndex(14)), addend: 0, implicit_addend: true })
+(10000146, Relocation { kind: Got, encoding: Generic, size: 10, target: Symbol(SymbolIndex(16)), addend: 0, implicit_addend: true })
+(1000014a, Relocation { kind: Xcoff(13), encoding: Generic, size: 10, target: Symbol(SymbolIndex(18)), addend: 0, implicit_addend: true })
+(1000014e, Relocation { kind: Got, encoding: Generic, size: 10, target: Symbol(SymbolIndex(3a)), addend: 0, implicit_addend: true })
+(10000152, Relocation { kind: Got, encoding: Generic, size: 10, target: Symbol(SymbolIndex(3c)), addend: 0, implicit_addend: true })
+(10000162, Relocation { kind: Got, encoding: Generic, size: 10, target: Symbol(SymbolIndex(28)), addend: 0, implicit_addend: true })
+(10000182, Relocation { kind: Got, encoding: Generic, size: 10, target: Symbol(SymbolIndex(2a)), addend: 0, implicit_addend: true })
+(10000190, Relocation { kind: Relative, encoding: Generic, size: 1a, target: Symbol(SymbolIndex(7b)), addend: fffffffffffffffc, implicit_addend: true })
+(1000019a, Relocation { kind: Got, encoding: Generic, size: 10, target: Symbol(SymbolIndex(3e)), addend: 0, implicit_addend: true })
+(100001a6, Relocation { kind: Got, encoding: Generic, size: 10, target: Symbol(SymbolIndex(40)), addend: 0, implicit_addend: true })
+(100001a8, Relocation { kind: Relative, encoding: Generic, size: 1a, target: Symbol(SymbolIndex(82)), addend: fffffffffffffffc, implicit_addend: true })
+(100001e2, Relocation { kind: Got, encoding: Generic, size: 10, target: Symbol(SymbolIndex(52)), addend: 0, implicit_addend: true })
+(1000022a, Relocation { kind: Got, encoding: Generic, size: 10, target: Symbol(SymbolIndex(52)), addend: 0, implicit_addend: true })
+(1000024e, Relocation { kind: Got, encoding: Generic, size: 10, target: Symbol(SymbolIndex(54)), addend: 0, implicit_addend: true })
+(10000272, Relocation { kind: Got, encoding: Generic, size: 10, target: Symbol(SymbolIndex(56)), addend: 0, implicit_addend: true })
+(10000296, Relocation { kind: Got, encoding: Generic, size: 10, target: Symbol(SymbolIndex(58)), addend: 0, implicit_addend: true })
+(100002ba, Relocation { kind: Got, encoding: Generic, size: 10, target: Symbol(SymbolIndex(5a)), addend: 0, implicit_addend: true })
+(100002ee, Relocation { kind: Got, encoding: Generic, size: 10, target: Symbol(SymbolIndex(58)), addend: 0, implicit_addend: true })
+(10000328, Relocation { kind: Xcoff(f), encoding: Generic, size: 20, target: Symbol(SymbolIndex(4e)), addend: 0, implicit_addend: true })
+(10000374, Relocation { kind: Relative, encoding: Generic, size: 1a, target: Symbol(SymbolIndex(87)), addend: fffffffffffffffc, implicit_addend: true })
+(100003c2, Relocation { kind: Xcoff(13), encoding: Generic, size: 10, target: Symbol(SymbolIndex(1c)), addend: 0, implicit_addend: true })
+(100003ca, Relocation { kind: Xcoff(13), encoding: Generic, size: 10, target: Symbol(SymbolIndex(1e)), addend: 0, implicit_addend: true })
+(100003ec, Relocation { kind: Relative, encoding: Generic, size: 1a, target: Symbol(SymbolIndex(8c)), addend: fffffffffffffffc, implicit_addend: true })
+(100003f6, Relocation { kind: Xcoff(13), encoding: Generic, size: 10, target: Symbol(SymbolIndex(22)), addend: 0, implicit_addend: true })
+(100003f8, Relocation { kind: Relative, encoding: Generic, size: 1a, target: Symbol(SymbolIndex(91)), addend: fffffffffffffffc, implicit_addend: true })
+(10000460, Relocation { kind: Relative, encoding: Generic, size: 1a, target: Symbol(SymbolIndex(87)), addend: fffffffffffffffc, implicit_addend: true })
+(1000046c, Relocation { kind: Relative, encoding: Generic, size: 1a, target: Symbol(SymbolIndex(82)), addend: fffffffffffffffc, implicit_addend: true })
+(100004ba, Relocation { kind: Got, encoding: Generic, size: 10, target: Symbol(SymbolIndex(1a)), addend: 0, implicit_addend: true })
+(100004e2, Relocation { kind: Got, encoding: Generic, size: 10, target: Symbol(SymbolIndex(20)), addend: 0, implicit_addend: true })
+(1000050a, Relocation { kind: Got, encoding: Generic, size: 10, target: Symbol(SymbolIndex(24)), addend: 0, implicit_addend: true })
+(10000532, Relocation { kind: Got, encoding: Generic, size: 10, target: Symbol(SymbolIndex(26)), addend: 0, implicit_addend: true })
+(10000582, Relocation { kind: Got, encoding: Generic, size: 10, target: Symbol(SymbolIndex(2c)), addend: 0, implicit_addend: true })
+(10000584, Relocation { kind: Relative, encoding: Generic, size: 1a, target: Symbol(SymbolIndex(96)), addend: fffffffffffffffc, implicit_addend: true })
+(100005be, Relocation { kind: Got, encoding: Generic, size: 10, target: Symbol(SymbolIndex(2e)), addend: 0, implicit_addend: true })
+
+.data relocations
+(200005f4, Relocation { kind: Absolute, encoding: Generic, size: 20, target: Symbol(SymbolIndex(3a)), addend: 0, implicit_addend: true })
+(200005f8, Relocation { kind: Absolute, encoding: Generic, size: 20, target: Symbol(SymbolIndex(50)), addend: 0, implicit_addend: true })
+(20000600, Relocation { kind: Absolute, encoding: Generic, size: 20, target: Symbol(SymbolIndex(74)), addend: 0, implicit_addend: true })
+(2000067c, Relocation { kind: Absolute, encoding: Generic, size: 20, target: Symbol(SymbolIndex(70)), addend: 0, implicit_addend: true })
+(2000068c, Relocation { kind: Absolute, encoding: Generic, size: 20, target: Symbol(SymbolIndex(6c)), addend: 0, implicit_addend: true })
+(20000710, Relocation { kind: Absolute, encoding: Generic, size: 20, target: Symbol(SymbolIndex(32)), addend: 0, implicit_addend: true })
+(20000714, Relocation { kind: Absolute, encoding: Generic, size: 20, target: Symbol(SymbolIndex(12)), addend: 0, implicit_addend: true })
+(20000718, Relocation { kind: Absolute, encoding: Generic, size: 20, target: Symbol(SymbolIndex(4a)), addend: 0, implicit_addend: true })
+(2000071c, Relocation { kind: Absolute, encoding: Generic, size: 20, target: Symbol(SymbolIndex(12)), addend: 0, implicit_addend: true })
+(20000724, Relocation { kind: Absolute, encoding: Generic, size: 20, target: Symbol(SymbolIndex(66)), addend: 0, implicit_addend: true })
+(20000728, Relocation { kind: Absolute, encoding: Generic, size: 20, target: Symbol(SymbolIndex(12)), addend: 0, implicit_addend: true })
+(20000730, Relocation { kind: Absolute, encoding: Generic, size: 20, target: Symbol(SymbolIndex(68)), addend: 0, implicit_addend: true })
+(20000734, Relocation { kind: Absolute, encoding: Generic, size: 20, target: Symbol(SymbolIndex(12)), addend: 0, implicit_addend: true })
+(2000073c, Relocation { kind: Absolute, encoding: Generic, size: 20, target: Symbol(SymbolIndex(64)), addend: 0, implicit_addend: true })
+(20000740, Relocation { kind: Absolute, encoding: Generic, size: 20, target: Symbol(SymbolIndex(12)), addend: 0, implicit_addend: true })
+(20000770, Relocation { kind: Absolute, encoding: Generic, size: 20, target: Symbol(SymbolIndex(e)), addend: 0, implicit_addend: true })
+(20000774, Relocation { kind: Absolute, encoding: Generic, size: 20, target: Symbol(SymbolIndex(c)), addend: 0, implicit_addend: true })
+(20000778, Relocation { kind: Absolute, encoding: Generic, size: 20, target: Symbol(SymbolIndex(38)), addend: 0, implicit_addend: true })
+(2000077c, Relocation { kind: Absolute, encoding: Generic, size: 20, target: Symbol(SymbolIndex(8)), addend: 0, implicit_addend: true })
+(20000780, Relocation { kind: Absolute, encoding: Generic, size: 20, target: Symbol(SymbolIndex(6a)), addend: 0, implicit_addend: true })
+(20000784, Relocation { kind: Absolute, encoding: Generic, size: 20, target: Symbol(SymbolIndex(6e)), addend: 0, implicit_addend: true })
+(20000788, Relocation { kind: Absolute, encoding: Generic, size: 20, target: Symbol(SymbolIndex(4)), addend: 0, implicit_addend: true })
+(2000078c, Relocation { kind: Absolute, encoding: Generic, size: 20, target: Symbol(SymbolIndex(72)), addend: 0, implicit_addend: true })
+(20000790, Relocation { kind: Absolute, encoding: Generic, size: 20, target: Symbol(SymbolIndex(a)), addend: 0, implicit_addend: true })
+(20000794, Relocation { kind: Absolute, encoding: Generic, size: 20, target: Symbol(SymbolIndex(2)), addend: 0, implicit_addend: true })
+(20000798, Relocation { kind: Absolute, encoding: Generic, size: 20, target: Symbol(SymbolIndex(10)), addend: 0, implicit_addend: true })
+(2000079c, Relocation { kind: Absolute, encoding: Generic, size: 20, target: Symbol(SymbolIndex(0)), addend: 0, implicit_addend: true })
+(200007a0, Relocation { kind: Absolute, encoding: Generic, size: 20, target: Symbol(SymbolIndex(7d)), addend: 0, implicit_addend: true })
+(200007a4, Relocation { kind: Absolute, encoding: Generic, size: 20, target: Symbol(SymbolIndex(6)), addend: 0, implicit_addend: true })
+
+Dynamic symbols

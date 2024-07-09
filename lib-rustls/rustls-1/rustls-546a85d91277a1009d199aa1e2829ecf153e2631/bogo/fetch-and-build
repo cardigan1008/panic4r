@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+set -ex
+
+mkdir -p bogo
+pushd bogo
+
+git init --initial-branch main
+git config core.sparsecheckout 1
+cat << EOF > .git/info/sparse-checkout
+go.mod
+go.sum
+ssl/test/runner
+util/testresult
+EOF
+
+# fix on a tested point of rustls-testing branch
+COMMIT=586adb914834a953d48fcc7a5d22aeed9d7f53c8
+git fetch --depth=1 https://github.com/rustls/boringssl.git $COMMIT
+git checkout $COMMIT
+(cd ssl/test/runner && go test -c)
+
+popd

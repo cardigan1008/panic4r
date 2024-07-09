@@ -1,0 +1,7 @@
+[package]
+name = "crossbeam-skiplist-1"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+crossbeam-skiplist = {path = "crossbeam-2128578c992a2415d34b1845494d74e0e40e8722/crossbeam-skiplist"}

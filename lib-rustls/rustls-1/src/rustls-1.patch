@@ -1,0 +1,37 @@
+From 3f5d37e9760301ebeff2671bcf781bcd2fc1bf47 Mon Sep 17 00:00:00 2001
+From: Arnav Singh <me@arnavion.dev>
+Date: Sat, 2 Mar 2024 02:09:34 -0800
+Subject: [PATCH] Return correct `ConnectionTrafficSecrets` variant when
+ AES-256-GCM is negotiated.
+
+55bb27953d52eb2762f20aa6e30dc54252b1f77e inadvertently changed `extract_keys`
+to always return `ConnectionTrafficSecrets::Aes128Gcm`, even when AES-256-GCM
+was negotiated. This change fixes it by restoring the key length check.
+
+Fixes #1833
+---
+ rustls/src/crypto/ring/tls12.rs | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/rustls/src/crypto/ring/tls12.rs b/rustls/src/crypto/ring/tls12.rs
+index 1630a827..bbdad6c9 100644
+--- a/rustls/src/crypto/ring/tls12.rs
++++ b/rustls/src/crypto/ring/tls12.rs
+@@ -162,9 +162,11 @@ impl Tls12AeadAlgorithm for GcmAlgorithm {
+         write_iv: &[u8],
+         explicit: &[u8],
+     ) -> Result<ConnectionTrafficSecrets, UnsupportedOperationError> {
+-        Ok(ConnectionTrafficSecrets::Aes128Gcm {
+-            key,
+-            iv: gcm_iv(write_iv, explicit),
++        let iv = gcm_iv(write_iv, explicit);
++        Ok(match self.0.key_len() {
++            16 => ConnectionTrafficSecrets::Aes128Gcm { key, iv },
++            32 => ConnectionTrafficSecrets::Aes256Gcm { key, iv },
++            _ => unreachable!(),
+         })
+     }
+ 
+-- 
+2.25.1
+
