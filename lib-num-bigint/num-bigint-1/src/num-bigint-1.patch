@@ -1,0 +1,46 @@
+From 500d250b253f1f256135483480a0b7071d61907a Mon Sep 17 00:00:00 2001
+From: Nick Dolan <nicholas.dolan1@gmail.com>
+Date: Fri, 23 Aug 2019 13:54:19 -0500
+Subject: [PATCH] fix(lcm): lcm(0,0) = 0
+
+Added a simple check to the BigInt::lcm() in the case that both arguments are
+zero. If this is the case, the method returns BigInt::zero().
+
+Added test case to test/bigint.rs checking that lcm(0, 0) returns 0.
+---
+ src/bigint.rs   | 6 +++++-
+ tests/bigint.rs | 1 +
+ 2 files changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/src/bigint.rs b/src/bigint.rs
+index 1227b4f..fa04992 100644
+--- a/src/bigint.rs
++++ b/src/bigint.rs
+@@ -2188,7 +2188,11 @@ impl Integer for BigInt {
+     /// Calculates the Lowest Common Multiple (LCM) of the number and `other`.
+     #[inline]
+     fn lcm(&self, other: &BigInt) -> BigInt {
+-        BigInt::from_biguint(Plus, self.data.lcm(&other.data))
++        if self.is_zero() && other.is_zero() {
++            Self::zero()
++        } else {
++            BigInt::from_biguint(Plus, self.data.lcm(&other.data))
++        }
+     }
+ 
+     /// Deprecated, use `is_multiple_of` instead.
+diff --git a/tests/bigint.rs b/tests/bigint.rs
+index ba2e658..911bff0 100644
+--- a/tests/bigint.rs
++++ b/tests/bigint.rs
+@@ -962,6 +962,7 @@ fn test_lcm() {
+         assert_eq!(big_a.lcm(&big_b), big_c);
+     }
+ 
++    check(0, 0, 0);
+     check(1, 0, 0);
+     check(0, 1, 0);
+     check(1, 1, 1);
+-- 
+2.34.1
+

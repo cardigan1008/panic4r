@@ -1,0 +1,2 @@
+thread 'main' panicked at /mnt/d/rust_learning/lib-bumpalo/bumpalo-2/bumpalo-1fec3b8c7dbbd3d523a5dfcacf3f00e2b35b29c4/src/lib.rs:616:13:
+assertion failed: ptr <= end

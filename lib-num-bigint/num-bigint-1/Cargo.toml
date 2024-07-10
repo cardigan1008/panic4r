@@ -1,0 +1,15 @@
+[package]
+name = "num-bigint-1"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+num-bigint = {path = "num-bigint-3e3487648685dbf4d447fe60ebb1bd4e706038eb"}
+
+[dependencies.num-traits]
+version = "0.2.7"
+default-features = false
+
+[dependencies.num-integer]
+version = "0.1.39"
+default-features = false

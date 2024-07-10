@@ -1,0 +1,9 @@
+[package]
+name = "rayon-1"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+rayon = {path = "rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221"}
+
+tokio = { version = "1.0", features = ["full"] }

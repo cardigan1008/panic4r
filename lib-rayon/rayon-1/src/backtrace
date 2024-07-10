@@ -1,0 +1,178 @@
+stack backtrace:
+   0:     0x55ca152ae995 - std::backtrace_rs::backtrace::libunwind::trace::h1a07e5dba0da0cd2
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/../../backtrace/src/backtrace/libunwind.rs:105:5
+   1:     0x55ca152ae995 - std::backtrace_rs::backtrace::trace_unsynchronized::h61b9b8394328c0bc
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/../../backtrace/src/backtrace/mod.rs:66:5
+   2:     0x55ca152ae995 - std::sys_common::backtrace::_print_fmt::h1c5e18b460934cff
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/sys_common/backtrace.rs:68:5
+   3:     0x55ca152ae995 - <std::sys_common::backtrace::_print::DisplayBacktrace as core::fmt::Display>::fmt::h1e1a1972118942ad
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/sys_common/backtrace.rs:44:22
+   4:     0x55ca152ccddb - core::fmt::rt::Argument::fmt::h07af2b4071d536cd
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/core/src/fmt/rt.rs:165:63       
+   5:     0x55ca152ccddb - core::fmt::write::hc090a2ffd6b28c4a
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/core/src/fmt/mod.rs:1157:21     
+   6:     0x55ca152ac5bf - std::io::Write::write_fmt::h8898bac6ff039a23
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/io/mod.rs:1832:15       
+   7:     0x55ca152ae76e - std::sys_common::backtrace::_print::h4e80c5803d4ee35b
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/sys_common/backtrace.rs:47:5
+   8:     0x55ca152ae76e - std::sys_common::backtrace::print::ha96650907276675e
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/sys_common/backtrace.rs:34:9
+   9:     0x55ca152afa29 - std::panicking::default_hook::{{closure}}::h215c2a0a8346e0e0
+  10:     0x55ca152af76d - std::panicking::default_hook::h207342be97478370
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/panicking.rs:298:9      
+  11:     0x55ca152afec3 - std::panicking::rust_panic_with_hook::hac8bdceee1e4fe2c
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/panicking.rs:795:13     
+  12:     0x55ca152afda4 - std::panicking::begin_panic_handler::{{closure}}::h00d785e82757ce3c
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/panicking.rs:664:13     
+  13:     0x55ca152aee59 - std::sys_common::backtrace::__rust_end_short_backtrace::h1628d957bcd06996
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/sys_common/backtrace.rs:171:18
+  14:     0x55ca152afad7 - rust_begin_unwind
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/panicking.rs:652:5      
+  15:     0x55ca15180e83 - core::panicking::panic_fmt::hdc63834ffaaefae5
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/core/src/panicking.rs:72:14     
+  16:     0x55ca1523897e - rayon_core::sleep::counters::AtomicCounters::sub_inactive_thread::h10309216533b7062
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/rayon-core/src/sleep/counters.rs:147:9
+  17:     0x55ca152381bc - rayon_core::sleep::Sleep::work_found::hcce2470b1452230b
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/rayon-core/src/sleep/mod.rs:97:31
+  18:     0x55ca1524ceae - rayon_core::registry::WorkerThread::wait_until_cold::h4a2862a82fd276b0
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/rayon-core/src/registry.rs:738:9
+  19:     0x55ca1523d92b - rayon_core::registry::WorkerThread::wait_until::h039616488df576f1
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/rayon-core/src/registry.rs:700:13
+  20:     0x55ca15185d11 - rayon_core::join::join_context::{{closure}}::hf2e7b7a489d2921c
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/rayon-core/src/join/mod.rs:166:17
+  21:     0x55ca151838ae - rayon_core::registry::in_worker::ha1a84e6321e86752
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/rayon-core/src/registry.rs:875:13
+  22:     0x55ca1518537a - rayon_core::join::join_context::h135f4162e3663f19
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/rayon-core/src/join/mod.rs:132:5
+  23:     0x55ca1518470d - rayon::iter::plumbing::bridge_producer_consumer::helper::hfb33768e316b6c48
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/src/iter/plumbing/mod.rs:416:47
+  24:     0x55ca15184902 - rayon::iter::plumbing::bridge_producer_consumer::helper::{{closure}}::h503a7ce7ed876788        
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/src/iter/plumbing/mod.rs:418:21
+  25:     0x55ca15185f84 - rayon_core::join::join_context::call_a::{{closure}}::h6bc59f4d443dc300
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/rayon-core/src/join/mod.rs:124:17
+  26:     0x55ca15186f70 - <core::panic::unwind_safe::AssertUnwindSafe<F> as core::ops::function::FnOnce<()>>::call_once::h54ad2ef9c1b6359c
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/core/src/panic/unwind_safe.rs:272:9
+  27:     0x55ca15189d64 - std::panicking::try::do_call::h80feea8dacfa48e4
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/panicking.rs:559:40     
+  28:     0x55ca1518a22b - __rust_try
+  29:     0x55ca15189982 - std::panicking::try::hb5bccd53a1c1db00
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/panicking.rs:523:19     
+  30:     0x55ca15181af6 - std::panic::catch_unwind::h313de051d2744732
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/panic.rs:149:14
+  31:     0x55ca151895de - rayon_core::unwind::halt_unwinding::h1820de87ecaf34b3
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/rayon-core/src/unwind.rs:17:5
+  32:     0x55ca15185b19 - rayon_core::join::join_context::{{closure}}::hf2e7b7a489d2921c
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/rayon-core/src/join/mod.rs:141:24
+  33:     0x55ca151838ae - rayon_core::registry::in_worker::ha1a84e6321e86752
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/rayon-core/src/registry.rs:875:13
+  34:     0x55ca1518537a - rayon_core::join::join_context::h135f4162e3663f19
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/rayon-core/src/join/mod.rs:132:5
+  35:     0x55ca1518470d - rayon::iter::plumbing::bridge_producer_consumer::helper::hfb33768e316b6c48
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/src/iter/plumbing/mod.rs:416:47
+  36:     0x55ca15184902 - rayon::iter::plumbing::bridge_producer_consumer::helper::{{closure}}::h503a7ce7ed876788        
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/src/iter/plumbing/mod.rs:418:21
+  37:     0x55ca15185f84 - rayon_core::join::join_context::call_a::{{closure}}::h6bc59f4d443dc300
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/rayon-core/src/join/mod.rs:124:17
+  38:     0x55ca15186f70 - <core::panic::unwind_safe::AssertUnwindSafe<F> as core::ops::function::FnOnce<()>>::call_once::h54ad2ef9c1b6359c
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/core/src/panic/unwind_safe.rs:272:9
+  39:     0x55ca15189d64 - std::panicking::try::do_call::h80feea8dacfa48e4
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/panicking.rs:559:40     
+  40:     0x55ca1518a22b - __rust_try
+  41:     0x55ca15189982 - std::panicking::try::hb5bccd53a1c1db00
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/panicking.rs:523:19     
+  42:     0x55ca15181af6 - std::panic::catch_unwind::h313de051d2744732
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/panic.rs:149:14
+  43:     0x55ca151895de - rayon_core::unwind::halt_unwinding::h1820de87ecaf34b3
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/rayon-core/src/unwind.rs:17:5
+  44:     0x55ca15185b19 - rayon_core::join::join_context::{{closure}}::hf2e7b7a489d2921c
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/rayon-core/src/join/mod.rs:141:24
+  45:     0x55ca151838ae - rayon_core::registry::in_worker::ha1a84e6321e86752
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/rayon-core/src/registry.rs:875:13
+  46:     0x55ca1518537a - rayon_core::join::join_context::h135f4162e3663f19
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/rayon-core/src/join/mod.rs:132:5
+  47:     0x55ca1518470d - rayon::iter::plumbing::bridge_producer_consumer::helper::hfb33768e316b6c48
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/src/iter/plumbing/mod.rs:416:47
+  48:     0x55ca15184902 - rayon::iter::plumbing::bridge_producer_consumer::helper::{{closure}}::h503a7ce7ed876788        
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/src/iter/plumbing/mod.rs:418:21
+  49:     0x55ca15185f84 - rayon_core::join::join_context::call_a::{{closure}}::h6bc59f4d443dc300
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/rayon-core/src/join/mod.rs:124:17
+  50:     0x55ca15186f70 - <core::panic::unwind_safe::AssertUnwindSafe<F> as core::ops::function::FnOnce<()>>::call_once::h54ad2ef9c1b6359c
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/core/src/panic/unwind_safe.rs:272:9
+  51:     0x55ca15189d64 - std::panicking::try::do_call::h80feea8dacfa48e4
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/panicking.rs:559:40     
+  52:     0x55ca1518a22b - __rust_try
+  53:     0x55ca15189982 - std::panicking::try::hb5bccd53a1c1db00
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/panicking.rs:523:19     
+  54:     0x55ca15181af6 - std::panic::catch_unwind::h313de051d2744732
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/panic.rs:149:14
+  55:     0x55ca151895de - rayon_core::unwind::halt_unwinding::h1820de87ecaf34b3
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/rayon-core/src/unwind.rs:17:5
+  56:     0x55ca15185b19 - rayon_core::join::join_context::{{closure}}::hf2e7b7a489d2921c
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/rayon-core/src/join/mod.rs:141:24
+  57:     0x55ca151838ae - rayon_core::registry::in_worker::ha1a84e6321e86752
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/rayon-core/src/registry.rs:875:13
+  58:     0x55ca1518537a - rayon_core::join::join_context::h135f4162e3663f19
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/rayon-core/src/join/mod.rs:132:5
+  59:     0x55ca1518470d - rayon::iter::plumbing::bridge_producer_consumer::helper::hfb33768e316b6c48
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/src/iter/plumbing/mod.rs:416:47
+  60:     0x55ca151849ed - rayon::iter::plumbing::bridge_producer_consumer::helper::{{closure}}::h8928cca071d60ca8        
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/src/iter/plumbing/mod.rs:427:21
+  61:     0x55ca151860f8 - rayon_core::join::join_context::call_b::{{closure}}::h61a70c17f6ae7ebe
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/rayon-core/src/join/mod.rs:129:25
+  62:     0x55ca1518900e - <rayon_core::job::StackJob<L,F,R> as rayon_core::job::Job>::execute::call::{{closure}}::h3eca971e8705928c
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/rayon-core/src/job.rs:113:21
+  63:     0x55ca15186fa0 - <core::panic::unwind_safe::AssertUnwindSafe<F> as core::ops::function::FnOnce<()>>::call_once::hbc9fd14077b5fdca
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/core/src/panic/unwind_safe.rs:272:9
+  64:     0x55ca15189ce4 - std::panicking::try::do_call::h54b690d10876549b
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/panicking.rs:559:40     
+  65:     0x55ca1518a22b - __rust_try
+  66:     0x55ca15189aa2 - std::panicking::try::hdbfeacf605ff0b9d
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/panicking.rs:523:19     
+  67:     0x55ca15181ae6 - std::panic::catch_unwind::h265cc685d8810ea4
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/panic.rs:149:14
+  68:     0x55ca1518966e - rayon_core::unwind::halt_unwinding::h7fb615ae42620279
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/rayon-core/src/unwind.rs:17:5
+  69:     0x55ca15188d23 - <rayon_core::job::StackJob<L,F,R> as rayon_core::job::Job>::execute::hcb3ff7c027c68198
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/rayon-core/src/job.rs:119:38
+  70:     0x55ca152542ee - rayon_core::job::JobRef::execute::h172df33629f57383
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/rayon-core/src/job.rs:59:9
+  71:     0x55ca1524cf5a - rayon_core::registry::WorkerThread::execute::h2216f78742669ad8
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/rayon-core/src/registry.rs:749:9
+  72:     0x55ca1524cdad - rayon_core::registry::WorkerThread::wait_until_cold::h4a2862a82fd276b0
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/rayon-core/src/registry.rs:726:17
+  73:     0x55ca1523d97b - rayon_core::registry::WorkerThread::wait_until::h2bcd2ff58076c5fe
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/rayon-core/src/registry.rs:700:13
+  74:     0x55ca1524d62d - rayon_core::registry::main_loop::h70f8dd6d9832a8f9
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/rayon-core/src/registry.rs:833:5
+  75:     0x55ca1524bf4d - rayon_core::registry::ThreadBuilder::run::h58b3294f70871e47
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/rayon-core/src/registry.rs:55:18
+  76:     0x55ca1523c3cd - <rayon_core::registry::DefaultSpawn as rayon_core::registry::ThreadSpawn>::spawn::{{closure}}::hf55cfaad0309832c
+                               at /mnt/d/rust_learning/lib-rayon/rayon-1/rayon-e63b4eba7f1fe7457164c070fb4bb1dc84ec9221/rayon-core/src/registry.rs:100:20
+  77:     0x55ca1526a506 - std::sys_common::backtrace::__rust_begin_short_backtrace::h7ed62ceba5525117
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/sys_common/backtrace.rs:155:18
+  78:     0x55ca152657cd - std::thread::Builder::spawn_unchecked_::{{closure}}::{{closure}}::hb2a85da04ca4a37a
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/thread/mod.rs:542:17    
+  79:     0x55ca15251b51 - <core::panic::unwind_safe::AssertUnwindSafe<F> as core::ops::function::FnOnce<()>>::call_once::h702590064723ff47
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/core/src/panic/unwind_safe.rs:272:9
+  80:     0x55ca1525144b - std::panicking::try::do_call::hfe615b739e2c8cf4
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/panicking.rs:559:40     
+  81:     0x55ca15251a8b - __rust_try
+  82:     0x55ca152511d2 - std::panicking::try::hed4f9f3211d9675e
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/panicking.rs:523:19     
+  83:     0x55ca15264d91 - std::panic::catch_unwind::hb472a21c76f13f5c
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/panic.rs:149:14
+  84:     0x55ca15264d91 - std::thread::Builder::spawn_unchecked_::{{closure}}::heb857b86f649b16a
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/thread/mod.rs:541:30    
+  85:     0x55ca1522c00f - core::ops::function::FnOnce::call_once{{vtable.shim}}::h42228c3023c16556
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/core/src/ops/function.rs:250:5  
+  86:     0x55ca152b23ab - <alloc::boxed::Box<F,A> as core::ops::function::FnOnce<Args>>::call_once::h09e5a4c541afa800    
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/alloc/src/boxed.rs:2022:9       
+  87:     0x55ca152b23ab - <alloc::boxed::Box<F,A> as core::ops::function::FnOnce<Args>>::call_once::h9c8b03c22f4e7026    
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/alloc/src/boxed.rs:2022:9       
+  88:     0x55ca152b23ab - std::sys::pal::unix::thread::Thread::new::thread_start::h522bc89a54da820a
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/sys/pal/unix/thread.rs:108:17
+  89:     0x7fbd783cdac3 - <unknown>
+  90:     0x7fbd7845f850 - <unknown>
+  91:                0x0 - <unknown>
+Rayon: detected unexpected panic; aborting
+Aborted

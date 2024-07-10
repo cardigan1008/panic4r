@@ -1,0 +1,111 @@
+From f4d3928246f88895d716808ac043f3dc55cfcbc4 Mon Sep 17 00:00:00 2001
+From: Nick Fitzgerald <fitzgen@gmail.com>
+Date: Fri, 21 Apr 2023 14:19:12 -0700
+Subject: [PATCH] Avoid constructing layouts with larger than `isize::MAX`
+ sizes
+
+Fixes #200
+---
+ src/lib.rs            | 16 ++++++----------
+ tests/all/capacity.rs |  7 +++++++
+ tests/all/main.rs     |  3 ++-
+ 3 files changed, 15 insertions(+), 11 deletions(-)
+ mode change 100644 => 100755 src/lib.rs
+ create mode 100644 tests/all/capacity.rs
+ mode change 100644 => 100755 tests/all/main.rs
+
+diff --git a/src/lib.rs b/src/lib.rs
+old mode 100644
+new mode 100755
+index 83fbf81..db5d41b
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -463,12 +463,8 @@ struct NewChunkMemoryDetails {
+ 
+ /// Wrapper around `Layout::from_size_align` that adds debug assertions.
+ #[inline]
+-unsafe fn layout_from_size_align(size: usize, align: usize) -> Layout {
+-    if cfg!(debug_assertions) {
+-        Layout::from_size_align(size, align).unwrap()
+-    } else {
+-        Layout::from_size_align_unchecked(size, align)
+-    }
++fn layout_from_size_align(size: usize, align: usize) -> Result<Layout, AllocErr> {
++    Layout::from_size_align(size, align).map_err(|_| AllocErr)
+ }
+ 
+ #[inline(never)]
+@@ -529,7 +525,7 @@ impl Bump {
+             });
+         }
+ 
+-        let layout = unsafe { layout_from_size_align(capacity, 1) };
++        let layout = layout_from_size_align(capacity, 1)?;
+ 
+         let chunk_footer = unsafe {
+             Self::new_chunk(
+@@ -676,7 +672,7 @@ impl Bump {
+             size,
+         } = new_chunk_memory_details;
+ 
+-        let layout = layout_from_size_align(size, align);
++        let layout = layout_from_size_align(size, align).ok()?;
+ 
+         debug_assert!(size >= requested_layout.size());
+ 
+@@ -1770,7 +1766,7 @@ impl Bump {
+             // reuse the currently allocated space.
+             let delta = new_size - old_size;
+             if let Some(p) =
+-                self.try_alloc_layout_fast(layout_from_size_align(delta, old_layout.align()))
++                self.try_alloc_layout_fast(layout_from_size_align(delta, old_layout.align())?)
+             {
+                 ptr::copy(ptr.as_ptr(), p.as_ptr(), old_size);
+                 return Ok(p);
+@@ -1881,7 +1877,7 @@ unsafe impl<'a> alloc::Alloc for &'a Bump {
+             return self.try_alloc_layout(layout);
+         }
+ 
+-        let new_layout = layout_from_size_align(new_size, layout.align());
++        let new_layout = layout_from_size_align(new_size, layout.align())?;
+         if new_size <= old_size {
+             self.shrink(ptr, layout, new_layout)
+         } else {
+diff --git a/tests/all/capacity.rs b/tests/all/capacity.rs
+new file mode 100644
+index 0000000..8481d4e
+--- /dev/null
++++ b/tests/all/capacity.rs
+@@ -0,0 +1,7 @@
++use bumpalo::Bump;
++
++#[test]
++fn try_with_capacity_too_large() {
++    // Shouldn't panic even though the capacity is too large for a `Layout`.
++    let _ = Bump::try_with_capacity(isize::MAX as usize + 1);
++}
+diff --git a/tests/all/main.rs b/tests/all/main.rs
+old mode 100644
+new mode 100755
+index 00de4f3..2f1ffa8
+--- a/tests/all/main.rs
++++ b/tests/all/main.rs
+@@ -5,6 +5,8 @@ mod alloc_try_with;
+ mod alloc_with;
+ mod allocation_limit;
+ mod allocator_api;
++mod boxed;
++mod capacity;
+ mod collect_in;
+ mod quickcheck;
+ mod quickchecks;
+@@ -13,6 +15,5 @@ mod tests;
+ mod try_alloc_try_with;
+ mod try_alloc_with;
+ mod vec;
+-mod boxed;
+ 
+ fn main() {}
+-- 
+2.34.1
+

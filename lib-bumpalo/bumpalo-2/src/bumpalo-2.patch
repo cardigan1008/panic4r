@@ -1,0 +1,110 @@
+From 7a2c28b4cd59921c9aded1fb31f944499d4517bb Mon Sep 17 00:00:00 2001
+From: Nick Fitzgerald <fitzgen@gmail.com>
+Date: Tue, 29 Oct 2019 10:31:07 -0700
+Subject: [PATCH] Check for some potential overflows and fix buggy assertion
+
+Fixes #28
+---
+ src/lib.rs     | 27 +++++++++++++++++++--------
+ tests/tests.rs |  7 +++++++
+ 2 files changed, 26 insertions(+), 8 deletions(-)
+
+diff --git a/src/lib.rs b/src/lib.rs
+index eb9e149..ad8098c 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -245,9 +245,10 @@ impl Drop for Bump {
+ unsafe impl Send for Bump {}
+ 
+ #[inline]
+-pub(crate) fn round_up_to(n: usize, divisor: usize) -> usize {
++pub(crate) fn round_up_to(n: usize, divisor: usize) -> Option<usize> {
++    debug_assert!(divisor > 0);
+     debug_assert!(divisor.is_power_of_two());
+-    (n + divisor - 1) & !(divisor - 1)
++    Some(n.checked_add(divisor - 1)? & !(divisor - 1))
+ }
+ 
+ // Maximum typical overhead per allocation imposed by allocators.
+@@ -269,6 +270,11 @@ unsafe fn layout_from_size_align(size: usize, align: usize) -> Layout {
+     }
+ }
+ 
++#[inline(never)]
++fn allocation_size_overflow<T>() -> T {
++    panic!("requested allocation size overflowed")
++}
++
+ impl Bump {
+     fn default_chunk_layout() -> Layout {
+         unsafe { layout_from_size_align(DEFAULT_CHUNK_SIZE_WITH_FOOTER, DEFAULT_CHUNK_ALIGN) }
+@@ -303,7 +309,7 @@ impl Bump {
+                     let footer_align = mem::align_of::<ChunkFooter>();
+                     debug_assert_eq!(
+                         old_doubled,
+-                        round_up_to(old_doubled, footer_align),
++                        round_up_to(old_doubled, footer_align).unwrap(),
+                         "The old size was already a multiple of our chunk footer alignment, so no \
+                          need to round it up again."
+                     );
+@@ -321,7 +327,8 @@ impl Bump {
+                         size_to_allocate,
+                         requested.size() + mem::size_of::<ChunkFooter>(),
+                     );
+-                    let size = round_up_to(size, footer_align);
++                    let size =
++                        round_up_to(size, footer_align).unwrap_or_else(allocation_size_overflow);
+                     let align = cmp::max(footer_align, requested.align());
+ 
+                     layout_from_size_align(size, align)
+@@ -611,16 +618,17 @@ impl Bump {
+             let footer = self.current_chunk_footer.get();
+             let footer = footer.as_ref();
+             let ptr = footer.ptr.get().as_ptr() as usize;
+-            let ptr = round_up_to(ptr, layout.align());
+             let end = footer as *const _ as usize;
+             debug_assert!(ptr <= end);
+ 
+             // If the pointer overflows, the allocation definitely doesn't fit into the current
+             // chunk, so we try to get a new one.
+-            let new_ptr = ptr.checked_add(layout.size())?;
++            let aligned_ptr = round_up_to(ptr, layout.align())?;
++            let new_ptr = aligned_ptr.checked_add(layout.size())?;
+ 
+             if new_ptr <= end {
+-                let p = ptr as *mut u8;
++                debug_assert!(aligned_ptr <= end);
++                let p = aligned_ptr as *mut u8;
+                 debug_assert!(new_ptr <= footer as *const _ as usize);
+                 footer.ptr.set(NonNull::new_unchecked(new_ptr as *mut u8));
+                 Some(NonNull::new_unchecked(p))
+@@ -776,7 +784,10 @@ impl Bump {
+         F: for<'a> FnMut(&'a [u8]),
+     {
+         for chunk in self.iter_allocated_chunks() {
+-            f(slice::from_raw_parts(chunk.as_ptr() as *const u8, chunk.len()));
++            f(slice::from_raw_parts(
++                chunk.as_ptr() as *const u8,
++                chunk.len(),
++            ));
+         }
+     }
+ }
+diff --git a/tests/tests.rs b/tests/tests.rs
+index 3264348..97f6df7 100644
+--- a/tests/tests.rs
++++ b/tests/tests.rs
+@@ -124,3 +124,10 @@ fn alloc_slice_clone() {
+ 
+     assert_eq!(src, dst);
+ }
++
++#[test]
++fn small_size_and_large_align() {
++    let b = Bump::new();
++    let layout = std::alloc::Layout::from_size_align(1, 0x1000).unwrap();
++    b.alloc_layout(layout);
++}
+-- 
+2.34.1
+

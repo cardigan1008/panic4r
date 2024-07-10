@@ -1,0 +1,127 @@
+From d8e90599732559b20a02f316f63f5d4f022e2796 Mon Sep 17 00:00:00 2001
+From: Josh Stone <cuviper@gmail.com>
+Date: Wed, 6 Apr 2022 10:50:21 -0700
+Subject: [PATCH] Enforce THREADS_MAX and expose it with max_num_threads()
+
+We have an inherent maximum on the number of threads we can support in a
+single thread pool, based on the number of `THREADS_BITS` we are using
+in the atomic sleep counters. However, we were not enforcing this, so a
+larger pool could be created and end up wrapping the counters. In debug
+builds this would fail an assertion, otherwise it may lead to errors in
+the desired sleep and wakeup behavior.
+
+We now assert this limit in `Sleep::new`, and also impose it as a soft
+limit in `Registry::new`, automatically reducing to the maximum. A
+top-level `pub fn max_num_threads()` returns the maximum for users.
+
+At the same time, the value of `THREADS_BITS` is now adjusted for
+different machine sizes. It was 10 bits everywhere, but 32-bit systems
+now use 8 bits for max 255 threads (leaving more room for the JEC),
+while 64-bit systems now use 16 bits for a maximum of 65,535 threads.
+---
+ rayon-core/src/lib.rs            | 11 +++++++++++
+ rayon-core/src/registry.rs       |  4 +++-
+ rayon-core/src/sleep/counters.rs |  8 ++++++--
+ rayon-core/src/sleep/mod.rs      |  2 ++
+ src/lib.rs                       |  2 +-
+ 5 files changed, 23 insertions(+), 4 deletions(-)
+
+diff --git a/rayon-core/src/lib.rs b/rayon-core/src/lib.rs
+index 2df24b2..ca056dc 100644
+--- a/rayon-core/src/lib.rs
++++ b/rayon-core/src/lib.rs
+@@ -87,6 +87,17 @@ pub use self::thread_pool::ThreadPool;
+ 
+ use self::registry::{CustomSpawn, DefaultSpawn, ThreadSpawn};
+ 
++/// Returns the maximum number of threads that Rayon supports in a single thread-pool.
++///
++/// If a higher thread count is requested by calling `ThreadPoolBuilder::num_threads` or by setting
++/// the `RAYON_NUM_THREADS` environment variable, then it will be reduced to this maximum.
++///
++/// The value may vary between different targets, and is subject to change in new Rayon versions.
++pub fn max_num_threads() -> usize {
++    // We are limited by the bits available in the sleep counter's `AtomicUsize`.
++    crate::sleep::THREADS_MAX
++}
++
+ /// Returns the number of threads in the current registry. If this
+ /// code is executing within a Rayon thread-pool, then this will be
+ /// the number of threads for the thread-pool of the current
+diff --git a/rayon-core/src/registry.rs b/rayon-core/src/registry.rs
+index 4156b90..4dd7971 100644
+--- a/rayon-core/src/registry.rs
++++ b/rayon-core/src/registry.rs
+@@ -214,7 +214,9 @@ impl Registry {
+     where
+         S: ThreadSpawn,
+     {
+-        let n_threads = builder.get_num_threads();
++        // Soft-limit the number of threads that we can actually support.
++        let n_threads = Ord::min(builder.get_num_threads(), crate::max_num_threads());
++
+         let breadth_first = builder.get_breadth_first();
+ 
+         let (workers, stealers): (Vec<_>, Vec<_>) = (0..n_threads)
+diff --git a/rayon-core/src/sleep/counters.rs b/rayon-core/src/sleep/counters.rs
+index 879d32e..29d3b18 100644
+--- a/rayon-core/src/sleep/counters.rs
++++ b/rayon-core/src/sleep/counters.rs
+@@ -53,7 +53,11 @@ impl JobsEventCounter {
+ }
+ 
+ /// Number of bits used for the thread counters.
+-const THREADS_BITS: usize = 10;
++#[cfg(target_pointer_width = "64")]
++const THREADS_BITS: usize = 16;
++
++#[cfg(target_pointer_width = "32")]
++const THREADS_BITS: usize = 8;
+ 
+ /// Bits to shift to select the sleeping threads
+ /// (used with `select_bits`).
+@@ -68,7 +72,7 @@ const INACTIVE_SHIFT: usize = 1 * THREADS_BITS;
+ const JEC_SHIFT: usize = 2 * THREADS_BITS;
+ 
+ /// Max value for the thread counters.
+-const THREADS_MAX: usize = (1 << THREADS_BITS) - 1;
++pub(crate) const THREADS_MAX: usize = (1 << THREADS_BITS) - 1;
+ 
+ /// Constant that can be added to add one sleeping thread.
+ const ONE_SLEEPING: usize = 1;
+diff --git a/rayon-core/src/sleep/mod.rs b/rayon-core/src/sleep/mod.rs
+index 2aa262c..2c4ac7c 100644
+--- a/rayon-core/src/sleep/mod.rs
++++ b/rayon-core/src/sleep/mod.rs
+@@ -11,6 +11,7 @@ use std::thread;
+ use std::usize;
+ 
+ mod counters;
++pub(crate) use self::counters::THREADS_MAX;
+ use self::counters::{AtomicCounters, JobsEventCounter};
+ 
+ /// The `Sleep` struct is embedded into each registry. It governs the waking and sleeping
+@@ -62,6 +63,7 @@ const ROUNDS_UNTIL_SLEEPING: u32 = ROUNDS_UNTIL_SLEEPY + 1;
+ 
+ impl Sleep {
+     pub(super) fn new(logger: Logger, n_threads: usize) -> Sleep {
++        assert!(n_threads <= THREADS_MAX);
+         Sleep {
+             logger,
+             worker_sleep_states: (0..n_threads).map(|_| Default::default()).collect(),
+diff --git a/src/lib.rs b/src/lib.rs
+index 6f9271a..b59f3fa 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -114,7 +114,7 @@ pub use rayon_core::ThreadBuilder;
+ pub use rayon_core::ThreadPool;
+ pub use rayon_core::ThreadPoolBuildError;
+ pub use rayon_core::ThreadPoolBuilder;
+-pub use rayon_core::{current_num_threads, current_thread_index};
++pub use rayon_core::{current_num_threads, current_thread_index, max_num_threads};
+ pub use rayon_core::{in_place_scope, scope, Scope};
+ pub use rayon_core::{in_place_scope_fifo, scope_fifo, ScopeFifo};
+ pub use rayon_core::{join, join_context};
+-- 
+2.34.1
+

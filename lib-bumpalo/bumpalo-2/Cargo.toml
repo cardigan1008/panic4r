@@ -1,0 +1,7 @@
+[package]
+name = "bumpalo-2"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+bumpalo = {path = "bumpalo-1fec3b8c7dbbd3d523a5dfcacf3f00e2b35b29c4"}
