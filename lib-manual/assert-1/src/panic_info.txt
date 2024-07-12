@@ -1,2 +1,0 @@
-thread 'main' panicked at src/main.rs:4:5:
-assertion failed: one() == 1

@@ -1,2 +1,0 @@
-thread 'main' panicked at index-9/index.rs:4:14:
-range start index 3 out of range for slice of length 2

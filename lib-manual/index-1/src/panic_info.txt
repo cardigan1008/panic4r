@@ -1,2 +1,0 @@
-thread 'main' panicked at index-1/index.rs:7:9:
-index out of bounds: the len is 1 but the index is 1

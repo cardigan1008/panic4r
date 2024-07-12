@@ -1,1 +1,1 @@
-thread 'main' panicked at syn-c2ef263dda394da054abb7a18c578a85ef9750e2/src/lit.rs:960:13: Unrecognized literal: `9e99e99`
+thread 'main' panicked at syn-0b3145dc6ad4e8b69589f84f5f1a52e1b11342f4/src/path.rs:713:17: attempt to subtract with overflow

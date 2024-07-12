@@ -1,2 +1,0 @@
-thread 'main' panicked at overflow-9/overflow-shr.rs:12:5:
-attempt to shift right with overflow

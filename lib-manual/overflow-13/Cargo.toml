@@ -1,7 +1,0 @@
-[package]
-name = "overflow-13"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-mul_lib = {path = "overflow-13"}

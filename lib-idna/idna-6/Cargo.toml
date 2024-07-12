@@ -1,9 +1,9 @@
 [package]
-name = "syn-3"
+name = "idna-6"
 version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-syn = {path = "syn-0b3145dc6ad4e8b69589f84f5f1a52e1b11342f4"}
+url={path="rust-url-bfa167b4e0253642b6766a7aa74a99df60a94048"}

@@ -1,1 +1,1 @@
-thread 'main' panicked at syn-0b3145dc6ad4e8b69589f84f5f1a52e1b11342f4/src/path.rs:713:17: attempt to subtract with overflow
+thread 'main' panicked at syn-a2f25fc8adfbb1ab53ffcfe6d363ae575546b883/src/lit.rs:1379:18: internal error: entered unreachable code

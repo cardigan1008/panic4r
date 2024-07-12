@@ -1,7 +1,0 @@
-[package]
-name = "explicit_2"
-version = "0.1.0"
-edition = "2021"
-
-[lib]
-path = "explicit.rs"

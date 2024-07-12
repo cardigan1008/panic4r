@@ -30,7 +30,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "syn-4"
+name = "syn-3"
 version = "0.1.0"
 dependencies = [
  "syn",

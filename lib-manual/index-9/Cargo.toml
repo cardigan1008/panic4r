@@ -1,7 +1,0 @@
-[package]
-name = "index-9"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-index_9 ={ path = "index-9"}

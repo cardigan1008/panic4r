@@ -1,29 +1,101 @@
-From 63ccc27e5e49088d337b27c4befe126ed82ca815 Mon Sep 17 00:00:00 2001
-From: David Tolnay <dtolnay@gmail.com>
-Date: Sat, 5 Sep 2020 21:26:45 -0700
-Subject: [PATCH] Allow 'e' as first character of float suffix
+From d6c421fac97dcbd883ea4aa192540533dd7daec2 Mon Sep 17 00:00:00 2001
+From: Taiki Endo <te316e89@gmail.com>
+Date: Tue, 1 Sep 2020 04:57:34 +0900
+Subject: [PATCH] Avoid panic on printing incomplete qualified path
 
 ---
- src/lit.rs | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ src/path.rs        |  7 ++----
+ tests/test_path.rs | 55 ++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 57 insertions(+), 5 deletions(-)
 
-diff --git a/src/lit.rs b/src/lit.rs
-index dbee8671..ee77e75b 100644
---- a/src/lit.rs
-+++ b/src/lit.rs
-@@ -1431,7 +1431,11 @@ mod value {
-                 }
-                 b'e' | b'E' => {
-                     if has_e {
--                        return None;
-+                        if has_exponent {
-+                            break;
-+                        } else {
-+                            return None;
-+                        }
-                     }
-                     has_e = true;
-                     bytes[write] = b'e';
+diff --git a/src/path.rs b/src/path.rs
+index 15c0fcc6..e4b61b23 100644
+--- a/src/path.rs
++++ b/src/path.rs
+@@ -558,6 +558,7 @@ mod printing {
+ 
+     use proc_macro2::TokenStream;
+     use quote::ToTokens;
++    use std::cmp;
+ 
+     use crate::print::TokensOrDefault;
+ 
+@@ -709,11 +710,7 @@ mod printing {
+             qself.lt_token.to_tokens(tokens);
+             qself.ty.to_tokens(tokens);
+ 
+-            let pos = if qself.position > 0 && qself.position >= path.segments.len() {
+-                path.segments.len() - 1
+-            } else {
+-                qself.position
+-            };
++            let pos = cmp::min(qself.position, path.segments.len());
+             let mut segments = path.segments.pairs();
+             if pos > 0 {
+                 TokensOrDefault(&qself.as_token).to_tokens(tokens);
+diff --git a/tests/test_path.rs b/tests/test_path.rs
+index 2ce12066..ba6b4e6b 100644
+--- a/tests/test_path.rs
++++ b/tests/test_path.rs
+@@ -50,3 +50,58 @@ fn parse_interpolated_leading_component() {
+     }
+     "###);
+ }
++
++#[test]
++fn print_incomplete_qpath() {
++    use quote::ToTokens;
++    use syn::TypePath;
++
++    // qpath with `as` token
++    let mut ty: TypePath = syn::parse_quote!(<Self as A>::Q);
++    snapshot!(ty.to_token_stream(), @r###"
++    TokenStream(`< Self as A > :: Q`)
++    "###);
++    assert!(ty.path.segments.pop().is_some());
++    snapshot!(ty.to_token_stream(), @r###"
++    TokenStream(`< Self as A > ::`)
++    "###);
++    assert!(ty.path.segments.pop().is_some());
++    snapshot!(ty.to_token_stream(), @r###"
++    TokenStream(`< Self >`)
++    "###);
++    assert!(ty.path.segments.pop().is_none());
++
++    // qpath without `as` token
++    let mut ty: TypePath = syn::parse_quote!(<Self>::A::B);
++    snapshot!(ty.to_token_stream(), @r###"
++    TokenStream(`< Self > :: A :: B`)
++    "###);
++    assert!(ty.path.segments.pop().is_some());
++    snapshot!(ty.to_token_stream(), @r###"
++    TokenStream(`< Self > :: A ::`)
++    "###);
++    assert!(ty.path.segments.pop().is_some());
++    snapshot!(ty.to_token_stream(), @r###"
++    TokenStream(`< Self > ::`)
++    "###);
++    assert!(ty.path.segments.pop().is_none());
++
++    // normal path
++    let mut ty: TypePath = syn::parse_quote!(Self::A::B);
++    snapshot!(ty.to_token_stream(), @r###"
++    TokenStream(`Self :: A :: B`)
++    "###);
++    assert!(ty.path.segments.pop().is_some());
++    snapshot!(ty.to_token_stream(), @r###"
++    TokenStream(`Self :: A ::`)
++    "###);
++    assert!(ty.path.segments.pop().is_some());
++    snapshot!(ty.to_token_stream(), @r###"
++    TokenStream(`Self ::`)
++    "###);
++    assert!(ty.path.segments.pop().is_some());
++    snapshot!(ty.to_token_stream(), @r###"
++    TokenStream(``)
++    "###);
++    assert!(ty.path.segments.pop().is_none());
++}
 -- 
 2.25.1
 

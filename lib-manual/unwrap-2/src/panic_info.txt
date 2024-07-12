@@ -1,2 +1,0 @@
-thread 'main' panicked at unwrap-2/unwrap.rs:5:11:
-called `Option::unwrap()` on a `None` value

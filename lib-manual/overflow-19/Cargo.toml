@@ -1,7 +1,0 @@
-[package]
-name = "overflow-19"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-shr_lib = { path = "overflow-19" }

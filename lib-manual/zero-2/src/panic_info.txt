@@ -1,2 +1,0 @@
-thread 'main' panicked at zero-2/div-assign-by-zero.rs:2:5:
-attempt to divide by zero

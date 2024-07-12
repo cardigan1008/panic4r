@@ -1,0 +1,29 @@
+From 63ccc27e5e49088d337b27c4befe126ed82ca815 Mon Sep 17 00:00:00 2001
+From: David Tolnay <dtolnay@gmail.com>
+Date: Sat, 5 Sep 2020 21:26:45 -0700
+Subject: [PATCH] Allow 'e' as first character of float suffix
+
+---
+ src/lit.rs | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/src/lit.rs b/src/lit.rs
+index dbee8671..ee77e75b 100644
+--- a/src/lit.rs
++++ b/src/lit.rs
+@@ -1431,7 +1431,11 @@ mod value {
+                 }
+                 b'e' | b'E' => {
+                     if has_e {
+-                        return None;
++                        if has_exponent {
++                            break;
++                        } else {
++                            return None;
++                        }
+                     }
+                     has_e = true;
+                     bytes[write] = b'e';
+-- 
+2.25.1
+

@@ -1,9 +1,9 @@
 [package]
-name = "syn-3"
+name = "syn-2"
 version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-syn = {path = "syn-0b3145dc6ad4e8b69589f84f5f1a52e1b11342f4"}
+syn={path = "syn-c2ef263dda394da054abb7a18c578a85ef9750e2"}

@@ -1,2 +1,0 @@
-thread 'main' panicked at overflow-17/overflow-shl.rs:4:5:
-attempt to shift left with overflow

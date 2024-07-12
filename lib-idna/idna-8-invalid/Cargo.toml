@@ -1,9 +1,0 @@
-[package]
-name = "idna-8"
-version = "0.1.0"
-edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
-[dependencies]
-url={path="rust-url-1be1b3be4d9d03ddd9b0d342d93f52f618ba4326"}

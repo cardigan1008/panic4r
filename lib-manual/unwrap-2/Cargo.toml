@@ -1,7 +1,0 @@
-[package]
-name = "unwrap-2"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-unwrap_2 ={ path = "unwrap-2"}

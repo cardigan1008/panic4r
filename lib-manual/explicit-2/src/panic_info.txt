@@ -1,2 +1,0 @@
-thread 'main' panicked at explicit-1/explicit.rs:5:9:
-x[0] is not 2!

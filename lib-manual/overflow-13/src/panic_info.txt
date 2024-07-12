@@ -1,2 +1,0 @@
-thread 'main' panicked at overflow-13/overflow-mul.rs:4:5:
-attempt to multiply with overflow

@@ -1,7 +1,0 @@
-[package]
-name = "overflow-18"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-shl_assign_lib ={ path = "overflow-18" }
