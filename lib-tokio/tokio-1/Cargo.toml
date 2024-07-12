@@ -6,6 +6,6 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-tokio = {path = "tokio-df6348fb4a8d9d34d241ab7275688e1ab489383c/tokio", features = ["rt", "rt-multi-thread", "macros", "test-util"] }
-tokio-util = {path = "tokio-df6348fb4a8d9d34d241ab7275688e1ab489383c/tokio-util", features = ["time"]}
+tokio = {path = "tokio-f6cb6e084babd72b8e37a770d962d740495585eb/tokio", features = ["rt", "rt-multi-thread", "macros", "test-util"] }
+tokio-util = {path = "tokio-f6cb6e084babd72b8e37a770d962d740495585eb/tokio-util", features = ["time"]}
 futures = "0.3.30"
