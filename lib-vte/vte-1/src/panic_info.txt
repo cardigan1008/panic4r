@@ -1,0 +1,1 @@
+thread 'main' panicked at /mnt/d/rust_learning/lib-vte/vte-1/vte-9e2fc2f4cd2db13f4f751fa7f21cf13629f9df32/src/lib.rs:205:17:index out of bounds: the len is 16 but the index is 16

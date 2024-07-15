@@ -1,0 +1,58 @@
+From b4695c2453924e91d6c69df5b64027d78adb2a85 Mon Sep 17 00:00:00 2001
+From: Lokathor <zefria@gmail.com>
+Date: Wed, 3 Feb 2021 06:56:37 -0700
+Subject: [PATCH] adjust the code to match the claims of the docs.
+
+---
+ src/lib.rs | 22 +++++++++++++++-------
+ 1 file changed, 15 insertions(+), 7 deletions(-)
+
+diff --git a/src/lib.rs b/src/lib.rs
+index ccbdbda..c22daaa 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -82,7 +82,7 @@ mod transparent;
+ pub use transparent::*;
+ 
+ #[cfg(feature = "derive")]
+-pub use bytemuck_derive::{Zeroable, Pod, TransparentWrapper, Contiguous};
++pub use bytemuck_derive::{Contiguous, Pod, TransparentWrapper, Zeroable};
+ 
+ /*
+ 
+@@ -112,9 +112,13 @@ fn something_went_wrong(src: &str, err: PodCastError) -> ! {
+ /// empty slice might not match the pointer value of the input reference.
+ #[inline]
+ pub fn bytes_of<T: Pod>(t: &T) -> &[u8] {
+-  match try_cast_slice::<T, u8>(core::slice::from_ref(t)) {
+-    Ok(s) => s,
+-    Err(_) => unreachable!(),
++  if size_of::<T>() == 0 {
++    &[]
++  } else {
++    match try_cast_slice::<T, u8>(core::slice::from_ref(t)) {
++      Ok(s) => s,
++      Err(_) => unreachable!(),
++    }
+   }
+ }
+ 
+@@ -124,9 +128,13 @@ pub fn bytes_of<T: Pod>(t: &T) -> &[u8] {
+ /// empty slice might not match the pointer value of the input reference.
+ #[inline]
+ pub fn bytes_of_mut<T: Pod>(t: &mut T) -> &mut [u8] {
+-  match try_cast_slice_mut::<T, u8>(core::slice::from_mut(t)) {
+-    Ok(s) => s,
+-    Err(_) => unreachable!(),
++  if size_of::<T>() == 0 {
++    &mut []
++  } else {
++    match try_cast_slice_mut::<T, u8>(core::slice::from_mut(t)) {
++      Ok(s) => s,
++      Err(_) => unreachable!(),
++    }
+   }
+ }
+ 
+-- 
+2.34.1

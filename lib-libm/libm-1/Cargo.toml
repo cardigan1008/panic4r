@@ -1,0 +1,7 @@
+[package]
+name = "libm-1"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+libm = {path = "libm-14a76eaf8dab437e92c5fc505c48fb4ed0eb3483"}

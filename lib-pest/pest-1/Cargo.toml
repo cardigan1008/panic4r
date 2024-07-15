@@ -1,0 +1,7 @@
+[package]
+name = "pest-1"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+pest = {path = "pest-9f9094ec4e10055f0cec3b2c29a8bee0f55b0078/pest"}

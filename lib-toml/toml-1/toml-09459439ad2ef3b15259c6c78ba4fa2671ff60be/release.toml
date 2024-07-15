@@ -1,0 +1,2 @@
+owners = ["github:toml-rs:maintainers"]
+allow-branch = ["main"]

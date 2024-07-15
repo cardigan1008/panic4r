@@ -1,0 +1,8 @@
+[package]
+name = "prettyplease-1"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+prettyplease = {path = "prettyplease-c1eaf472d57ea87f401af96a509b6e3590f36bb0"}
+syn = { version = "1.0", features = ["full"] }

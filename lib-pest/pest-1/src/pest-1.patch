@@ -1,0 +1,360 @@
+From 4f11bb7859444c8652937aea3c9078d2ea1a3512 Mon Sep 17 00:00:00 2001
+From: David Koloski <djkoloski@gmail.com>
+Date: Fri, 22 Mar 2024 20:02:05 +0000
+Subject: [PATCH] Remove unnecessary unsafe functions
+
+Fundamentally, pest never does anything unsafe. All of the UTF-8 slicing
+uses indexing and is therefore checked. There's no need to provide the
+internal guarantee that all pest positions lie on UTF-8 boundaries when
+it provides no performance benefit.
+---
+ pest/src/error.rs                |  2 +-
+ pest/src/iterators/flat_pairs.rs | 36 ++++++++++++--------------------
+ pest/src/iterators/pair.rs       | 11 ++--------
+ pest/src/iterators/pairs.rs      | 30 ++++++++++++--------------
+ pest/src/iterators/tokens.rs     | 20 ++++++------------
+ pest/src/parser_state.rs         |  3 +--
+ pest/src/position.rs             | 12 ++---------
+ pest/src/span.rs                 | 23 +++++---------------
+ 8 files changed, 43 insertions(+), 94 deletions(-)
+
+diff --git a/pest/src/error.rs b/pest/src/error.rs
+index b1a72cc..2a6c1fe 100644
+--- a/pest/src/error.rs
++++ b/pest/src/error.rs
+@@ -490,7 +490,7 @@ impl<R: RuleType> Error<R> {
+         };
+         let error = Error::new_from_pos(
+             ErrorVariant::CustomError { message },
+-            Position::new(input, error_position).unwrap(),
++            Position::new_internal(input, error_position),
+         );
+         Some(error)
+     }
+diff --git a/pest/src/iterators/flat_pairs.rs b/pest/src/iterators/flat_pairs.rs
+index 9b92f55..6c4f16c 100644
+--- a/pest/src/iterators/flat_pairs.rs
++++ b/pest/src/iterators/flat_pairs.rs
+@@ -22,9 +22,6 @@ use crate::RuleType;
+ /// [`Pair`]: struct.Pair.html
+ /// [`Pairs::flatten`]: struct.Pairs.html#method.flatten
+ pub struct FlatPairs<'i, R> {
+-    /// # Safety
+-    ///
+-    /// All `QueueableToken`s' `input_pos` must be valid character boundary indices into `input`.
+     queue: Rc<Vec<QueueableToken<'i, R>>>,
+     input: &'i str,
+     start: usize,
+@@ -32,10 +29,7 @@ pub struct FlatPairs<'i, R> {
+     line_index: Rc<LineIndex>,
+ }
+ 
+-/// # Safety
+-///
+-/// All `QueueableToken`s' `input_pos` must be valid character boundary indices into `input`.
+-pub unsafe fn new<'i, R: RuleType>(
++pub fn new<'i, R: RuleType>(
+     queue: Rc<Vec<QueueableToken<'i, R>>>,
+     input: &'i str,
+     start: usize,
+@@ -117,14 +111,12 @@ impl<'i, R: RuleType> Iterator for FlatPairs<'i, R> {
+             return None;
+         }
+ 
+-        let pair = unsafe {
+-            pair::new(
+-                Rc::clone(&self.queue),
+-                self.input,
+-                Rc::clone(&self.line_index),
+-                self.start,
+-            )
+-        };
++        let pair = pair::new(
++            Rc::clone(&self.queue),
++            self.input,
++            Rc::clone(&self.line_index),
++            self.start,
++        );
+         self.next_start();
+ 
+         Some(pair)
+@@ -144,14 +136,12 @@ impl<'i, R: RuleType> DoubleEndedIterator for FlatPairs<'i, R> {
+ 
+         self.next_start_from_end();
+ 
+-        let pair = unsafe {
+-            pair::new(
+-                Rc::clone(&self.queue),
+-                self.input,
+-                Rc::clone(&self.line_index),
+-                self.end,
+-            )
+-        };
++        let pair = pair::new(
++            Rc::clone(&self.queue),
++            self.input,
++            Rc::clone(&self.line_index),
++            self.end,
++        );
+ 
+         Some(pair)
+     }
+diff --git a/pest/src/iterators/pair.rs b/pest/src/iterators/pair.rs
+index 5d2f83c..690f0a1 100644
+--- a/pest/src/iterators/pair.rs
++++ b/pest/src/iterators/pair.rs
+@@ -38,9 +38,6 @@ use crate::RuleType;
+ /// [`Token`]: ../enum.Token.html
+ #[derive(Clone)]
+ pub struct Pair<'i, R> {
+-    /// # Safety
+-    ///
+-    /// All `QueueableToken`s' `input_pos` must be valid character boundary indices into `input`.
+     queue: Rc<Vec<QueueableToken<'i, R>>>,
+     input: &'i str,
+     /// Token index into `queue`.
+@@ -48,10 +45,7 @@ pub struct Pair<'i, R> {
+     line_index: Rc<LineIndex>,
+ }
+ 
+-/// # Safety
+-///
+-/// All `QueueableToken`s' `input_pos` must be valid character boundary indices into `input`.
+-pub unsafe fn new<'i, R: RuleType>(
++pub fn new<'i, R: RuleType>(
+     queue: Rc<Vec<QueueableToken<'i, R>>>,
+     input: &'i str,
+     line_index: Rc<LineIndex>,
+@@ -210,8 +204,7 @@ impl<'i, R: RuleType> Pair<'i, R> {
+         let start = self.pos(self.start);
+         let end = self.pos(self.pair());
+ 
+-        // Generated positions always come from Positions and are UTF-8 borders.
+-        unsafe { span::Span::new_unchecked(self.input, start, end) }
++        span::Span::new_internal(self.input, start, end)
+     }
+ 
+     /// Get current node tag
+diff --git a/pest/src/iterators/pairs.rs b/pest/src/iterators/pairs.rs
+index ed6a9a1..a98ceb7 100644
+--- a/pest/src/iterators/pairs.rs
++++ b/pest/src/iterators/pairs.rs
+@@ -205,7 +205,7 @@ impl<'i, R: RuleType> Pairs<'i, R> {
+     /// ```
+     #[inline]
+     pub fn flatten(self) -> FlatPairs<'i, R> {
+-        unsafe { flat_pairs::new(self.queue, self.input, self.start, self.end) }
++        flat_pairs::new(self.queue, self.input, self.start, self.end)
+     }
+ 
+     /// Finds the first pair that has its node or branch tagged with the provided
+@@ -347,14 +347,12 @@ impl<'i, R: RuleType> Pairs<'i, R> {
+     #[inline]
+     pub fn peek(&self) -> Option<Pair<'i, R>> {
+         if self.start < self.end {
+-            Some(unsafe {
+-                pair::new(
+-                    Rc::clone(&self.queue),
+-                    self.input,
+-                    Rc::clone(&self.line_index),
+-                    self.start,
+-                )
+-            })
++            Some(pair::new(
++                Rc::clone(&self.queue),
++                self.input,
++                Rc::clone(&self.line_index),
++                self.start,
++            ))
+         } else {
+             None
+         }
+@@ -427,14 +425,12 @@ impl<'i, R: RuleType> DoubleEndedIterator for Pairs<'i, R> {
+         self.end = self.pair_from_end();
+         self.pairs_count -= 1;
+ 
+-        let pair = unsafe {
+-            pair::new(
+-                Rc::clone(&self.queue),
+-                self.input,
+-                Rc::clone(&self.line_index),
+-                self.end,
+-            )
+-        };
++        let pair = pair::new(
++            Rc::clone(&self.queue),
++            self.input,
++            Rc::clone(&self.line_index),
++            self.end,
++        );
+ 
+         Some(pair)
+     }
+diff --git a/pest/src/iterators/tokens.rs b/pest/src/iterators/tokens.rs
+index 41cbc47..2b93a4f 100644
+--- a/pest/src/iterators/tokens.rs
++++ b/pest/src/iterators/tokens.rs
+@@ -24,16 +24,12 @@ use crate::RuleType;
+ /// [`Pairs::tokens`]: struct.Pairs.html#method.tokens
+ #[derive(Clone)]
+ pub struct Tokens<'i, R> {
+-    /// # Safety:
+-    ///
+-    /// All `QueueableToken`s' `input_pos` must be valid character boundary indices into `input`.
+     queue: Rc<Vec<QueueableToken<'i, R>>>,
+     input: &'i str,
+     start: usize,
+     end: usize,
+ }
+ 
+-// TODO(safety): QueueableTokens must be valid indices into input.
+ pub fn new<'i, R: RuleType>(
+     queue: Rc<Vec<QueueableToken<'i, R>>>,
+     input: &'i str,
+@@ -46,7 +42,7 @@ pub fn new<'i, R: RuleType>(
+                 QueueableToken::Start { input_pos, .. } | QueueableToken::End { input_pos, .. } => {
+                     assert!(
+                         input.get(input_pos..).is_some(),
+-                        "💥 UNSAFE `Tokens` CREATED 💥"
++                        "💥 INVALID `Tokens` CREATED 💥"
+                     )
+                 }
+             }
+@@ -75,19 +71,15 @@ impl<'i, R: RuleType> Tokens<'i, R> {
+ 
+                 Token::Start {
+                     rule,
+-                    // QueueableTokens are safely created.
+-                    pos: unsafe { position::Position::new_unchecked(self.input, input_pos) },
++                    pos: position::Position::new_internal(self.input, input_pos),
+                 }
+             }
+             QueueableToken::End {
+                 rule, input_pos, ..
+-            } => {
+-                Token::End {
+-                    rule,
+-                    // QueueableTokens are safely created.
+-                    pos: unsafe { position::Position::new_unchecked(self.input, input_pos) },
+-                }
+-            }
++            } => Token::End {
++                rule,
++                pos: position::Position::new_internal(self.input, input_pos),
++            },
+         }
+     }
+ }
+diff --git a/pest/src/parser_state.rs b/pest/src/parser_state.rs
+index c99cd61..1193eb3 100644
+--- a/pest/src/parser_state.rs
++++ b/pest/src/parser_state.rs
+@@ -463,8 +463,7 @@ where
+ 
+             Err(Error::new_from_pos_with_parsing_attempts(
+                 variant,
+-                // TODO(performance): Guarantee state.attempt_pos is a valid position
+-                Position::new(input, state.attempt_pos).unwrap(),
++                Position::new_internal(input, state.attempt_pos),
+                 state.parse_attempts.clone(),
+             ))
+         }
+diff --git a/pest/src/position.rs b/pest/src/position.rs
+index 3b1b6e7..6d37916 100644
+--- a/pest/src/position.rs
++++ b/pest/src/position.rs
+@@ -20,19 +20,12 @@ use crate::span;
+ #[derive(Clone, Copy)]
+ pub struct Position<'i> {
+     input: &'i str,
+-    /// # Safety:
+-    ///
+-    /// `input[pos..]` must be a valid codepoint boundary (should not panic when indexing thus).
+     pos: usize,
+ }
+ 
+ impl<'i> Position<'i> {
+     /// Create a new `Position` without checking invariants. (Checked with `debug_assertions`.)
+-    ///
+-    /// # Safety:
+-    ///
+-    /// `input[pos..]` must be a valid codepoint boundary (should not panic when indexing thus).
+-    pub(crate) unsafe fn new_unchecked(input: &str, pos: usize) -> Position<'_> {
++    pub(crate) fn new_internal(input: &str, pos: usize) -> Position<'_> {
+         debug_assert!(input.get(pos..).is_some());
+         Position { input, pos }
+     }
+@@ -106,8 +99,7 @@ impl<'i> Position<'i> {
+         if ptr::eq(self.input, other.input)
+         /* && self.input.get(self.pos..other.pos).is_some() */
+         {
+-            // This is safe because the pos field of a Position should always be a valid str index.
+-            unsafe { span::Span::new_unchecked(self.input, self.pos, other.pos) }
++            span::Span::new_internal(self.input, self.pos, other.pos)
+         } else {
+             // TODO: maybe a panic if self.pos < other.pos
+             panic!("span created from positions from different inputs")
+diff --git a/pest/src/span.rs b/pest/src/span.rs
+index bf7b12b..4fae16e 100644
+--- a/pest/src/span.rs
++++ b/pest/src/span.rs
+@@ -22,23 +22,13 @@ use crate::position;
+ #[derive(Clone, Copy)]
+ pub struct Span<'i> {
+     input: &'i str,
+-    /// # Safety
+-    ///
+-    /// Must be a valid character boundary index into `input`.
+     start: usize,
+-    /// # Safety
+-    ///
+-    /// Must be a valid character boundary index into `input`.
+     end: usize,
+ }
+ 
+ impl<'i> Span<'i> {
+     /// Create a new `Span` without checking invariants. (Checked with `debug_assertions`.)
+-    ///
+-    /// # Safety
+-    ///
+-    /// `input[start..end]` must be a valid subslice; that is, said indexing should not panic.
+-    pub(crate) unsafe fn new_unchecked(input: &str, start: usize, end: usize) -> Span<'_> {
++    pub(crate) fn new_internal(input: &str, start: usize, end: usize) -> Span<'_> {
+         debug_assert!(input.get(start..end).is_some());
+         Span { input, start, end }
+     }
+@@ -144,8 +134,7 @@ impl<'i> Span<'i> {
+     /// ```
+     #[inline]
+     pub fn start_pos(&self) -> position::Position<'i> {
+-        // Span's start position is always a UTF-8 border.
+-        unsafe { position::Position::new_unchecked(self.input, self.start) }
++        position::Position::new_internal(self.input, self.start)
+     }
+ 
+     /// Returns the `Span`'s end `Position`.
+@@ -163,8 +152,7 @@ impl<'i> Span<'i> {
+     /// ```
+     #[inline]
+     pub fn end_pos(&self) -> position::Position<'i> {
+-        // Span's end position is always a UTF-8 border.
+-        unsafe { position::Position::new_unchecked(self.input, self.end) }
++        position::Position::new_internal(self.input, self.end)
+     }
+ 
+     /// Splits the `Span` into a pair of `Position`s.
+@@ -182,9 +170,8 @@ impl<'i> Span<'i> {
+     /// ```
+     #[inline]
+     pub fn split(self) -> (position::Position<'i>, position::Position<'i>) {
+-        // Span's start and end positions are always a UTF-8 borders.
+-        let pos1 = unsafe { position::Position::new_unchecked(self.input, self.start) };
+-        let pos2 = unsafe { position::Position::new_unchecked(self.input, self.end) };
++        let pos1 = position::Position::new_internal(self.input, self.start);
++        let pos2 = position::Position::new_internal(self.input, self.end);
+ 
+         (pos1, pos2)
+     }
+-- 
+2.34.1
+

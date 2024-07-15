@@ -1,0 +1,7 @@
+[package]
+name = "serde-yaml-1"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+serde_yaml = {path = "serde-yaml-492ac3041da20e39a4c85cce528b2d827d02d2bf"}

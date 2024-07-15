@@ -1,0 +1,21 @@
+[package]
+name = "toml_edit_fuzz"
+version = "0.0.0"
+edition.workspace = true
+rust-version.workspace = true
+publish = false
+
+[package.metadata.release]
+release = false
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = { git = "https://github.com/rust-fuzz/libfuzzer-sys.git" }
+toml_edit = { path = "../toml_edit" }
+
+[[bin]]
+name = "parse_document"
+path = "parse_document.rs"
+test = false

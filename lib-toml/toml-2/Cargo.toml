@@ -1,0 +1,9 @@
+[package]
+name = "toml-2"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+toml_edit = {path = "toml-1a32fa3eb59ee8e275796afbc7473d4cb7b8a023", features = ["easy"]}
+serde = { version = "1.0", features = ["derive"] }
+hashbrown = "0.11.2"  # 如果需要在 no_std 环境中使用 HashSet

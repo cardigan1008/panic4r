@@ -1,0 +1,37 @@
+From c9b219296ca75d6bdf03fe6f4ca8756ea1335ca6 Mon Sep 17 00:00:00 2001
+From: Ed Page <eopage@gmail.com>
+Date: Tue, 23 May 2023 16:13:40 -0500
+Subject: [PATCH] fix(edit): Ensure Key::from_str doesnt rely on Document
+
+Fixes #559
+---
+ crates/toml_edit/src/key.rs               | 10 ++++++++--
+ 1 files changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/crates/toml_edit/src/key.rs b/crates/toml_edit/src/key.rs
+index 203445a..b7038c3 100644
+--- a/crates/toml_edit/src/key.rs
++++ b/crates/toml_edit/src/key.rs
+@@ -128,11 +128,17 @@ impl Key {
+     }
+ 
+     fn try_parse_simple(s: &str) -> Result<Key, crate::TomlError> {
+-        parser::parse_key(s)
++        let mut key = parser::parse_key(s)?;
++        key.despan(s);
++        Ok(key)
+     }
+ 
+     fn try_parse_path(s: &str) -> Result<Vec<Key>, crate::TomlError> {
+-        parser::parse_key_path(s)
++        let mut keys = parser::parse_key_path(s)?;
++        for key in &mut keys {
++            key.despan(s);
++        }
++        Ok(keys)
+     }
+ }
+
+-- 
+2.34.1
+

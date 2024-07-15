@@ -1,0 +1,60 @@
+From ce8af747355fb98650cf5ba700a96e74c0be3894 Mon Sep 17 00:00:00 2001
+From: Jon Gjengset <jongje@amazon.com>
+Date: Mon, 9 May 2022 10:01:40 -0700
+Subject: [PATCH] Allow using unit variants as map keys
+
+Fixes #319 and aligns our behavior with that of serde_json.
+---
+ src/ser/key.rs |  4 ++--
+ tests/serde.rs | 19 +++++++++++++++++++
+ 2 files changed, 21 insertions(+), 2 deletions(-)
+
+diff --git a/src/ser/key.rs b/src/ser/key.rs
+index fff7a03..0265fb2 100644
+--- a/src/ser/key.rs
++++ b/src/ser/key.rs
+@@ -94,9 +94,9 @@ impl serde::ser::Serializer for KeySerializer {
+         self,
+         _name: &'static str,
+         _variant_index: u32,
+-        _variant: &'static str,
++        variant: &'static str,
+     ) -> Result<InternalString, Self::Error> {
+-        Err(ErrorKind::KeyNotString.into())
++        Ok(variant.into())
+     }
+ 
+     fn serialize_newtype_struct<T: ?Sized>(
+diff --git a/tests/serde.rs b/tests/serde.rs
+index 4d1d0d4..0c4c4a3 100644
+--- a/tests/serde.rs
++++ b/tests/serde.rs
+@@ -308,6 +308,25 @@ fn parse_enum_string() {
+     }
+ }
+ 
++#[test]
++fn map_key_unit_variants() {
++    #[derive(Serialize, Deserialize, PartialEq, Eq, Debug, Clone, PartialOrd, Ord)]
++    enum Sort {
++        #[serde(rename = "ascending")]
++        Asc,
++        Desc,
++    }
++
++    let mut map = BTreeMap::new();
++    map.insert(Sort::Asc, 1);
++    map.insert(Sort::Desc, 2);
++
++    equivalent! {
++        map,
++        Table(map! { ascending: Integer(1), Desc: Integer(2) }),
++    }
++}
++
+ #[test]
+ fn empty_arrays() {
+     #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
+-- 
+2.34.1
+

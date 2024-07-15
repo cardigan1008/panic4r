@@ -1,0 +1,51 @@
+From d23702022da98c49e04413bc1ac0137e86cd0a28 Mon Sep 17 00:00:00 2001
+From: David Tolnay <dtolnay@gmail.com>
+Date: Fri, 29 Jul 2022 03:54:45 -0700
+Subject: [PATCH] Improve error message on scan error
+
+---
+ src/de.rs           | 10 ++++++++--
+ tests/test_error.rs |  2 +-
+ 2 files changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/src/de.rs b/src/de.rs
+index ad8554b..f3c7141 100644
+--- a/src/de.rs
++++ b/src/de.rs
+@@ -101,17 +101,20 @@ impl<'de> Deserializer<'de> {
+         let mut pos = 0;
+         let mut jumpcount = 0;
+ 
+-        match &self.progress {
++        match self.progress {
+             Progress::Iterable(_) => return Err(error::new(ErrorImpl::MoreThanOneDocument)),
+             Progress::Document(document) => {
+                 let t = f(&mut DeserializerFromEvents {
+-                    document,
++                    document: &document,
+                     pos: &mut pos,
+                     jumpcount: &mut jumpcount,
+                     path: Path::Root,
+                     remaining_depth: 128,
+                     current_enum: None,
+                 })?;
++                if let Some(parse_error) = document.error {
++                    return Err(error::shared(parse_error));
++                }
+                 return Ok(t);
+             }
+             _ => {}
+@@ -130,6 +133,9 @@ impl<'de> Deserializer<'de> {
+             remaining_depth: 128,
+             current_enum: None,
+         })?;
++        if let Some(parse_error) = document.error {
++            return Err(error::shared(parse_error));
++        }
+         if loader.next_document().is_none() {
+             Ok(t)
+         } else {
+
+-- 
+2.34.1
+

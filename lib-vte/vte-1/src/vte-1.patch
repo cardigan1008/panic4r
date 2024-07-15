@@ -1,0 +1,30 @@
+From 773c474ff6a98027e5b6bb3313d03e16fe76853b Mon Sep 17 00:00:00 2001
+From: Your Name <your.email@example.com>
+Date: Sun, 1 Mar 2020 11:49:12 -0700
+Subject: [PATCH] Fix out of bounds panic in vte::Parser::perform_action
+
+---
+ src/lib.rs | 34 ++++++++++++++++++++++++++++------
+ 1 file changed, 28 insertions(+), 6 deletions(-)
+
+diff --git a/src/lib.rs b/src/lib.rs
+index c38200f9..410e701e 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -202,8 +202,12 @@ impl Parser {
+             Action::Print => performer.print(byte as char),
+             Action::Execute => performer.execute(byte),
+             Action::Hook => {
+-                self.params[self.num_params] = self.param;
+-                self.num_params += 1;
++                if self.num_params == MAX_PARAMS {
++                    self.ignoring = true;
++                } else {
++                    self.params[self.num_params] = self.param;
++                    self.num_params += 1;
++                }
+                 
+                 performer.hook(self.params(), self.intermediates(), self.ignoring, byte as char);
+             },
+-- 
+2.34.1

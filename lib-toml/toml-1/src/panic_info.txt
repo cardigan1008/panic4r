@@ -1,0 +1,5 @@
+thread 'main' panicked at toml-09459439ad2ef3b15259c6c78ba4fa2671ff60be/crates/toml_edit/src/raw_string.rs:37:17:
+span 0..6 should be in input:
+```
+a=1
+```

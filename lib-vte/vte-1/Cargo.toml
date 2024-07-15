@@ -1,0 +1,7 @@
+[package]
+name = "vte-1"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+vte = {path = "vte-9e2fc2f4cd2db13f4f751fa7f21cf13629f9df32"}

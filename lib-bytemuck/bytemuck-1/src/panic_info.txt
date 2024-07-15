@@ -1,0 +1,2 @@
+thread 'main' panicked at /mnt/d/rust_learning/lib-bytemuck/bytemuck-1/bytemuck-b05354dc01dfbb05cd63aaa088646d2428c85c2f/src/lib.rs:117:15:
+internal error: entered unreachable code

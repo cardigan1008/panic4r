@@ -1,0 +1,1969 @@
+From 03793736b25004d45cbfad5f9fb3818a614116cf Mon Sep 17 00:00:00 2001
+From: David Tolnay <dtolnay@gmail.com>
+Date: Mon, 13 Mar 2023 22:07:50 -0700
+Subject: [PATCH] Update to syn 2
+
+---
+ Cargo.toml                     |   4 +-
+ README.md                      |   2 +-
+ cargo-expand/update/Cargo.toml |   2 +-
+ examples/update/Cargo.toml     |   2 +-
+ fuzz/Cargo.toml                |   2 +-
+ src/attr.rs                    |  55 ++++---
+ src/data.rs                    |  25 +--
+ src/expr.rs                    | 277 +++++++++------------------------
+ src/generics.rs                | 100 ++++++++----
+ src/item.rs                    | 200 +++++++++++++++---------
+ src/lib.rs                     |   2 +-
+ src/lit.rs                     |   2 +
+ src/mac.rs                     |  14 +-
+ src/pat.rs                     |  55 ++-----
+ src/path.rs                    |  51 ++++--
+ src/stmt.rs                    |  83 ++++++++--
+ src/ty.rs                      |  86 +++++++---
+ 17 files changed, 507 insertions(+), 455 deletions(-)
+
+diff --git a/Cargo.toml b/Cargo.toml
+index 5200f11..fbdfe34 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -19,10 +19,10 @@ verbatim = ["syn/parsing"]
+ 
+ [dependencies]
+ proc-macro2 = { version = "1.0", default-features = false }
+-syn = { version = "1.0.104", default-features = false, features = ["full"] }
++syn = { version = "2.0.7", default-features = false, features = ["full"] }
+ 
+ [dev-dependencies]
+-syn = { version = "1.0.104", default-features = false, features = ["parsing"] }
++syn = { version = "2.0.7", default-features = false, features = ["parsing"] }
+ 
+ [lib]
+ doc-scrape-examples = false
+diff --git a/README.md b/README.md
+index 5695972..82dd54a 100644
+--- a/README.md
++++ b/README.md
+@@ -168,7 +168,7 @@ from rustfmt-formatted code.
+ ```rust
+ // [dependencies]
+ // prettyplease = "0.1"
+-// syn = { version = "1", default-features = false, features = ["full", "parsing"] }
++// syn = { version = "2", default-features = false, features = ["full", "parsing"] }
+ 
+ const INPUT: &str = stringify! {
+     use crate::{
+diff --git a/cargo-expand/update/Cargo.toml b/cargo-expand/update/Cargo.toml
+index fd769ff..7408f54 100644
+--- a/cargo-expand/update/Cargo.toml
++++ b/cargo-expand/update/Cargo.toml
+@@ -13,4 +13,4 @@ path = "update.rs"
+ anyhow = "1.0"
+ prettyplease = { path = "../../", features = ["verbatim"] }
+ proc-macro2 = { version = "1.0", features = ["span-locations"] }
+-syn = { version = "1.0", default-features = false, features = ["parsing", "printing"] }
++syn = { version = "2.0", default-features = false, features = ["parsing", "printing"] }
+diff --git a/examples/update/Cargo.toml b/examples/update/Cargo.toml
+index 17b8c57..0ce7e3c 100644
+--- a/examples/update/Cargo.toml
++++ b/examples/update/Cargo.toml
+@@ -13,4 +13,4 @@ path = "update-examples.rs"
+ anyhow = "1.0"
+ prettyplease = { path = "../../" }
+ quote = { version = "1.0", default-features = false }
+-syn = { version = "1.0", default-features = false, features = ["parsing", "printing"] }
++syn = { version = "2.0", default-features = false, features = ["parsing", "printing"] }
+diff --git a/fuzz/Cargo.toml b/fuzz/Cargo.toml
+index fe007c7..e87968e 100644
+--- a/fuzz/Cargo.toml
++++ b/fuzz/Cargo.toml
+@@ -11,7 +11,7 @@ cargo-fuzz = true
+ [dependencies]
+ libfuzzer-sys = "0.4"
+ prettyplease = { path = "..", features = ["verbatim"] }
+-syn = { version = "1", default-features = false, features = ["full", "parsing"] }
++syn = { version = "2", default-features = false, features = ["full", "parsing"] }
+ 
+ [[bin]]
+ name = "round_trip"
+diff --git a/src/attr.rs b/src/attr.rs
+index 4e8336a..0388d66 100644
+--- a/src/attr.rs
++++ b/src/attr.rs
+@@ -1,8 +1,8 @@
+ use crate::algorithm::Printer;
+ use crate::path::PathKind;
+ use crate::INDENT;
+-use proc_macro2::{Delimiter, TokenStream, TokenTree};
+-use syn::{AttrStyle, Attribute, Lit};
++use proc_macro2::{Delimiter, Group, TokenStream, TokenTree};
++use syn::{AttrStyle, Attribute, Expr, Lit, MacroDelimiter, Meta, MetaList, MetaNameValue};
+ 
+ impl Printer {
+     pub fn outer_attrs(&mut self, attrs: &[Attribute]) {
+@@ -75,12 +75,36 @@ impl Printer {
+             AttrStyle::Inner(_) => "#!",
+         });
+         self.word("[");
+-        self.path(&attr.path, PathKind::Simple);
+-        self.attr_tokens(attr.tokens.clone());
++        self.meta(&attr.meta);
+         self.word("]");
+         self.space();
+     }
+ 
++    fn meta(&mut self, meta: &Meta) {
++        match meta {
++            Meta::Path(path) => self.path(path, PathKind::Simple),
++            Meta::List(meta) => self.meta_list(meta),
++            Meta::NameValue(meta) => self.meta_name_value(meta),
++        }
++    }
++
++    fn meta_list(&mut self, meta: &MetaList) {
++        self.path(&meta.path, PathKind::Simple);
++        let delimiter = match meta.delimiter {
++            MacroDelimiter::Paren(_) => Delimiter::Parenthesis,
++            MacroDelimiter::Brace(_) => Delimiter::Brace,
++            MacroDelimiter::Bracket(_) => Delimiter::Bracket,
++        };
++        let group = Group::new(delimiter, meta.tokens.clone());
++        self.attr_tokens(TokenStream::from(TokenTree::Group(group)));
++    }
++
++    fn meta_name_value(&mut self, meta: &MetaNameValue) {
++        self.path(&meta.path, PathKind::Simple);
++        self.word(" = ");
++        self.expr(&meta.value);
++    }
++
+     fn attr_tokens(&mut self, tokens: TokenStream) {
+         let mut stack = Vec::new();
+         stack.push((tokens.into_iter().peekable(), Delimiter::None));
+@@ -185,26 +209,15 @@ impl Printer {
+ }
+ 
+ fn value_of_attribute(requested: &str, attr: &Attribute) -> Option<String> {
+-    let is_doc = attr.path.leading_colon.is_none()
+-        && attr.path.segments.len() == 1
+-        && attr.path.segments[0].arguments.is_none()
+-        && attr.path.segments[0].ident == requested;
+-    if !is_doc {
+-        return None;
+-    }
+-    let mut tokens = attr.tokens.clone().into_iter();
+-    match tokens.next() {
+-        Some(TokenTree::Punct(punct)) if punct.as_char() == '=' => {}
++    let value = match &attr.meta {
++        Meta::NameValue(meta) if meta.path.is_ident(requested) => &meta.value,
+         _ => return None,
+-    }
+-    let literal = match tokens.next() {
+-        Some(TokenTree::Literal(literal)) => literal,
++    };
++    let lit = match value {
++        Expr::Lit(expr) if expr.attrs.is_empty() => &expr.lit,
+         _ => return None,
+     };
+-    if tokens.next().is_some() {
+-        return None;
+-    }
+-    match Lit::new(literal) {
++    match lit {
+         Lit::Str(string) => Some(string.value()),
+         _ => None,
+     }
+diff --git a/src/data.rs b/src/data.rs
+index c258678..d823ee3 100644
+--- a/src/data.rs
++++ b/src/data.rs
+@@ -2,7 +2,7 @@ use crate::algorithm::Printer;
+ use crate::iter::IterDelimited;
+ use crate::path::PathKind;
+ use crate::INDENT;
+-use syn::{Field, Fields, FieldsUnnamed, Variant, VisCrate, VisPublic, VisRestricted, Visibility};
++use syn::{Field, Fields, FieldsUnnamed, Variant, VisRestricted, Visibility};
+ 
+ impl Printer {
+     pub fn variant(&mut self, variant: &Variant) {
+@@ -58,32 +58,17 @@ impl Printer {
+ 
+     pub fn visibility(&mut self, vis: &Visibility) {
+         match vis {
+-            Visibility::Public(vis) => self.vis_public(vis),
+-            Visibility::Crate(vis) => self.vis_crate(vis),
++            Visibility::Public(_) => self.word("pub "),
+             Visibility::Restricted(vis) => self.vis_restricted(vis),
+             Visibility::Inherited => {}
+         }
+     }
+ 
+-    fn vis_public(&mut self, vis: &VisPublic) {
+-        let _ = vis;
+-        self.word("pub ");
+-    }
+-
+-    fn vis_crate(&mut self, vis: &VisCrate) {
+-        let _ = vis;
+-        self.word("crate ");
+-    }
+-
+     fn vis_restricted(&mut self, vis: &VisRestricted) {
+         self.word("pub(");
+-        let omit_in = vis.path.leading_colon.is_none()
+-            && vis.path.segments.len() == 1
+-            && vis.path.segments[0].arguments.is_none()
+-            && matches!(
+-                vis.path.segments[0].ident.to_string().as_str(),
+-                "self" | "super" | "crate",
+-            );
++        let omit_in = vis.path.get_ident().map_or(false, |ident| {
++            matches!(ident.to_string().as_str(), "self" | "super" | "crate")
++        });
+         if !omit_in {
+             self.word("in ");
+         }
+diff --git a/src/expr.rs b/src/expr.rs
+index 3755699..95d14c1 100644
+--- a/src/expr.rs
++++ b/src/expr.rs
+@@ -7,13 +7,13 @@ use crate::INDENT;
+ use proc_macro2::TokenStream;
+ use syn::punctuated::Punctuated;
+ use syn::{
+-    token, Arm, Attribute, BinOp, Block, Expr, ExprArray, ExprAssign, ExprAssignOp, ExprAsync,
+-    ExprAwait, ExprBinary, ExprBlock, ExprBox, ExprBreak, ExprCall, ExprCast, ExprClosure,
+-    ExprContinue, ExprField, ExprForLoop, ExprGroup, ExprIf, ExprIndex, ExprLet, ExprLit, ExprLoop,
++    token, Arm, Attribute, BinOp, Block, Expr, ExprArray, ExprAssign, ExprAsync, ExprAwait,
++    ExprBinary, ExprBlock, ExprBreak, ExprCall, ExprCast, ExprClosure, ExprConst, ExprContinue,
++    ExprField, ExprForLoop, ExprGroup, ExprIf, ExprIndex, ExprInfer, ExprLet, ExprLit, ExprLoop,
+     ExprMacro, ExprMatch, ExprMethodCall, ExprParen, ExprPath, ExprRange, ExprReference,
+-    ExprRepeat, ExprReturn, ExprStruct, ExprTry, ExprTryBlock, ExprTuple, ExprType, ExprUnary,
+-    ExprUnsafe, ExprWhile, ExprYield, FieldValue, GenericMethodArgument, Index, Label, Member,
+-    MethodTurbofish, QSelf, RangeLimits, ReturnType, Stmt, Token, UnOp,
++    ExprRepeat, ExprReturn, ExprStruct, ExprTry, ExprTryBlock, ExprTuple, ExprUnary, ExprUnsafe,
++    ExprWhile, ExprYield, FieldValue, Index, Label, Member, RangeLimits, ReturnType, Stmt, Token,
++    UnOp,
+ };
+ 
+ impl Printer {
+@@ -21,22 +21,22 @@ impl Printer {
+         match expr {
+             Expr::Array(expr) => self.expr_array(expr),
+             Expr::Assign(expr) => self.expr_assign(expr),
+-            Expr::AssignOp(expr) => self.expr_assign_op(expr),
+             Expr::Async(expr) => self.expr_async(expr),
+             Expr::Await(expr) => self.expr_await(expr, false),
+             Expr::Binary(expr) => self.expr_binary(expr),
+             Expr::Block(expr) => self.expr_block(expr),
+-            Expr::Box(expr) => self.expr_box(expr),
+             Expr::Break(expr) => self.expr_break(expr),
+             Expr::Call(expr) => self.expr_call(expr, false),
+             Expr::Cast(expr) => self.expr_cast(expr),
+             Expr::Closure(expr) => self.expr_closure(expr),
++            Expr::Const(expr) => self.expr_const(expr),
+             Expr::Continue(expr) => self.expr_continue(expr),
+             Expr::Field(expr) => self.expr_field(expr, false),
+             Expr::ForLoop(expr) => self.expr_for_loop(expr),
+             Expr::Group(expr) => self.expr_group(expr),
+             Expr::If(expr) => self.expr_if(expr),
+             Expr::Index(expr) => self.expr_index(expr, false),
++            Expr::Infer(expr) => self.expr_infer(expr),
+             Expr::Let(expr) => self.expr_let(expr),
+             Expr::Lit(expr) => self.expr_lit(expr),
+             Expr::Loop(expr) => self.expr_loop(expr),
+@@ -53,7 +53,6 @@ impl Printer {
+             Expr::Try(expr) => self.expr_try(expr, false),
+             Expr::TryBlock(expr) => self.expr_try_block(expr),
+             Expr::Tuple(expr) => self.expr_tuple(expr),
+-            Expr::Type(expr) => self.expr_type(expr),
+             Expr::Unary(expr) => self.expr_unary(expr),
+             Expr::Unsafe(expr) => self.expr_unsafe(expr),
+             Expr::Verbatim(expr) => self.expr_verbatim(expr),
+@@ -132,19 +131,6 @@ impl Printer {
+         self.end();
+     }
+ 
+-    fn expr_assign_op(&mut self, expr: &ExprAssignOp) {
+-        self.outer_attrs(&expr.attrs);
+-        self.ibox(INDENT);
+-        self.ibox(-INDENT);
+-        self.expr(&expr.left);
+-        self.end();
+-        self.space();
+-        self.binary_operator(&expr.op);
+-        self.nbsp();
+-        self.expr(&expr.right);
+-        self.end();
+-    }
+-
+     fn expr_async(&mut self, expr: &ExprAsync) {
+         self.outer_attrs(&expr.attrs);
+         self.word("async ");
+@@ -192,12 +178,6 @@ impl Printer {
+         self.end();
+     }
+ 
+-    fn expr_box(&mut self, expr: &ExprBox) {
+-        self.outer_attrs(&expr.attrs);
+-        self.word("box ");
+-        self.expr(&expr.expr);
+-    }
+-
+     fn expr_break(&mut self, expr: &ExprBreak) {
+         self.outer_attrs(&expr.attrs);
+         self.word("break");
+@@ -241,12 +221,18 @@ impl Printer {
+     fn expr_closure(&mut self, expr: &ExprClosure) {
+         self.outer_attrs(&expr.attrs);
+         self.ibox(0);
+-        if expr.asyncness.is_some() {
+-            self.word("async ");
++        if let Some(bound_lifetimes) = &expr.lifetimes {
++            self.bound_lifetimes(bound_lifetimes);
++        }
++        if expr.constness.is_some() {
++            self.word("const ");
+         }
+         if expr.movability.is_some() {
+             self.word("static ");
+         }
++        if expr.asyncness.is_some() {
++            self.word("async ");
++        }
+         if expr.capture.is_some() {
+             self.word("move ");
+         }
+@@ -310,6 +296,14 @@ impl Printer {
+         self.end();
+     }
+ 
++    pub fn expr_const(&mut self, expr: &ExprConst) {
++        self.outer_attrs(&expr.attrs);
++        self.word("const ");
++        self.cbox(INDENT);
++        self.small_block(&expr.block, &expr.attrs);
++        self.end();
++    }
++
+     fn expr_continue(&mut self, expr: &ExprContinue) {
+         self.outer_attrs(&expr.attrs);
+         self.word("continue");
+@@ -434,6 +428,11 @@ impl Printer {
+         self.word("]");
+     }
+ 
++    fn expr_infer(&mut self, expr: &ExprInfer) {
++        self.outer_attrs(&expr.attrs);
++        self.word("_");
++    }
++
+     fn expr_let(&mut self, expr: &ExprLet) {
+         self.outer_attrs(&expr.attrs);
+         self.ibox(INDENT);
+@@ -476,7 +475,7 @@ impl Printer {
+         self.word("}");
+     }
+ 
+-    fn expr_macro(&mut self, expr: &ExprMacro) {
++    pub fn expr_macro(&mut self, expr: &ExprMacro) {
+         self.outer_attrs(&expr.attrs);
+         self.mac(&expr.mac, None);
+     }
+@@ -520,7 +519,7 @@ impl Printer {
+         self.word(".");
+         self.ident(&expr.method);
+         if let Some(turbofish) = &expr.turbofish {
+-            self.method_turbofish(turbofish);
++            self.angle_bracketed_generic_arguments(turbofish, PathKind::Expr);
+         }
+         self.cbox(if unindent_call_args { -INDENT } else { 0 });
+         self.word("(");
+@@ -536,22 +535,22 @@ impl Printer {
+         self.word(")");
+     }
+ 
+-    fn expr_path(&mut self, expr: &ExprPath) {
++    pub fn expr_path(&mut self, expr: &ExprPath) {
+         self.outer_attrs(&expr.attrs);
+         self.qpath(&expr.qself, &expr.path, PathKind::Expr);
+     }
+ 
+-    fn expr_range(&mut self, expr: &ExprRange) {
++    pub fn expr_range(&mut self, expr: &ExprRange) {
+         self.outer_attrs(&expr.attrs);
+-        if let Some(from) = &expr.from {
+-            self.expr(from);
++        if let Some(start) = &expr.start {
++            self.expr(start);
+         }
+         self.word(match expr.limits {
+             RangeLimits::HalfOpen(_) => "..",
+             RangeLimits::Closed(_) => "..=",
+         });
+-        if let Some(to) = &expr.to {
+-            self.expr(to);
++        if let Some(end) = &expr.end {
++            self.expr(end);
+         }
+     }
+ 
+@@ -583,14 +582,10 @@ impl Printer {
+     }
+ 
+     fn expr_struct(&mut self, expr: &ExprStruct) {
+-        self.expr_qualified_struct(&None, expr);
+-    }
+-
+-    fn expr_qualified_struct(&mut self, qself: &Option<QSelf>, expr: &ExprStruct) {
+         self.outer_attrs(&expr.attrs);
+         self.cbox(INDENT);
+         self.ibox(-INDENT);
+-        self.qpath(qself, &expr.path, PathKind::Expr);
++        self.qpath(&expr.qself, &expr.path, PathKind::Expr);
+         self.end();
+         self.word(" {");
+         self.space_if_nonempty();
+@@ -646,18 +641,6 @@ impl Printer {
+         self.word(")");
+     }
+ 
+-    fn expr_type(&mut self, expr: &ExprType) {
+-        self.outer_attrs(&expr.attrs);
+-        self.ibox(INDENT);
+-        self.ibox(-INDENT);
+-        self.expr(&expr.expr);
+-        self.end();
+-        self.space();
+-        self.word(": ");
+-        self.ty(&expr.ty);
+-        self.end();
+-    }
+-
+     fn expr_unary(&mut self, expr: &ExprUnary) {
+         self.outer_attrs(&expr.attrs);
+         self.unary_operator(&expr.op);
+@@ -682,15 +665,10 @@ impl Printer {
+     #[cfg(feature = "verbatim")]
+     fn expr_verbatim(&mut self, tokens: &TokenStream) {
+         use syn::parse::{Parse, ParseStream, Result};
+-        use syn::{braced, BoundLifetimes};
+ 
+         enum ExprVerbatim {
+             Empty,
+-            Infer,
+             RawReference(RawReference),
+-            ConstBlock(ConstBlock),
+-            ClosureWithLifetimes(ClosureWithLifetimes),
+-            QualifiedStruct(QualifiedStruct),
+         }
+ 
+         struct RawReference {
+@@ -698,21 +676,6 @@ impl Printer {
+             expr: Expr,
+         }
+ 
+-        struct ConstBlock {
+-            attrs: Vec<Attribute>,
+-            block: Block,
+-        }
+-
+-        struct ClosureWithLifetimes {
+-            lifetimes: BoundLifetimes,
+-            closure: ExprClosure,
+-        }
+-
+-        struct QualifiedStruct {
+-            qself: QSelf,
+-            strct: ExprStruct,
+-        }
+-
+         mod kw {
+             syn::custom_keyword!(raw);
+         }
+@@ -722,9 +685,6 @@ impl Printer {
+                 let lookahead = input.lookahead1();
+                 if input.is_empty() {
+                     Ok(ExprVerbatim::Empty)
+-                } else if lookahead.peek(Token![_]) {
+-                    input.parse::<Token![_]>()?;
+-                    Ok(ExprVerbatim::Infer)
+                 } else if lookahead.peek(Token![&]) {
+                     input.parse::<Token![&]>()?;
+                     input.parse::<kw::raw>()?;
+@@ -734,53 +694,6 @@ impl Printer {
+                     }
+                     let expr: Expr = input.parse()?;
+                     Ok(ExprVerbatim::RawReference(RawReference { mutable, expr }))
+-                } else if lookahead.peek(Token![const]) {
+-                    input.parse::<Token![const]>()?;
+-                    let content;
+-                    let brace_token = braced!(content in input);
+-                    let attrs = content.call(Attribute::parse_inner)?;
+-                    let stmts = content.call(Block::parse_within)?;
+-                    Ok(ExprVerbatim::ConstBlock(ConstBlock {
+-                        attrs,
+-                        block: Block { brace_token, stmts },
+-                    }))
+-                } else if lookahead.peek(Token![for]) {
+-                    let lifetimes = input.parse()?;
+-                    let closure = input.parse()?;
+-                    Ok(ExprVerbatim::ClosureWithLifetimes(ClosureWithLifetimes {
+-                        lifetimes,
+-                        closure,
+-                    }))
+-                } else if lookahead.peek(Token![<]) {
+-                    let path: ExprPath = input.parse()?;
+-                    let content;
+-                    let mut expr = QualifiedStruct {
+-                        qself: path.qself.unwrap(),
+-                        strct: ExprStruct {
+-                            attrs: Vec::new(),
+-                            brace_token: braced!(content in input),
+-                            path: path.path,
+-                            fields: Punctuated::new(),
+-                            dot2_token: None,
+-                            rest: None,
+-                        },
+-                    };
+-                    while !content.is_empty() {
+-                        if content.peek(Token![..]) {
+-                            expr.strct.dot2_token = Some(content.parse()?);
+-                            if !content.is_empty() {
+-                                expr.strct.rest = Some(Box::new(content.parse()?));
+-                            }
+-                            break;
+-                        }
+-                        expr.strct.fields.push(content.parse()?);
+-                        if content.is_empty() {
+-                            break;
+-                        }
+-                        let punct: Token![,] = content.parse()?;
+-                        expr.strct.fields.push_punct(punct);
+-                    }
+-                    Ok(ExprVerbatim::QualifiedStruct(expr))
+                 } else {
+                     Err(lookahead.error())
+                 }
+@@ -794,28 +707,11 @@ impl Printer {
+ 
+         match expr {
+             ExprVerbatim::Empty => {}
+-            ExprVerbatim::Infer => {
+-                self.word("_");
+-            }
+             ExprVerbatim::RawReference(expr) => {
+                 self.word("&raw ");
+                 self.word(if expr.mutable { "mut " } else { "const " });
+                 self.expr(&expr.expr);
+             }
+-            ExprVerbatim::ConstBlock(expr) => {
+-                self.outer_attrs(&expr.attrs);
+-                self.cbox(INDENT);
+-                self.word("const ");
+-                self.small_block(&expr.block, &expr.attrs);
+-                self.end();
+-            }
+-            ExprVerbatim::ClosureWithLifetimes(expr) => {
+-                self.bound_lifetimes(&expr.lifetimes);
+-                self.expr_closure(&expr.closure);
+-            }
+-            ExprVerbatim::QualifiedStruct(expr) => {
+-                self.expr_qualified_struct(&Some(expr.qself), &expr.strct);
+-            }
+         }
+     }
+ 
+@@ -878,7 +774,7 @@ impl Printer {
+         while let Expr::Block(expr) = body {
+             if expr.attrs.is_empty() && expr.label.is_none() {
+                 let mut stmts = expr.block.stmts.iter();
+-                if let (Some(Stmt::Expr(inner)), None) = (stmts.next(), stmts.next()) {
++                if let (Some(Stmt::Expr(inner, None)), None) = (stmts.next(), stmts.next()) {
+                     body = inner;
+                     continue;
+                 }
+@@ -936,26 +832,6 @@ impl Printer {
+         }
+     }
+ 
+-    fn method_turbofish(&mut self, turbofish: &MethodTurbofish) {
+-        self.word("::<");
+-        self.cbox(INDENT);
+-        self.zerobreak();
+-        for arg in turbofish.args.iter().delimited() {
+-            self.generic_method_argument(&arg);
+-            self.trailing_comma(arg.is_last);
+-        }
+-        self.offset(-INDENT);
+-        self.end();
+-        self.word(">");
+-    }
+-
+-    fn generic_method_argument(&mut self, generic: &GenericMethodArgument) {
+-        match generic {
+-            GenericMethodArgument::Type(arg) => self.ty(arg),
+-            GenericMethodArgument::Const(arg) => self.expr(arg),
+-        }
+-    }
+-
+     fn call_args(&mut self, args: &Punctuated<Expr, Token![,]>) {
+         let mut iter = args.iter();
+         match (iter.next(), iter.next()) {
+@@ -975,13 +851,13 @@ impl Printer {
+         }
+     }
+ 
+-    fn small_block(&mut self, block: &Block, attrs: &[Attribute]) {
++    pub fn small_block(&mut self, block: &Block, attrs: &[Attribute]) {
+         self.word("{");
+         if attr::has_inner(attrs) || !block.stmts.is_empty() {
+             self.space();
+             self.inner_attrs(attrs);
+             match (block.stmts.get(0), block.stmts.get(1)) {
+-                (Some(Stmt::Expr(expr)), None) if stmt::break_after(expr) => {
++                (Some(Stmt::Expr(expr, None)), None) if stmt::break_after(expr) => {
+                     self.ibox(0);
+                     self.expr_beginning_of_line(expr, true);
+                     self.end();
+@@ -1029,16 +905,18 @@ impl Printer {
+             BinOp::Ne(_) => "!=",
+             BinOp::Ge(_) => ">=",
+             BinOp::Gt(_) => ">",
+-            BinOp::AddEq(_) => "+=",
+-            BinOp::SubEq(_) => "-=",
+-            BinOp::MulEq(_) => "*=",
+-            BinOp::DivEq(_) => "/=",
+-            BinOp::RemEq(_) => "%=",
+-            BinOp::BitXorEq(_) => "^=",
+-            BinOp::BitAndEq(_) => "&=",
+-            BinOp::BitOrEq(_) => "|=",
+-            BinOp::ShlEq(_) => "<<=",
+-            BinOp::ShrEq(_) => ">>=",
++            BinOp::AddAssign(_) => "+=",
++            BinOp::SubAssign(_) => "-=",
++            BinOp::MulAssign(_) => "*=",
++            BinOp::DivAssign(_) => "/=",
++            BinOp::RemAssign(_) => "%=",
++            BinOp::BitXorAssign(_) => "^=",
++            BinOp::BitAndAssign(_) => "&=",
++            BinOp::BitOrAssign(_) => "|=",
++            BinOp::ShlAssign(_) => "<<=",
++            BinOp::ShrAssign(_) => ">>=",
++            #[cfg_attr(all(test, exhaustive), deny(non_exhaustive_omitted_patterns))]
++            _ => unimplemented!("unknown BinOp"),
+         });
+     }
+ 
+@@ -1047,6 +925,8 @@ impl Printer {
+             UnOp::Deref(_) => "*",
+             UnOp::Not(_) => "!",
+             UnOp::Neg(_) => "-",
++            #[cfg_attr(all(test, exhaustive), deny(non_exhaustive_omitted_patterns))]
++            _ => unimplemented!("unknown UnOp"),
+         });
+     }
+ 
+@@ -1059,24 +939,22 @@ impl Printer {
+ }
+ 
+ pub fn requires_terminator(expr: &Expr) -> bool {
+-    // see https://github.com/rust-lang/rust/blob/2679c38fc/src/librustc_ast/util/classify.rs#L7-L25
++    // see https://github.com/rust-lang/rust/blob/a266f1199/compiler/rustc_ast/src/util/classify.rs#L7-L26
+     match expr {
+-        Expr::Unsafe(_)
+-        | Expr::Block(_)
+-        | Expr::If(_)
++        Expr::If(_)
+         | Expr::Match(_)
++        | Expr::Block(_) | Expr::Unsafe(_) // both under ExprKind::Block in rustc
+         | Expr::While(_)
+         | Expr::Loop(_)
+         | Expr::ForLoop(_)
+-        | Expr::Async(_)
+-        | Expr::TryBlock(_) => false,
++        | Expr::TryBlock(_)
++        | Expr::Const(_) => false,
+ 
+         Expr::Array(_)
+         | Expr::Assign(_)
+-        | Expr::AssignOp(_)
++        | Expr::Async(_)
+         | Expr::Await(_)
+         | Expr::Binary(_)
+-        | Expr::Box(_)
+         | Expr::Break(_)
+         | Expr::Call(_)
+         | Expr::Cast(_)
+@@ -1085,6 +963,7 @@ pub fn requires_terminator(expr: &Expr) -> bool {
+         | Expr::Field(_)
+         | Expr::Group(_)
+         | Expr::Index(_)
++        | Expr::Infer(_)
+         | Expr::Let(_)
+         | Expr::Lit(_)
+         | Expr::Macro(_)
+@@ -1098,7 +977,6 @@ pub fn requires_terminator(expr: &Expr) -> bool {
+         | Expr::Struct(_)
+         | Expr::Try(_)
+         | Expr::Tuple(_)
+-        | Expr::Type(_)
+         | Expr::Unary(_)
+         | Expr::Verbatim(_)
+         | Expr::Yield(_) => true,
+@@ -1117,20 +995,17 @@ fn contains_exterior_struct_lit(expr: &Expr) -> bool {
+         Expr::Struct(_) => true,
+ 
+         Expr::Assign(ExprAssign { left, right, .. })
+-        | Expr::AssignOp(ExprAssignOp { left, right, .. })
+         | Expr::Binary(ExprBinary { left, right, .. }) => {
+             // X { y: 1 } + X { y: 2 }
+             contains_exterior_struct_lit(left) || contains_exterior_struct_lit(right)
+         }
+ 
+         Expr::Await(ExprAwait { base: e, .. })
+-        | Expr::Box(ExprBox { expr: e, .. })
+         | Expr::Cast(ExprCast { expr: e, .. })
+         | Expr::Field(ExprField { base: e, .. })
+         | Expr::Index(ExprIndex { expr: e, .. })
+         | Expr::MethodCall(ExprMethodCall { receiver: e, .. })
+         | Expr::Reference(ExprReference { expr: e, .. })
+-        | Expr::Type(ExprType { expr: e, .. })
+         | Expr::Unary(ExprUnary { expr: e, .. }) => {
+             // &X { y: 1 }, X { y: 1 }.y
+             contains_exterior_struct_lit(e)
+@@ -1142,10 +1017,12 @@ fn contains_exterior_struct_lit(expr: &Expr) -> bool {
+         | Expr::Break(_)
+         | Expr::Call(_)
+         | Expr::Closure(_)
++        | Expr::Const(_)
+         | Expr::Continue(_)
+         | Expr::ForLoop(_)
+         | Expr::Group(_)
+         | Expr::If(_)
++        | Expr::Infer(_)
+         | Expr::Let(_)
+         | Expr::Lit(_)
+         | Expr::Loop(_)
+@@ -1176,15 +1053,17 @@ fn needs_newline_if_wrap(expr: &Expr) -> bool {
+         | Expr::Block(_)
+         | Expr::Break(ExprBreak { expr: None, .. })
+         | Expr::Closure(_)
++        | Expr::Const(_)
+         | Expr::Continue(_)
+         | Expr::ForLoop(_)
+         | Expr::If(_)
++        | Expr::Infer(_)
+         | Expr::Lit(_)
+         | Expr::Loop(_)
+         | Expr::Macro(_)
+         | Expr::Match(_)
+         | Expr::Path(_)
+-        | Expr::Range(ExprRange { to: None, .. })
++        | Expr::Range(ExprRange { end: None, .. })
+         | Expr::Repeat(_)
+         | Expr::Return(ExprReturn { expr: None, .. })
+         | Expr::Struct(_)
+@@ -1196,22 +1075,19 @@ fn needs_newline_if_wrap(expr: &Expr) -> bool {
+         | Expr::Yield(ExprYield { expr: None, .. }) => false,
+ 
+         Expr::Assign(_)
+-        | Expr::AssignOp(_)
+         | Expr::Await(_)
+         | Expr::Binary(_)
+         | Expr::Cast(_)
+         | Expr::Field(_)
+         | Expr::Index(_)
+-        | Expr::MethodCall(_)
+-        | Expr::Type(_) => true,
++        | Expr::MethodCall(_) => true,
+ 
+-        Expr::Box(ExprBox { expr: e, .. })
+-        | Expr::Break(ExprBreak { expr: Some(e), .. })
++        Expr::Break(ExprBreak { expr: Some(e), .. })
+         | Expr::Call(ExprCall { func: e, .. })
+         | Expr::Group(ExprGroup { expr: e, .. })
+         | Expr::Let(ExprLet { expr: e, .. })
+         | Expr::Paren(ExprParen { expr: e, .. })
+-        | Expr::Range(ExprRange { to: Some(e), .. })
++        | Expr::Range(ExprRange { end: Some(e), .. })
+         | Expr::Reference(ExprReference { expr: e, .. })
+         | Expr::Return(ExprReturn { expr: Some(e), .. })
+         | Expr::Try(ExprTry { expr: e, .. })
+@@ -1227,10 +1103,10 @@ fn is_short_ident(expr: &Expr) -> bool {
+     if let Expr::Path(expr) = expr {
+         return expr.attrs.is_empty()
+             && expr.qself.is_none()
+-            && expr.path.leading_colon.is_none()
+-            && expr.path.segments.len() == 1
+-            && expr.path.segments[0].ident.to_string().len() as isize <= INDENT
+-            && expr.path.segments[0].arguments.is_none();
++            && expr
++                .path
++                .get_ident()
++                .map_or(false, |ident| ident.to_string().len() as isize <= INDENT);
+     }
+     false
+ }
+@@ -1241,16 +1117,15 @@ fn is_blocklike(expr: &Expr) -> bool {
+         | Expr::Async(ExprAsync { attrs, .. })
+         | Expr::Block(ExprBlock { attrs, .. })
+         | Expr::Closure(ExprClosure { attrs, .. })
++        | Expr::Const(ExprConst { attrs, .. })
+         | Expr::Struct(ExprStruct { attrs, .. })
+         | Expr::TryBlock(ExprTryBlock { attrs, .. })
+         | Expr::Tuple(ExprTuple { attrs, .. })
+         | Expr::Unsafe(ExprUnsafe { attrs, .. }) => !attr::has_outer(attrs),
+ 
+         Expr::Assign(_)
+-        | Expr::AssignOp(_)
+         | Expr::Await(_)
+         | Expr::Binary(_)
+-        | Expr::Box(_)
+         | Expr::Break(_)
+         | Expr::Call(_)
+         | Expr::Cast(_)
+@@ -1260,6 +1135,7 @@ fn is_blocklike(expr: &Expr) -> bool {
+         | Expr::Group(_)
+         | Expr::If(_)
+         | Expr::Index(_)
++        | Expr::Infer(_)
+         | Expr::Let(_)
+         | Expr::Lit(_)
+         | Expr::Loop(_)
+@@ -1273,7 +1149,6 @@ fn is_blocklike(expr: &Expr) -> bool {
+         | Expr::Repeat(_)
+         | Expr::Return(_)
+         | Expr::Try(_)
+-        | Expr::Type(_)
+         | Expr::Unary(_)
+         | Expr::Verbatim(_)
+         | Expr::While(_)
+diff --git a/src/generics.rs b/src/generics.rs
+index e3d0254..35da0b2 100644
+--- a/src/generics.rs
++++ b/src/generics.rs
+@@ -2,11 +2,12 @@ use crate::algorithm::Printer;
+ use crate::iter::IterDelimited;
+ use crate::path::PathKind;
+ use crate::INDENT;
++use proc_macro2::TokenStream;
+ use std::ptr;
+ use syn::{
+-    BoundLifetimes, ConstParam, GenericParam, Generics, LifetimeDef, PredicateEq,
+-    PredicateLifetime, PredicateType, TraitBound, TraitBoundModifier, TypeParam, TypeParamBound,
+-    WhereClause, WherePredicate,
++    BoundLifetimes, ConstParam, GenericParam, Generics, LifetimeParam, PredicateLifetime,
++    PredicateType, TraitBound, TraitBoundModifier, TypeParam, TypeParamBound, WhereClause,
++    WherePredicate,
+ };
+ 
+ impl Printer {
+@@ -21,9 +22,6 @@ impl Printer {
+ 
+         // Print lifetimes before types and consts, regardless of their
+         // order in self.params.
+-        //
+-        // TODO: ordering rules for const parameters vs type parameters have
+-        // not been settled yet. https://github.com/rust-lang/rust/issues/44580
+         #[derive(Ord, PartialOrd, Eq, PartialEq)]
+         enum Group {
+             First,
+@@ -53,26 +51,26 @@ impl Printer {
+     fn generic_param(&mut self, generic_param: &GenericParam) {
+         match generic_param {
+             GenericParam::Type(type_param) => self.type_param(type_param),
+-            GenericParam::Lifetime(lifetime_def) => self.lifetime_def(lifetime_def),
++            GenericParam::Lifetime(lifetime_param) => self.lifetime_param(lifetime_param),
+             GenericParam::Const(const_param) => self.const_param(const_param),
+         }
+     }
+ 
+     pub fn bound_lifetimes(&mut self, bound_lifetimes: &BoundLifetimes) {
+         self.word("for<");
+-        for lifetime_def in bound_lifetimes.lifetimes.iter().delimited() {
+-            self.lifetime_def(&lifetime_def);
+-            if !lifetime_def.is_last {
++        for param in bound_lifetimes.lifetimes.iter().delimited() {
++            self.generic_param(&param);
++            if !param.is_last {
+                 self.word(", ");
+             }
+         }
+         self.word("> ");
+     }
+ 
+-    fn lifetime_def(&mut self, lifetime_def: &LifetimeDef) {
+-        self.outer_attrs(&lifetime_def.attrs);
+-        self.lifetime(&lifetime_def.lifetime);
+-        for lifetime in lifetime_def.bounds.iter().delimited() {
++    fn lifetime_param(&mut self, lifetime_param: &LifetimeParam) {
++        self.outer_attrs(&lifetime_param.attrs);
++        self.lifetime(&lifetime_param.lifetime);
++        for lifetime in lifetime_param.bounds.iter().delimited() {
+             if lifetime.is_first {
+                 self.word(": ");
+             } else {
+@@ -105,27 +103,29 @@ impl Printer {
+ 
+     pub fn type_param_bound(&mut self, type_param_bound: &TypeParamBound) {
+         match type_param_bound {
+-            TypeParamBound::Trait(trait_bound) => self.trait_bound(trait_bound),
++            TypeParamBound::Trait(trait_bound) => {
++                let tilde_const = false;
++                self.trait_bound(trait_bound, tilde_const);
++            }
+             TypeParamBound::Lifetime(lifetime) => self.lifetime(lifetime),
++            TypeParamBound::Verbatim(bound) => self.type_param_bound_verbatim(bound),
++            #[cfg_attr(all(test, exhaustive), deny(non_exhaustive_omitted_patterns))]
++            _ => unimplemented!("unknown TypeParamBound"),
+         }
+     }
+ 
+-    fn trait_bound(&mut self, trait_bound: &TraitBound) {
++    fn trait_bound(&mut self, trait_bound: &TraitBound, tilde_const: bool) {
+         if trait_bound.paren_token.is_some() {
+             self.word("(");
+         }
+-        let skip = match trait_bound.path.segments.first() {
+-            Some(segment) if segment.ident == "const" => {
+-                self.word("~const ");
+-                1
+-            }
+-            _ => 0,
+-        };
++        if tilde_const {
++            self.word("~const ");
++        }
+         self.trait_bound_modifier(&trait_bound.modifier);
+         if let Some(bound_lifetimes) = &trait_bound.lifetimes {
+             self.bound_lifetimes(bound_lifetimes);
+         }
+-        for segment in trait_bound.path.segments.iter().skip(skip).delimited() {
++        for segment in trait_bound.path.segments.iter().delimited() {
+             if !segment.is_first || trait_bound.path.leading_colon.is_some() {
+                 self.word("::");
+             }
+@@ -143,6 +143,49 @@ impl Printer {
+         }
+     }
+ 
++    #[cfg(not(feature = "verbatim"))]
++    fn type_param_bound_verbatim(&mut self, bound: &TokenStream) {
++        unimplemented!("TypeParamBound::Verbatim `{}`", bound);
++    }
++
++    #[cfg(feature = "verbatim")]
++    fn type_param_bound_verbatim(&mut self, tokens: &TokenStream) {
++        use syn::parse::{Parse, ParseStream, Result};
++        use syn::{parenthesized, token, Token};
++
++        enum TypeParamBoundVerbatim {
++            TildeConst(TraitBound),
++        }
++
++        impl Parse for TypeParamBoundVerbatim {
++            fn parse(input: ParseStream) -> Result<Self> {
++                let content;
++                let (paren_token, content) = if input.peek(token::Paren) {
++                    (Some(parenthesized!(content in input)), &content)
++                } else {
++                    (None, input)
++                };
++                content.parse::<Token![~]>()?;
++                content.parse::<Token![const]>()?;
++                let mut bound: TraitBound = content.parse()?;
++                bound.paren_token = paren_token;
++                Ok(TypeParamBoundVerbatim::TildeConst(bound))
++            }
++        }
++
++        let bound: TypeParamBoundVerbatim = match syn::parse2(tokens.clone()) {
++            Ok(bound) => bound,
++            Err(_) => unimplemented!("TypeParamBound::Verbatim `{}`", tokens),
++        };
++
++        match bound {
++            TypeParamBoundVerbatim::TildeConst(trait_bound) => {
++                let tilde_const = true;
++                self.trait_bound(&trait_bound, tilde_const);
++            }
++        }
++    }
++
+     fn const_param(&mut self, const_param: &ConstParam) {
+         self.outer_attrs(&const_param.attrs);
+         self.word("const ");
+@@ -236,7 +279,8 @@ impl Printer {
+         match predicate {
+             WherePredicate::Type(predicate) => self.predicate_type(predicate),
+             WherePredicate::Lifetime(predicate) => self.predicate_lifetime(predicate),
+-            WherePredicate::Eq(predicate) => self.predicate_eq(predicate),
++            #[cfg_attr(all(test, exhaustive), deny(non_exhaustive_omitted_patterns))]
++            _ => unimplemented!("unknown WherePredicate"),
+         }
+     }
+ 
+@@ -278,10 +322,4 @@ impl Printer {
+         }
+         self.end();
+     }
+-
+-    fn predicate_eq(&mut self, predicate: &PredicateEq) {
+-        self.ty(&predicate.lhs_ty);
+-        self.word(" = ");
+-        self.ty(&predicate.rhs_ty);
+-    }
+ }
+diff --git a/src/item.rs b/src/item.rs
+index 44ef55a..1692ab1 100644
+--- a/src/item.rs
++++ b/src/item.rs
+@@ -5,11 +5,11 @@ use crate::INDENT;
+ use proc_macro2::TokenStream;
+ use syn::{
+     Fields, FnArg, ForeignItem, ForeignItemFn, ForeignItemMacro, ForeignItemStatic,
+-    ForeignItemType, ImplItem, ImplItemConst, ImplItemMacro, ImplItemMethod, ImplItemType, Item,
+-    ItemConst, ItemEnum, ItemExternCrate, ItemFn, ItemForeignMod, ItemImpl, ItemMacro, ItemMacro2,
+-    ItemMod, ItemStatic, ItemStruct, ItemTrait, ItemTraitAlias, ItemType, ItemUnion, ItemUse, Pat,
+-    Receiver, Signature, Stmt, TraitItem, TraitItemConst, TraitItemMacro, TraitItemMethod,
+-    TraitItemType, Type, UseGlob, UseGroup, UseName, UsePath, UseRename, UseTree,
++    ForeignItemType, ImplItem, ImplItemConst, ImplItemFn, ImplItemMacro, ImplItemType, Item,
++    ItemConst, ItemEnum, ItemExternCrate, ItemFn, ItemForeignMod, ItemImpl, ItemMacro, ItemMod,
++    ItemStatic, ItemStruct, ItemTrait, ItemTraitAlias, ItemType, ItemUnion, ItemUse, Receiver,
++    Signature, StaticMutability, Stmt, TraitItem, TraitItemConst, TraitItemFn, TraitItemMacro,
++    TraitItemType, Type, UseGlob, UseGroup, UseName, UsePath, UseRename, UseTree, Variadic,
+ };
+ 
+ impl Printer {
+@@ -22,7 +22,6 @@ impl Printer {
+             Item::ForeignMod(item) => self.item_foreign_mod(item),
+             Item::Impl(item) => self.item_impl(item),
+             Item::Macro(item) => self.item_macro(item),
+-            Item::Macro2(item) => self.item_macro2(item),
+             Item::Mod(item) => self.item_mod(item),
+             Item::Static(item) => self.item_static(item),
+             Item::Struct(item) => self.item_struct(item),
+@@ -43,6 +42,7 @@ impl Printer {
+         self.visibility(&item.vis);
+         self.word("const ");
+         self.ident(&item.ident);
++        self.generics(&item.generics);
+         self.word(": ");
+         self.ty(&item.ty);
+         self.word(" = ");
+@@ -108,6 +108,9 @@ impl Printer {
+     fn item_foreign_mod(&mut self, item: &ItemForeignMod) {
+         self.outer_attrs(&item.attrs);
+         self.cbox(INDENT);
++        if item.unsafety.is_some() {
++            self.word("unsafe ");
++        }
+         self.abi(&item.abi);
+         self.word("{");
+         self.hardbreak_if_nonempty();
+@@ -166,14 +169,13 @@ impl Printer {
+         self.hardbreak();
+     }
+ 
+-    fn item_macro2(&mut self, item: &ItemMacro2) {
+-        unimplemented!("Item::Macro2 `macro {} {}`", item.ident, item.rules);
+-    }
+-
+     fn item_mod(&mut self, item: &ItemMod) {
+         self.outer_attrs(&item.attrs);
+         self.cbox(INDENT);
+         self.visibility(&item.vis);
++        if item.unsafety.is_some() {
++            self.word("unsafe ");
++        }
+         self.word("mod ");
+         self.ident(&item.ident);
+         if let Some((_brace, items)) = &item.content {
+@@ -198,7 +200,7 @@ impl Printer {
+         self.cbox(0);
+         self.visibility(&item.vis);
+         self.word("static ");
+-        if item.mutability.is_some() {
++        if let StaticMutability::Mut(_) = item.mutability {
+             self.word("mut ");
+         }
+         self.ident(&item.ident);
+@@ -363,11 +365,32 @@ impl Printer {
+     #[cfg(feature = "verbatim")]
+     fn item_verbatim(&mut self, tokens: &TokenStream) {
+         use syn::parse::{Parse, ParseStream, Result};
+-        use syn::{Attribute, Token};
++        use syn::punctuated::Punctuated;
++        use syn::{braced, Attribute, Token, Visibility};
+ 
+         enum ItemVerbatim {
+             Empty,
+-            UnsafeForeignMod(ItemForeignMod),
++            UseBrace(UseBrace),
++        }
++
++        struct UseBrace {
++            attrs: Vec<Attribute>,
++            vis: Visibility,
++            trees: Punctuated<RootUseTree, Token![,]>,
++        }
++
++        struct RootUseTree {
++            leading_colon: Option<Token![::]>,
++            inner: UseTree,
++        }
++
++        impl Parse for RootUseTree {
++            fn parse(input: ParseStream) -> Result<Self> {
++                Ok(RootUseTree {
++                    leading_colon: input.parse()?,
++                    inner: input.parse()?,
++                })
++            }
+         }
+ 
+         impl Parse for ItemVerbatim {
+@@ -376,12 +399,13 @@ impl Printer {
+                     Ok(ItemVerbatim::Empty)
+                 } else {
+                     let attrs = input.call(Attribute::parse_outer)?;
+-                    input.parse::<Token![unsafe]>()?;
+-                    let module: ItemForeignMod = input.parse()?;
+-                    Ok(ItemVerbatim::UnsafeForeignMod(ItemForeignMod {
+-                        attrs,
+-                        ..module
+-                    }))
++                    let vis: Visibility = input.parse()?;
++                    input.parse::<Token![use]>()?;
++                    let content;
++                    braced!(content in input);
++                    let trees = content.parse_terminated(RootUseTree::parse, Token![,])?;
++                    input.parse::<Token![;]>()?;
++                    Ok(ItemVerbatim::UseBrace(UseBrace { attrs, vis, trees }))
+                 }
+             }
+         }
+@@ -393,20 +417,43 @@ impl Printer {
+ 
+         match item {
+             ItemVerbatim::Empty => {}
+-            ItemVerbatim::UnsafeForeignMod(item) => {
++            ItemVerbatim::UseBrace(item) => {
+                 self.outer_attrs(&item.attrs);
+-                self.cbox(INDENT);
+-                self.word("unsafe ");
+-                self.abi(&item.abi);
+-                self.word("{");
+-                self.hardbreak_if_nonempty();
+-                self.inner_attrs(&item.attrs);
+-                for foreign_item in &item.items {
+-                    self.foreign_item(foreign_item);
++                self.visibility(&item.vis);
++                self.word("use ");
++                if item.trees.len() == 1 {
++                    self.word("::");
++                    self.use_tree(&item.trees[0].inner);
++                } else {
++                    self.cbox(INDENT);
++                    self.word("{");
++                    self.zerobreak();
++                    self.ibox(0);
++                    for use_tree in item.trees.iter().delimited() {
++                        if use_tree.leading_colon.is_some() {
++                            self.word("::");
++                        }
++                        self.use_tree(&use_tree.inner);
++                        if !use_tree.is_last {
++                            self.word(",");
++                            let mut use_tree = &use_tree.inner;
++                            while let UseTree::Path(use_path) = use_tree {
++                                use_tree = &use_path.tree;
++                            }
++                            if let UseTree::Group(_) = use_tree {
++                                self.hardbreak();
++                            } else {
++                                self.space();
++                            }
++                        }
++                    }
++                    self.end();
++                    self.trailing_comma(true);
++                    self.offset(-INDENT);
++                    self.word("}");
++                    self.end();
+                 }
+-                self.offset(-INDENT);
+-                self.end();
+-                self.word("}");
++                self.word(";");
+             }
+         }
+ 
+@@ -504,7 +551,7 @@ impl Printer {
+         self.cbox(0);
+         self.visibility(&foreign_item.vis);
+         self.word("static ");
+-        if foreign_item.mutability.is_some() {
++        if let StaticMutability::Mut(_) = foreign_item.mutability {
+             self.word("mut ");
+         }
+         self.ident(&foreign_item.ident);
+@@ -521,6 +568,7 @@ impl Printer {
+         self.visibility(&foreign_item.vis);
+         self.word("type ");
+         self.ident(&foreign_item.ident);
++        self.generics(&foreign_item.generics);
+         self.word(";");
+         self.end();
+         self.hardbreak();
+@@ -568,7 +616,7 @@ impl Printer {
+     fn trait_item(&mut self, trait_item: &TraitItem) {
+         match trait_item {
+             TraitItem::Const(item) => self.trait_item_const(item),
+-            TraitItem::Method(item) => self.trait_item_method(item),
++            TraitItem::Fn(item) => self.trait_item_fn(item),
+             TraitItem::Type(item) => self.trait_item_type(item),
+             TraitItem::Macro(item) => self.trait_item_macro(item),
+             TraitItem::Verbatim(item) => self.trait_item_verbatim(item),
+@@ -582,6 +630,7 @@ impl Printer {
+         self.cbox(0);
+         self.word("const ");
+         self.ident(&trait_item.ident);
++        self.generics(&trait_item.generics);
+         self.word(": ");
+         self.ty(&trait_item.ty);
+         if let Some((_eq_token, default)) = &trait_item.default {
+@@ -594,7 +643,7 @@ impl Printer {
+         self.hardbreak();
+     }
+ 
+-    fn trait_item_method(&mut self, trait_item: &TraitItemMethod) {
++    fn trait_item_fn(&mut self, trait_item: &TraitItemFn) {
+         self.outer_attrs(&trait_item.attrs);
+         self.cbox(INDENT);
+         self.signature(&trait_item.sig);
+@@ -658,7 +707,7 @@ impl Printer {
+     fn impl_item(&mut self, impl_item: &ImplItem) {
+         match impl_item {
+             ImplItem::Const(item) => self.impl_item_const(item),
+-            ImplItem::Method(item) => self.impl_item_method(item),
++            ImplItem::Fn(item) => self.impl_item_fn(item),
+             ImplItem::Type(item) => self.impl_item_type(item),
+             ImplItem::Macro(item) => self.impl_item_macro(item),
+             ImplItem::Verbatim(item) => self.impl_item_verbatim(item),
+@@ -676,6 +725,7 @@ impl Printer {
+         }
+         self.word("const ");
+         self.ident(&impl_item.ident);
++        self.generics(&impl_item.generics);
+         self.word(": ");
+         self.ty(&impl_item.ty);
+         self.word(" = ");
+@@ -686,7 +736,7 @@ impl Printer {
+         self.hardbreak();
+     }
+ 
+-    fn impl_item_method(&mut self, impl_item: &ImplItemMethod) {
++    fn impl_item_fn(&mut self, impl_item: &ImplItemFn) {
+         self.outer_attrs(&impl_item.attrs);
+         self.cbox(INDENT);
+         self.visibility(&impl_item.vis);
+@@ -751,33 +801,6 @@ impl Printer {
+         self.hardbreak();
+     }
+ 
+-    fn maybe_variadic(&mut self, arg: &FnArg) -> bool {
+-        let pat_type = match arg {
+-            FnArg::Typed(pat_type) => pat_type,
+-            FnArg::Receiver(receiver) => {
+-                self.receiver(receiver);
+-                return false;
+-            }
+-        };
+-
+-        match pat_type.ty.as_ref() {
+-            Type::Verbatim(ty) if ty.to_string() == "..." => {
+-                match pat_type.pat.as_ref() {
+-                    Pat::Verbatim(pat) if pat.to_string() == "..." => {
+-                        self.outer_attrs(&pat_type.attrs);
+-                        self.word("...");
+-                    }
+-                    _ => self.pat_type(pat_type),
+-                }
+-                true
+-            }
+-            _ => {
+-                self.pat_type(pat_type);
+-                false
+-            }
+-        }
+-    }
+-
+     fn signature(&mut self, signature: &Signature) {
+         if signature.constness.is_some() {
+             self.word("const ");
+@@ -798,18 +821,13 @@ impl Printer {
+         self.neverbreak();
+         self.cbox(0);
+         self.zerobreak();
+-        let mut last_is_variadic = false;
+         for input in signature.inputs.iter().delimited() {
+-            last_is_variadic = self.maybe_variadic(&input);
+-            if last_is_variadic {
+-                self.zerobreak();
+-            } else {
+-                let is_last = input.is_last && signature.variadic.is_none();
+-                self.trailing_comma(is_last);
+-            }
++            self.fn_arg(&input);
++            let is_last = input.is_last && signature.variadic.is_none();
++            self.trailing_comma(is_last);
+         }
+-        if signature.variadic.is_some() && !last_is_variadic {
+-            self.word("...");
++        if let Some(variadic) = &signature.variadic {
++            self.variadic(variadic);
+             self.zerobreak();
+         }
+         self.offset(-INDENT);
+@@ -820,6 +838,13 @@ impl Printer {
+         self.end();
+     }
+ 
++    fn fn_arg(&mut self, fn_arg: &FnArg) {
++        match fn_arg {
++            FnArg::Receiver(receiver) => self.receiver(receiver),
++            FnArg::Typed(pat_type) => self.pat_type(pat_type),
++        }
++    }
++
+     fn receiver(&mut self, receiver: &Receiver) {
+         self.outer_attrs(&receiver.attrs);
+         if let Some((_ampersand, lifetime)) = &receiver.reference {
+@@ -833,5 +858,34 @@ impl Printer {
+             self.word("mut ");
+         }
+         self.word("self");
++        if receiver.colon_token.is_some() {
++            self.word(": ");
++            self.ty(&receiver.ty);
++        } else {
++            let consistent = match (&receiver.reference, &receiver.mutability, &*receiver.ty) {
++                (Some(_), mutability, Type::Reference(ty)) => {
++                    mutability.is_some() == ty.mutability.is_some()
++                        && match &*ty.elem {
++                            Type::Path(ty) => ty.qself.is_none() && ty.path.is_ident("Self"),
++                            _ => false,
++                        }
++                }
++                (None, _, Type::Path(ty)) => ty.qself.is_none() && ty.path.is_ident("Self"),
++                _ => false,
++            };
++            if !consistent {
++                self.word(": ");
++                self.ty(&receiver.ty);
++            }
++        }
++    }
++
++    fn variadic(&mut self, variadic: &Variadic) {
++        self.outer_attrs(&variadic.attrs);
++        if let Some((pat, _colon)) = &variadic.pat {
++            self.pat(pat);
++            self.word(": ");
++        }
++        self.word("...");
+     }
+ }
+diff --git a/src/lib.rs b/src/lib.rs
+index 15a9e17..48bcb80 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -180,7 +180,7 @@
+ //! ```
+ //! // [dependencies]
+ //! // prettyplease = "0.1"
+-//! // syn = { version = "1", default-features = false, features = ["full", "parsing"] }
++//! // syn = { version = "2", default-features = false, features = ["full", "parsing"] }
+ //!
+ //! const INPUT: &str = stringify! {
+ //!     use crate::{
+diff --git a/src/lit.rs b/src/lit.rs
+index c64b8a1..c38cf60 100644
+--- a/src/lit.rs
++++ b/src/lit.rs
+@@ -13,6 +13,8 @@ impl Printer {
+             Lit::Float(lit) => self.lit_float(lit),
+             Lit::Bool(lit) => self.lit_bool(lit),
+             Lit::Verbatim(lit) => self.lit_verbatim(lit),
++            #[cfg_attr(all(test, exhaustive), deny(non_exhaustive_omitted_patterns))]
++            _ => unimplemented!("unknown Lit"),
+         }
+     }
+ 
+diff --git a/src/mac.rs b/src/mac.rs
+index f54faf3..5761641 100644
+--- a/src/mac.rs
++++ b/src/mac.rs
+@@ -7,11 +7,7 @@ use syn::{Ident, Macro, MacroDelimiter};
+ 
+ impl Printer {
+     pub fn mac(&mut self, mac: &Macro, ident: Option<&Ident>) {
+-        let is_macro_rules = mac.path.leading_colon.is_none()
+-            && mac.path.segments.len() == 1
+-            && mac.path.segments[0].arguments.is_none()
+-            && mac.path.segments[0].ident == "macro_rules";
+-        if is_macro_rules {
++        if mac.path.is_ident("macro_rules") {
+             if let Some(ident) = ident {
+                 self.macro_rules(ident, &mac.tokens);
+                 return;
+@@ -212,10 +208,10 @@ impl Printer {
+ 
+ fn is_keyword(ident: &Ident) -> bool {
+     match ident.to_string().as_str() {
+-        "as" | "box" | "break" | "const" | "continue" | "crate" | "else" | "enum" | "extern"
+-        | "fn" | "for" | "if" | "impl" | "in" | "let" | "loop" | "macro" | "match" | "mod"
+-        | "move" | "mut" | "pub" | "ref" | "return" | "static" | "struct" | "trait" | "type"
+-        | "unsafe" | "use" | "where" | "while" | "yield" => true,
++        "as" | "async" | "await" | "box" | "break" | "const" | "continue" | "crate" | "dyn"
++        | "else" | "enum" | "extern" | "fn" | "for" | "if" | "impl" | "in" | "let" | "loop"
++        | "macro" | "match" | "mod" | "move" | "mut" | "pub" | "ref" | "return" | "static"
++        | "struct" | "trait" | "type" | "unsafe" | "use" | "where" | "while" | "yield" => true,
+         _ => false,
+     }
+ }
+diff --git a/src/pat.rs b/src/pat.rs
+index 6c71b96..51c17a1 100644
+--- a/src/pat.rs
++++ b/src/pat.rs
+@@ -4,20 +4,21 @@ use crate::path::PathKind;
+ use crate::INDENT;
+ use proc_macro2::TokenStream;
+ use syn::{
+-    FieldPat, Pat, PatBox, PatIdent, PatLit, PatMacro, PatOr, PatPath, PatRange, PatReference,
+-    PatRest, PatSlice, PatStruct, PatTuple, PatTupleStruct, PatType, PatWild, RangeLimits,
++    FieldPat, Pat, PatIdent, PatOr, PatParen, PatReference, PatRest, PatSlice, PatStruct, PatTuple,
++    PatTupleStruct, PatType, PatWild,
+ };
+ 
+ impl Printer {
+     pub fn pat(&mut self, pat: &Pat) {
+         match pat {
+-            Pat::Box(pat) => self.pat_box(pat),
++            Pat::Const(pat) => self.expr_const(pat),
+             Pat::Ident(pat) => self.pat_ident(pat),
+-            Pat::Lit(pat) => self.pat_lit(pat),
+-            Pat::Macro(pat) => self.pat_macro(pat),
++            Pat::Lit(pat) => self.expr_lit(pat),
++            Pat::Macro(pat) => self.expr_macro(pat),
+             Pat::Or(pat) => self.pat_or(pat),
+-            Pat::Path(pat) => self.pat_path(pat),
+-            Pat::Range(pat) => self.pat_range(pat),
++            Pat::Paren(pat) => self.pat_paren(pat),
++            Pat::Path(pat) => self.expr_path(pat),
++            Pat::Range(pat) => self.expr_range(pat),
+             Pat::Reference(pat) => self.pat_reference(pat),
+             Pat::Rest(pat) => self.pat_rest(pat),
+             Pat::Slice(pat) => self.pat_slice(pat),
+@@ -32,12 +33,6 @@ impl Printer {
+         }
+     }
+ 
+-    fn pat_box(&mut self, pat: &PatBox) {
+-        self.outer_attrs(&pat.attrs);
+-        self.word("box ");
+-        self.pat(&pat.pat);
+-    }
+-
+     fn pat_ident(&mut self, pat: &PatIdent) {
+         self.outer_attrs(&pat.attrs);
+         if pat.by_ref.is_some() {
+@@ -53,16 +48,6 @@ impl Printer {
+         }
+     }
+ 
+-    fn pat_lit(&mut self, pat: &PatLit) {
+-        self.outer_attrs(&pat.attrs);
+-        self.expr(&pat.expr);
+-    }
+-
+-    fn pat_macro(&mut self, pat: &PatMacro) {
+-        self.outer_attrs(&pat.attrs);
+-        self.mac(&pat.mac, None);
+-    }
+-
+     fn pat_or(&mut self, pat: &PatOr) {
+         self.outer_attrs(&pat.attrs);
+         let mut consistent_break = false;
+@@ -90,19 +75,11 @@ impl Printer {
+         self.end();
+     }
+ 
+-    fn pat_path(&mut self, pat: &PatPath) {
++    fn pat_paren(&mut self, pat: &PatParen) {
+         self.outer_attrs(&pat.attrs);
+-        self.qpath(&pat.qself, &pat.path, PathKind::Expr);
+-    }
+-
+-    fn pat_range(&mut self, pat: &PatRange) {
+-        self.outer_attrs(&pat.attrs);
+-        self.expr(&pat.lo);
+-        match &pat.limits {
+-            RangeLimits::HalfOpen(_) => self.word(".."),
+-            RangeLimits::Closed(_) => self.word("..="),
+-        }
+-        self.expr(&pat.hi);
++        self.word("(");
++        self.pat(&pat.pat);
++        self.word(")");
+     }
+ 
+     fn pat_reference(&mut self, pat: &PatReference) {
+@@ -137,10 +114,10 @@ impl Printer {
+         self.space_if_nonempty();
+         for field in pat.fields.iter().delimited() {
+             self.field_pat(&field);
+-            self.trailing_comma_or_space(field.is_last && pat.dot2_token.is_none());
++            self.trailing_comma_or_space(field.is_last && pat.rest.is_none());
+         }
+-        if pat.dot2_token.is_some() {
+-            self.word("..");
++        if let Some(rest) = &pat.rest {
++            self.pat_rest(rest);
+             self.space();
+         }
+         self.offset(-INDENT);
+@@ -175,7 +152,7 @@ impl Printer {
+         self.word("(");
+         self.cbox(INDENT);
+         self.zerobreak();
+-        for elem in pat.pat.elems.iter().delimited() {
++        for elem in pat.elems.iter().delimited() {
+             self.pat(&elem);
+             self.trailing_comma(elem.is_last);
+         }
+diff --git a/src/path.rs b/src/path.rs
+index e032710..b8bcd06 100644
+--- a/src/path.rs
++++ b/src/path.rs
+@@ -3,7 +3,7 @@ use crate::iter::IterDelimited;
+ use crate::INDENT;
+ use std::ptr;
+ use syn::{
+-    AngleBracketedGenericArguments, Binding, Constraint, Expr, GenericArgument,
++    AngleBracketedGenericArguments, AssocConst, AssocType, Constraint, Expr, GenericArgument,
+     ParenthesizedGenericArguments, Path, PathArguments, PathSegment, QSelf,
+ };
+ 
+@@ -49,8 +49,6 @@ impl Printer {
+         match arg {
+             GenericArgument::Lifetime(lifetime) => self.lifetime(lifetime),
+             GenericArgument::Type(ty) => self.ty(ty),
+-            GenericArgument::Binding(binding) => self.binding(binding),
+-            GenericArgument::Constraint(constraint) => self.constraint(constraint),
+             GenericArgument::Const(expr) => {
+                 match expr {
+                     Expr::Lit(expr) => self.expr_lit(expr),
+@@ -64,10 +62,15 @@ impl Printer {
+                     }
+                 }
+             }
++            GenericArgument::AssocType(assoc) => self.assoc_type(assoc),
++            GenericArgument::AssocConst(assoc) => self.assoc_const(assoc),
++            GenericArgument::Constraint(constraint) => self.constraint(constraint),
++            #[cfg_attr(all(test, exhaustive), deny(non_exhaustive_omitted_patterns))]
++            _ => unimplemented!("unknown GenericArgument"),
+         }
+     }
+ 
+-    fn angle_bracketed_generic_arguments(
++    pub fn angle_bracketed_generic_arguments(
+         &mut self,
+         generic: &AngleBracketedGenericArguments,
+         path_kind: PathKind,
+@@ -83,26 +86,27 @@ impl Printer {
+         self.cbox(INDENT);
+         self.zerobreak();
+ 
+-        // Print lifetimes before types and consts, all before bindings,
+-        // regardless of their order in self.args.
+-        //
+-        // TODO: ordering rules for const arguments vs type arguments have
+-        // not been settled yet. https://github.com/rust-lang/rust/issues/44580
++        // Print lifetimes before types/consts/bindings, regardless of their
++        // order in self.args.
+         #[derive(Ord, PartialOrd, Eq, PartialEq)]
+         enum Group {
+             First,
+             Second,
+-            Third,
+         }
+         fn group(arg: &GenericArgument) -> Group {
+             match arg {
+                 GenericArgument::Lifetime(_) => Group::First,
+-                GenericArgument::Type(_) | GenericArgument::Const(_) => Group::Second,
+-                GenericArgument::Binding(_) | GenericArgument::Constraint(_) => Group::Third,
++                GenericArgument::Type(_)
++                | GenericArgument::Const(_)
++                | GenericArgument::AssocType(_)
++                | GenericArgument::AssocConst(_)
++                | GenericArgument::Constraint(_) => Group::Second,
++                #[cfg_attr(all(test, exhaustive), deny(non_exhaustive_omitted_patterns))]
++                _ => Group::Second,
+             }
+         }
+         let last = generic.args.iter().max_by_key(|param| group(param));
+-        for current_group in [Group::First, Group::Second, Group::Third] {
++        for current_group in [Group::First, Group::Second] {
+             for arg in &generic.args {
+                 if group(arg) == current_group {
+                     self.generic_argument(arg);
+@@ -116,14 +120,29 @@ impl Printer {
+         self.word(">");
+     }
+ 
+-    fn binding(&mut self, binding: &Binding) {
+-        self.ident(&binding.ident);
++    fn assoc_type(&mut self, assoc: &AssocType) {
++        self.ident(&assoc.ident);
++        if let Some(generics) = &assoc.generics {
++            self.angle_bracketed_generic_arguments(generics, PathKind::Type);
++        }
++        self.word(" = ");
++        self.ty(&assoc.ty);
++    }
++
++    fn assoc_const(&mut self, assoc: &AssocConst) {
++        self.ident(&assoc.ident);
++        if let Some(generics) = &assoc.generics {
++            self.angle_bracketed_generic_arguments(generics, PathKind::Type);
++        }
+         self.word(" = ");
+-        self.ty(&binding.ty);
++        self.expr(&assoc.value);
+     }
+ 
+     fn constraint(&mut self, constraint: &Constraint) {
+         self.ident(&constraint.ident);
++        if let Some(generics) = &constraint.generics {
++            self.angle_bracketed_generic_arguments(generics, PathKind::Type);
++        }
+         self.ibox(INDENT);
+         for bound in constraint.bounds.iter().delimited() {
+             if bound.is_first {
+diff --git a/src/stmt.rs b/src/stmt.rs
+index 53f6aab..00bcee1 100644
+--- a/src/stmt.rs
++++ b/src/stmt.rs
+@@ -1,5 +1,6 @@
+ use crate::algorithm::Printer;
+-use syn::{Expr, Stmt};
++use crate::INDENT;
++use syn::{BinOp, Expr, Stmt};
+ 
+ impl Printer {
+     pub fn stmt(&mut self, stmt: &Stmt) {
+@@ -9,17 +10,32 @@ impl Printer {
+                 self.ibox(0);
+                 self.word("let ");
+                 self.pat(&local.pat);
+-                if let Some((_eq, init)) = &local.init {
++                if let Some(local_init) = &local.init {
+                     self.word(" = ");
+                     self.neverbreak();
+-                    self.expr(init);
++                    self.expr(&local_init.expr);
++                    if let Some((_else, diverge)) = &local_init.diverge {
++                        self.word(" else ");
++                        if let Expr::Block(expr) = diverge.as_ref() {
++                            self.small_block(&expr.block, &[]);
++                        } else {
++                            self.word("{");
++                            self.space();
++                            self.ibox(INDENT);
++                            self.expr(diverge);
++                            self.end();
++                            self.space();
++                            self.offset(-INDENT);
++                            self.word("}");
++                        }
++                    }
+                 }
+                 self.word(";");
+                 self.end();
+                 self.hardbreak();
+             }
+             Stmt::Item(item) => self.item(item),
+-            Stmt::Expr(expr) => {
++            Stmt::Expr(expr, None) => {
+                 if break_after(expr) {
+                     self.ibox(0);
+                     self.expr_beginning_of_line(expr, true);
+@@ -32,7 +48,7 @@ impl Printer {
+                     self.expr_beginning_of_line(expr, true);
+                 }
+             }
+-            Stmt::Semi(expr, _semi) => {
++            Stmt::Expr(expr, Some(_semi)) => {
+                 if let Expr::Verbatim(tokens) = expr {
+                     if tokens.is_empty() {
+                         return;
+@@ -46,33 +62,68 @@ impl Printer {
+                 self.end();
+                 self.hardbreak();
+             }
++            Stmt::Macro(stmt) => {
++                self.outer_attrs(&stmt.attrs);
++                self.mac(&stmt.mac, None);
++                self.mac_semi_if_needed(&stmt.mac.delimiter);
++                self.hardbreak();
++            }
+         }
+     }
+ }
+ 
+ pub fn add_semi(expr: &Expr) -> bool {
+     match expr {
+-        Expr::Assign(_)
+-        | Expr::AssignOp(_)
+-        | Expr::Break(_)
+-        | Expr::Continue(_)
+-        | Expr::Return(_)
+-        | Expr::Yield(_) => true,
++        Expr::Assign(_) | Expr::Break(_) | Expr::Continue(_) | Expr::Return(_) | Expr::Yield(_) => {
++            true
++        }
++        Expr::Binary(expr) => match expr.op {
++            BinOp::AddAssign(_)
++            | BinOp::SubAssign(_)
++            | BinOp::MulAssign(_)
++            | BinOp::DivAssign(_)
++            | BinOp::RemAssign(_)
++            | BinOp::BitXorAssign(_)
++            | BinOp::BitAndAssign(_)
++            | BinOp::BitOrAssign(_)
++            | BinOp::ShlAssign(_)
++            | BinOp::ShrAssign(_) => true,
++            BinOp::Add(_)
++            | BinOp::Sub(_)
++            | BinOp::Mul(_)
++            | BinOp::Div(_)
++            | BinOp::Rem(_)
++            | BinOp::And(_)
++            | BinOp::Or(_)
++            | BinOp::BitXor(_)
++            | BinOp::BitAnd(_)
++            | BinOp::BitOr(_)
++            | BinOp::Shl(_)
++            | BinOp::Shr(_)
++            | BinOp::Eq(_)
++            | BinOp::Lt(_)
++            | BinOp::Le(_)
++            | BinOp::Ne(_)
++            | BinOp::Ge(_)
++            | BinOp::Gt(_) => false,
++            #[cfg_attr(all(test, exhaustive), deny(non_exhaustive_omitted_patterns))]
++            _ => unimplemented!("unknown BinOp"),
++        },
+         Expr::Group(group) => add_semi(&group.expr),
+ 
+         Expr::Array(_)
+         | Expr::Async(_)
+         | Expr::Await(_)
+-        | Expr::Binary(_)
+         | Expr::Block(_)
+-        | Expr::Box(_)
+         | Expr::Call(_)
+         | Expr::Cast(_)
+         | Expr::Closure(_)
++        | Expr::Const(_)
+         | Expr::Field(_)
+         | Expr::ForLoop(_)
+         | Expr::If(_)
+         | Expr::Index(_)
++        | Expr::Infer(_)
+         | Expr::Let(_)
+         | Expr::Lit(_)
+         | Expr::Loop(_)
+@@ -88,7 +139,6 @@ pub fn add_semi(expr: &Expr) -> bool {
+         | Expr::Try(_)
+         | Expr::TryBlock(_)
+         | Expr::Tuple(_)
+-        | Expr::Type(_)
+         | Expr::Unary(_)
+         | Expr::Unsafe(_)
+         | Expr::Verbatim(_)
+@@ -119,19 +169,19 @@ fn remove_semi(expr: &Expr) -> bool {
+ 
+         Expr::Array(_)
+         | Expr::Assign(_)
+-        | Expr::AssignOp(_)
+         | Expr::Async(_)
+         | Expr::Await(_)
+         | Expr::Binary(_)
+         | Expr::Block(_)
+-        | Expr::Box(_)
+         | Expr::Break(_)
+         | Expr::Call(_)
+         | Expr::Cast(_)
+         | Expr::Closure(_)
+         | Expr::Continue(_)
++        | Expr::Const(_)
+         | Expr::Field(_)
+         | Expr::Index(_)
++        | Expr::Infer(_)
+         | Expr::Let(_)
+         | Expr::Lit(_)
+         | Expr::Loop(_)
+@@ -148,7 +198,6 @@ fn remove_semi(expr: &Expr) -> bool {
+         | Expr::Try(_)
+         | Expr::TryBlock(_)
+         | Expr::Tuple(_)
+-        | Expr::Type(_)
+         | Expr::Unary(_)
+         | Expr::Unsafe(_)
+         | Expr::Verbatim(_)
+diff --git a/src/ty.rs b/src/ty.rs
+index 835d671..0118a9c 100644
+--- a/src/ty.rs
++++ b/src/ty.rs
+@@ -4,9 +4,9 @@ use crate::path::PathKind;
+ use crate::INDENT;
+ use proc_macro2::TokenStream;
+ use syn::{
+-    Abi, BareFnArg, ReturnType, Type, TypeArray, TypeBareFn, TypeGroup, TypeImplTrait, TypeInfer,
+-    TypeMacro, TypeNever, TypeParen, TypePath, TypePtr, TypeReference, TypeSlice, TypeTraitObject,
+-    TypeTuple, Variadic,
++    Abi, BareFnArg, BareVariadic, ReturnType, Type, TypeArray, TypeBareFn, TypeGroup,
++    TypeImplTrait, TypeInfer, TypeMacro, TypeNever, TypeParen, TypePath, TypePtr, TypeReference,
++    TypeSlice, TypeTraitObject, TypeTuple,
+ };
+ 
+ impl Printer {
+@@ -58,7 +58,7 @@ impl Printer {
+             self.trailing_comma(bare_fn_arg.is_last && ty.variadic.is_none());
+         }
+         if let Some(variadic) = &ty.variadic {
+-            self.variadic(variadic);
++            self.bare_variadic(variadic);
+             self.zerobreak();
+         }
+         self.offset(-INDENT);
+@@ -163,30 +163,56 @@ impl Printer {
+ 
+     #[cfg(not(feature = "verbatim"))]
+     fn type_verbatim(&mut self, ty: &TokenStream) {
+-        if ty.to_string() == "..." {
+-            self.word("...");
+-        } else {
+-            unimplemented!("Type::Verbatim `{}`", ty);
+-        }
++        unimplemented!("Type::Verbatim `{}`", ty);
+     }
+ 
+     #[cfg(feature = "verbatim")]
+     fn type_verbatim(&mut self, tokens: &TokenStream) {
+         use syn::parse::{Parse, ParseStream, Result};
+-        use syn::{token, ExprBlock, Lit};
++        use syn::punctuated::Punctuated;
++        use syn::{Token, TypeParamBound};
+ 
+         enum TypeVerbatim {
+-            Lit(Lit),
+-            Block(ExprBlock),
++            DynStar(DynStar),
++            MutSelf(MutSelf),
++            NotType(NotType),
++        }
++
++        struct DynStar {
++            bounds: Punctuated<TypeParamBound, Token![+]>,
++        }
++
++        struct MutSelf {
++            ty: Option<Type>,
++        }
++
++        struct NotType {
++            inner: Type,
+         }
+ 
+         impl Parse for TypeVerbatim {
+             fn parse(input: ParseStream) -> Result<Self> {
+                 let lookahead = input.lookahead1();
+-                if lookahead.peek(Lit) {
+-                    input.parse().map(TypeVerbatim::Lit)
+-                } else if lookahead.peek(token::Brace) {
+-                    input.parse().map(TypeVerbatim::Block)
++                if lookahead.peek(Token![dyn]) {
++                    input.parse::<Token![dyn]>()?;
++                    input.parse::<Token![*]>()?;
++                    let bounds = input.parse_terminated(TypeParamBound::parse, Token![+])?;
++                    Ok(TypeVerbatim::DynStar(DynStar { bounds }))
++                } else if lookahead.peek(Token![mut]) {
++                    input.parse::<Token![mut]>()?;
++                    input.parse::<Token![self]>()?;
++                    let ty = if input.is_empty() {
++                        None
++                    } else {
++                        input.parse::<Token![:]>()?;
++                        let ty: Type = input.parse()?;
++                        Some(ty)
++                    };
++                    Ok(TypeVerbatim::MutSelf(MutSelf { ty }))
++                } else if lookahead.peek(Token![!]) {
++                    input.parse::<Token![!]>()?;
++                    let inner: Type = input.parse()?;
++                    Ok(TypeVerbatim::NotType(NotType { inner }))
+                 } else {
+                     Err(lookahead.error())
+                 }
+@@ -199,11 +225,25 @@ impl Printer {
+         };
+ 
+         match ty {
+-            TypeVerbatim::Lit(lit) => {
+-                self.lit(&lit);
++            TypeVerbatim::DynStar(ty) => {
++                self.word("dyn* ");
++                for type_param_bound in ty.bounds.iter().delimited() {
++                    if !type_param_bound.is_first {
++                        self.word(" + ");
++                    }
++                    self.type_param_bound(&type_param_bound);
++                }
++            }
++            TypeVerbatim::MutSelf(bare_fn_arg) => {
++                self.word("mut self");
++                if let Some(ty) = &bare_fn_arg.ty {
++                    self.word(": ");
++                    self.ty(ty);
++                }
+             }
+-            TypeVerbatim::Block(block) => {
+-                self.expr_block(&block);
++            TypeVerbatim::NotType(ty) => {
++                self.word("!");
++                self.ty(&ty.inner);
+             }
+         }
+     }
+@@ -227,8 +267,12 @@ impl Printer {
+         self.ty(&bare_fn_arg.ty);
+     }
+ 
+-    fn variadic(&mut self, variadic: &Variadic) {
++    fn bare_variadic(&mut self, variadic: &BareVariadic) {
+         self.outer_attrs(&variadic.attrs);
++        if let Some((name, _colon)) = &variadic.name {
++            self.ident(name);
++            self.word(": ");
++        }
+         self.word("...");
+     }
+ 
+-- 
+2.34.1
+
