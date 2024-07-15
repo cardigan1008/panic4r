@@ -1,0 +1,7 @@
+[package]
+name = "toml-1"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+toml_edit = {path = "toml-9339a086c868355384293a73482a4426304ce879/crates/toml_edit"}

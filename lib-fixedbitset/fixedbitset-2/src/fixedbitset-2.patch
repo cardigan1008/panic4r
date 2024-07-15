@@ -1,0 +1,28 @@
+From 4e88a9c39034fe09b546277e727dfa0a9b624b83 Mon Sep 17 00:00:00 2001
+From: bluss <bluss@users.noreply.github.com>
+Date: Fri, 31 Mar 2017 02:08:29 +0200
+Subject: [PATCH] Fix .count_ones() for even block size ranges
+
+---
+ src/lib.rs | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/src/lib.rs b/src/lib.rs
+index eaeb857..88ce092 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -171,8 +171,9 @@ impl FixedBitSet
+         let mask = |x| if x != 0 { Block::max_value() >> (BITS - x) } else { 0 };
+         let mask_first_block: Block = mask(first_rem);
+         let mask_last_block: Block = mask(last_rem);
+-        sum += (self.data[last_block] & mask_last_block).count_ones() as usize;
+-        sum -= (self.data[first_block] & mask_first_block).count_ones() as usize;
++        let get_or_0 = |i| self.data.get(i).map_or(0, |&x| x);
++        sum += (get_or_0(last_block) & mask_last_block).count_ones() as usize;
++        sum -= (get_or_0(first_block) & mask_first_block).count_ones() as usize;
+         sum
+     }
+ 
+-- 
+2.25.1
+

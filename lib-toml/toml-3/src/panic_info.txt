@@ -1,0 +1,4 @@
+thread 'main' panicked at src/main.rs:9:5:
+assertion `left == right` failed
+  left: "aaaaaa = 1\naaa = 2\n"
+ right: "aaaaaa = 1\nbbb = 2\n"

@@ -1,0 +1,50 @@
+From c3e7f213432508a91f11b3a5e3190e74ffc24663 Mon Sep 17 00:00:00 2001
+From: Matt Brubeck <mbrubeck@limpet.net>
+Date: Sat, 20 Mar 2021 19:57:54 -0700
+Subject: [PATCH] Panic on arithmetic overflow in drain
+
+Fixes #258.
+---
+ src/lib.rs   | 4 ++--
+ src/tests.rs | 7 +++++++
+ 2 files changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/src/lib.rs b/src/lib.rs
+index 5e9de82..af6187d 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -725,11 +725,11 @@ impl<A: Array> SmallVec<A> {
+         let len = self.len();
+         let start = match range.start_bound() {
+             Included(&n) => n,
+-            Excluded(&n) => n + 1,
++            Excluded(&n) => n.checked_add(1).expect("Range start out of bounds"),
+             Unbounded => 0,
+         };
+         let end = match range.end_bound() {
+-            Included(&n) => n + 1,
++            Included(&n) => n.checked_add(1).expect("Range end out of bounds"),
+             Excluded(&n) => n,
+             Unbounded => len,
+         };
+diff --git a/src/tests.rs b/src/tests.rs
+index 19f6da8..349a48c 100644
+--- a/src/tests.rs
++++ b/src/tests.rs
+@@ -423,6 +423,13 @@ fn test_invalid_grow() {
+     v.grow(5);
+ }
+ 
++#[test]
++#[should_panic]
++fn drain_overflow() {
++    let mut v: SmallVec<[u8; 8]> = smallvec![0];
++    v.drain(..=std::usize::MAX);
++}
++
+ #[test]
+ fn test_insert_from_slice() {
+     let mut v: SmallVec<[u8; 8]> = SmallVec::new();
+-- 
+2.25.1
+

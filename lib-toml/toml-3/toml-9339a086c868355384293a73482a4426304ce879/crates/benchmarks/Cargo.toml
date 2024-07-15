@@ -1,0 +1,26 @@
+[package]
+name = "toml_benchmarks"
+version = "0.0.0"
+publish = false
+edition.workspace = true
+rust-version.workspace = true
+
+[package.metadata.release]
+release = false
+
+[dev-dependencies]
+criterion = "0.4.0"
+toml = { path = "../toml" }
+toml_edit = { path = "../toml_edit" }
+toml_old = { version = "0.5.10", package = "toml" }
+serde = { version = "1.0.160", features = ["derive"] }
+serde_json = "1.0.96"
+lexopt = "0.3.0"
+
+[[bench]]
+name = "cargo"
+harness = false
+
+[[bench]]
+name = "linear"
+harness = false

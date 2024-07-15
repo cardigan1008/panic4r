@@ -1,0 +1,2 @@
+thread 'main' panicked at /home/lhw/rusttest/lib-phf/phf-1/rust-phf-53000d3dc844968e955fe30272734d3af36efe8f/phf_shared/src/lib.rs:46:26:
+attempt to calculate the remainder with a divisor of zero

@@ -1,0 +1,2 @@
+thread 'main' panicked at /home/lhw/rusttest/lib-fixedbitset/fixedbitset-2/fixedbitset-573e5c831e053734c50705649a495b23e504700a/src/lib.rs:174:26:
+index out of bounds: the len is 16 but the index is 16

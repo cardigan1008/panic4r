@@ -1,0 +1,8 @@
+[package]
+name = "phf-1"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+phf = {path = "rust-phf-53000d3dc844968e955fe30272734d3af36efe8f/phf"}
+phf_builder = {path = "rust-phf-53000d3dc844968e955fe30272734d3af36efe8f/phf_builder"}

@@ -1,0 +1,2 @@
+thread 'main' panicked at proc-macro2-36931ed936cdd88848a2116a50bc9af8a033f71a/src/strnom.rs:20:29:
+byte index 1 is not a char boundary; it is inside '\u{86}' (bytes 0..2) of `  ^"`

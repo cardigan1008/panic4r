@@ -1,0 +1,7 @@
+[package]
+name = "fixedbitset-1"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+fixedbitset = {path = "fixedbitset-4d6590f482b4510074fe4532dcee232293a4615a"}

@@ -1,0 +1,7 @@
+[package]
+name = "filetime-1"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+filetime = {path = "filetime-b53dd77c67e5ed2aee1a4d165ff679bc4f2a0c09"}

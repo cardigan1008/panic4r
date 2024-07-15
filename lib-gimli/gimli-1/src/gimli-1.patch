@@ -1,0 +1,105 @@
+From f02056b9dfbb4cfee4c4d110ab7ca5a2e9cc88c8 Mon Sep 17 00:00:00 2001
+From: Philip Craig <philipjcraig@gmail.com>
+Date: Wed, 13 May 2020 12:03:13 +1000
+Subject: [PATCH] read: handle combination of DW_FORM_indirect and
+ DW_FORM_implicit_const
+
+The standard specifies that DW_FORM_indirect only has a single ULEB128,
+which means it can't also contain the implicit constant. It also
+doesn't make sense to want to combine these.
+---
+ src/read/abbrev.rs |  9 ++++++---
+ src/read/mod.rs    |  3 +++
+ src/read/unit.rs   | 28 +++++++++++++++++++++++++++-
+ 3 files changed, 36 insertions(+), 4 deletions(-)
+
+diff --git a/src/read/abbrev.rs b/src/read/abbrev.rs
+index 8c60e62..a5b0fb4 100644
+--- a/src/read/abbrev.rs
++++ b/src/read/abbrev.rs
+@@ -410,9 +410,12 @@ impl AttributeSpecification {
+ 
+     /// Get the attribute's implicit const value.
+     #[inline]
+-    pub fn implicit_const_value(&self) -> i64 {
+-        assert!(self.form == constants::DW_FORM_implicit_const);
+-        self.implicit_const_value
++    pub fn implicit_const_value(&self) -> Option<i64> {
++        if self.form == constants::DW_FORM_implicit_const {
++            Some(self.implicit_const_value)
++        } else {
++            None
++        }
+     }
+ 
+     /// Return the size of the attribute, in bytes.
+diff --git a/src/read/mod.rs b/src/read/mod.rs
+index 8baeaa9..b83c252 100644
+--- a/src/read/mod.rs
++++ b/src/read/mod.rs
+@@ -383,6 +383,8 @@ pub enum Error {
+     MissingFileEntryFormatPath,
+     /// Expected an attribute value to be a string form.
+     ExpectedStringAttributeValue,
++    /// `DW_FORM_implicit_const` used in an invalid context.
++    InvalidImplicitConst,
+ }
+ 
+ impl fmt::Display for Error {
+@@ -526,6 +528,7 @@ impl Error {
+             Error::ExpectedStringAttributeValue => {
+                 "Expected an attribute value to be a string form."
+             }
++            Error::InvalidImplicitConst => "DW_FORM_implicit_const used in an invalid context.",
+         }
+     }
+ }
+diff --git a/src/read/unit.rs b/src/read/unit.rs
+index 5e4894b..a89da7a 100644
+--- a/src/read/unit.rs
++++ b/src/read/unit.rs
+@@ -2201,7 +2201,12 @@ pub(crate) fn parse_attribute<'unit, R: Reader>(
+                 let offset = input.read_offset(encoding.format)?;
+                 AttributeValue::DebugLineStrRef(DebugLineStrOffset(offset))
+             }
+-            constants::DW_FORM_implicit_const => AttributeValue::Sdata(spec.implicit_const_value()),
++            constants::DW_FORM_implicit_const => {
++                let data = spec
++                    .implicit_const_value()
++                    .ok_or(Error::InvalidImplicitConst)?;
++                AttributeValue::Sdata(data)
++            }
+             constants::DW_FORM_strx | constants::DW_FORM_GNU_str_index => {
+                 let index = input.read_uleb128().and_then(R::Offset::from_u64)?;
+                 AttributeValue::DebugStrOffsetsIndex(DebugStrOffsetsIndex(index))
+@@ -4751,6 +4756,27 @@ mod tests {
+         test_parse_attribute(&buf, bytes_written, &unit, form, value);
+     }
+ 
++    #[test]
++    fn test_parse_attribute_indirect_implicit_const() {
++        let encoding = Encoding {
++            format: Format::Dwarf32,
++            version: 4,
++            address_size: 4,
++        };
++        let mut buf = [0; 100];
++        let mut writable = &mut buf[..];
++        leb128::write::unsigned(&mut writable, constants::DW_FORM_implicit_const.0.into())
++            .expect("should write implicit_const");
++
++        let input = &mut EndianSlice::new(&buf, LittleEndian);
++        let spec =
++            AttributeSpecification::new(constants::DW_AT_low_pc, constants::DW_FORM_indirect, None);
++        assert_eq!(
++            parse_attribute(input, encoding, spec),
++            Err(Error::InvalidImplicitConst)
++        );
++    }
++
+     #[test]
+     fn test_attrs_iter() {
+         let encoding = Encoding {
+-- 
+2.25.1
+

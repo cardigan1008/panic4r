@@ -1,0 +1,2 @@
+thread 'main' panicked at library/proc_macro/src/bridge/client.rs:307:17:
+procedural macro API is used outside of a procedural macro

@@ -1,0 +1,62 @@
+From c681afa9df473673ce8ad3da2d7ed66be3692c0d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Alain=20=CE=A6=CE=BF=CE=B3=CF=84=CE=B9=CE=B1=20Zscheile?=
+ <fogti+devel@ytrizja.de>
+Date: Tue, 5 Dec 2023 17:37:21 +0100
+Subject: [PATCH] unix/birthtime: use broad support of libstd (#100)
+
+---
+ src/unix/mod.rs | 37 ++++++++++---------------------------
+ 1 file changed, 10 insertions(+), 27 deletions(-)
+
+diff --git a/src/unix/mod.rs b/src/unix/mod.rs
+index df62de4..f5a48b2 100644
+--- a/src/unix/mod.rs
++++ b/src/unix/mod.rs
+@@ -85,34 +85,17 @@ pub fn from_last_access_time(meta: &fs::Metadata) -> FileTime {
+ }
+ 
+ pub fn from_creation_time(meta: &fs::Metadata) -> Option<FileTime> {
+-    macro_rules! birthtim {
+-        ($(($e:expr, $i:ident)),*) => {
+-            #[cfg(any($(target_os = $e),*))]
+-            fn imp(meta: &fs::Metadata) -> Option<FileTime> {
+-                $(
+-                    #[cfg(target_os = $e)]
+-                    use std::os::$i::fs::MetadataExt;
+-                )*
+-                Some(FileTime {
+-                    seconds: meta.st_birthtime(),
+-                    nanos: meta.st_birthtime_nsec() as u32,
+-                })
+-            }
+-
+-            #[cfg(all($(not(target_os = $e)),*))]
+-            fn imp(_meta: &fs::Metadata) -> Option<FileTime> {
+-                None
+-            }
+-        }
++    #[cfg(target_os = "bitrig")]
++    {
++        use std::os::bitrig::fs::MetadataExt;
++        Some(FileTime {
++            seconds: meta.st_birthtime(),
++            nanos: meta.st_birthtime_nsec() as u32,
++        })
+     }
+ 
+-    birthtim! {
+-        ("bitrig", bitrig),
+-        ("freebsd", freebsd),
+-        ("ios", ios),
+-        ("macos", macos),
+-        ("openbsd", openbsd)
++    #[cfg(not(target_os = "bitrig"))]
++    {
++        meta.created().map(|i| i.into()).ok()
+     }
+-
+-    imp(meta)
+ }
+-- 
+2.25.1
+

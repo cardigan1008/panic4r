@@ -1,0 +1,7 @@
+[package]
+name = "gimli-1"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+gimli = {path = "gimli-73c43d41249d24b05b6eb33863efd1fff6968d05"}

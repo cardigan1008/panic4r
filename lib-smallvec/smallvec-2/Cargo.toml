@@ -1,0 +1,7 @@
+[package]
+name = "smallvec-2"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+smallvec = {path = "rust-smallvec-bff26fcaa8d6db8bf88f3f3eb6ee689a93413ddd"}

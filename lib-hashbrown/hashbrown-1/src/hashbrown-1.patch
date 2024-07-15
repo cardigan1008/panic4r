@@ -1,0 +1,103 @@
+From 17be6d5c8fc8f90f2dde6fbec123a265a7f80556 Mon Sep 17 00:00:00 2001
+From: Amanieu d'Antras <amanieu@gmail.com>
+Date: Tue, 30 Oct 2018 15:13:50 +0000
+Subject: [PATCH] Fix a bug when inserting into a table smaller than the group
+ width
+
+Fixes #1
+---
+ src/raw/bitmask.rs | 16 ++++++++++++++++
+ src/raw/mod.rs     | 34 ++++++++++++++++++++++++++++++----
+ 2 files changed, 46 insertions(+), 4 deletions(-)
+
+diff --git a/src/raw/bitmask.rs b/src/raw/bitmask.rs
+index ba45c2e..feffe0e 100644
+--- a/src/raw/bitmask.rs
++++ b/src/raw/bitmask.rs
+@@ -1,3 +1,7 @@
++#[cfg(not(feature = "nightly"))]
++use core::hint;
++#[cfg(feature = "nightly")]
++use core::intrinsics;
+ use raw::imp::{BitMaskWord, BITMASK_MASK, BITMASK_SHIFT};
+ 
+ /// A bit mask which contains the result of a `Match` operation on a `Group` and
+@@ -38,6 +42,18 @@ impl BitMask {
+         }
+     }
+ 
++    /// Returns the first set bit in the `BitMask`, if there is one. The
++    /// bitmask must not be empty.
++    #[inline]
++    #[cfg(feature = "nightly")]
++    pub unsafe fn lowest_set_bit_nonzero(self) -> usize {
++        intrinsics::cttz_nonzero(self.0) as usize >> BITMASK_SHIFT
++    }
++    #[cfg(not(feature = "nightly"))]
++    pub unsafe fn lowest_set_bit_nonzero(self) -> usize {
++        self.trailing_zeros()
++    }
++
+     /// Returns the number of trailing zeroes in the `BitMask`.
+     #[inline]
+     pub fn trailing_zeros(self) -> usize {
+diff --git a/src/raw/mod.rs b/src/raw/mod.rs
+index 786f5eb..17d4384 100644
+--- a/src/raw/mod.rs
++++ b/src/raw/mod.rs
+@@ -11,12 +11,17 @@ use scopeguard::guard;
+ // Branch prediction hint. This is currently only available on nightly but it
+ // consistently improves performance by 10-15%.
+ #[cfg(feature = "nightly")]
+-use core::intrinsics::likely;
++use core::intrinsics::{likely, unlikely};
+ #[cfg(not(feature = "nightly"))]
+ #[inline]
+ fn likely(b: bool) -> bool {
+     b
+ }
++#[cfg(not(feature = "nightly"))]
++#[inline]
++fn unlikely(b: bool) -> bool {
++    b
++}
+ 
+ // Use the SSE2 implementation if possible: it allows us to scan 16 buckets at
+ // once instead of 8.
+@@ -390,9 +395,30 @@ impl<T> RawTable<T> {
+     #[inline]
+     fn find_insert_slot(&self, hash: u64) -> usize {
+         for pos in self.probe_seq(hash) {
+-            let group = unsafe { Group::load(self.ctrl(pos)) };
+-            if let Some(bit) = group.match_empty_or_deleted().lowest_set_bit() {
+-                return (pos + bit) & self.bucket_mask;
++            unsafe {
++                let group = Group::load(self.ctrl(pos));
++                if let Some(bit) = group.match_empty_or_deleted().lowest_set_bit() {
++                    let result = (pos + bit) & self.bucket_mask;
++
++                    // In tables smaller than the group width, trailing control
++                    // bytes outside the range of the table are filled with
++                    // DELETED entries. These will unfortunately trigger a
++                    // match, but once masked will point to a full bucket that
++                    // is already occupied. We detect this situation here and
++                    // perform a second scan starting at the begining of the
++                    // table. This second scan is guaranteed to find an empty
++                    // slot (due to the load factor) before hitting the trailing
++                    // control bytes (containing DELETED).
++                    if unlikely(is_full(*self.ctrl(result))) {
++                        debug_assert!(self.bucket_mask < Group::WIDTH);
++                        debug_assert_ne!(pos, 0);
++                        return Group::load_aligned(self.ctrl(0))
++                            .match_empty_or_deleted()
++                            .lowest_set_bit_nonzero();
++                    } else {
++                        return result;
++                    }
++                }
+             }
+         }
+ 
+-- 
+2.25.1
+

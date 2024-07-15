@@ -1,0 +1,11 @@
+[package]
+name = "prost-1"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+prost = {path = "prost-1944c27c3029d01ff216e7b126d846b6cf8c7d77"}
+prost-derive = {path = "prost-1944c27c3029d01ff216e7b126d846b6cf8c7d77/prost-derive"}
+bytes = "0.4.12"
+prost-types = {path = "prost-1944c27c3029d01ff216e7b126d846b6cf8c7d77/prost-types"}
+prost-build = {path = "prost-1944c27c3029d01ff216e7b126d846b6cf8c7d77/prost-build"}

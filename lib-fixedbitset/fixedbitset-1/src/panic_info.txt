@@ -1,0 +1,2 @@
+thread 'main' panicked at /home/lhw/rusttest/lib-fixedbitset/fixedbitset-1/fixedbitset-4d6590f482b4510074fe4532dcee232293a4615a/src/lib.rs:146:9:
+assertion failed: bit < self.length

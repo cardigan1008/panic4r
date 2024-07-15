@@ -1,0 +1,58 @@
+From 8c03033828a614775017f078a01f2c457957975b Mon Sep 17 00:00:00 2001
+From: Alex Crichton <alex@alexcrichton.com>
+Date: Tue, 16 Jan 2018 08:07:36 -0800
+Subject: [PATCH] Fix a panic in `cooked_byte` on utf-8 chars
+
+Don't want to slice on the wrong boundary!
+
+Closes #54
+---
+ src/stable.rs | 8 +++++++-
+ tests/test.rs | 9 +++++++++
+ 2 files changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/src/stable.rs b/src/stable.rs
+index 6312ace..ffa077a 100644
+--- a/src/stable.rs
++++ b/src/stable.rs
+@@ -904,7 +904,13 @@ fn cooked_byte(input: Cursor) -> PResult<()> {
+     };
+     if ok {
+         match bytes.next() {
+-            Some((offset, _)) => Ok((input.advance(offset), ())),
++            Some((offset, _)) => {
++                if input.chars().as_str().is_char_boundary(offset) {
++                    Ok((input.advance(offset), ()))
++                } else {
++                    Err(LexError)
++                }
++            }
+             None => Ok((input.advance(input.len()), ())),
+         }
+     } else {
+diff --git a/tests/test.rs b/tests/test.rs
+index 19f7b27..7c7275d 100644
+--- a/tests/test.rs
++++ b/tests/test.rs
+@@ -1,5 +1,7 @@
+ extern crate proc_macro2;
+ 
++use std::str;
++
+ use proc_macro2::{Term, Literal, TokenStream};
+ 
+ #[cfg(procmacro2_semver_exempt)]
+@@ -161,3 +163,10 @@ fn span_join() {
+ 
+     assert_eq!(joined1.unwrap().source_file(), source1[0].span.source_file());
+ }
++
++#[test]
++fn no_panic() {
++    let s = str::from_utf8(b"b\'\xc2\x86  \x00\x00\x00^\"").unwrap();
++    assert!(s.parse::<proc_macro2::TokenStream>().is_err());
++}
++
+-- 
+2.25.1
+

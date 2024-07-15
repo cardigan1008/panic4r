@@ -1,0 +1,14 @@
+[package]
+name = "conformance"
+version = "0.0.0"
+authors = ["Dan Burkert <dan@danburkert.com>"]
+publish = false
+edition = "2018"
+
+[dependencies]
+bytes = "0.4.7"
+env_logger = { version = "0.6", default-features = false }
+log = "0.3"
+prost = { path = ".." }
+protobuf = { path = "../protobuf" }
+tests = { path = "../tests" }

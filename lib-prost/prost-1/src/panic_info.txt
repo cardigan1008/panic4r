@@ -1,0 +1,2 @@
+thread 'main' panicked at /home/lhw/rusttest/lib-prost/prost-1/prost-1944c27c3029d01ff216e7b126d846b6cf8c7d77/src/encoding.rs:309:5:
+assertion failed: tag >= MIN_TAG && tag <= MAX_TAG

@@ -1,0 +1,2 @@
+thread 'main' panicked at /home/lhw/rusttest/lib-gimli/gimli-1/gimli-73c43d41249d24b05b6eb33863efd1fff6968d05/src/read/abbrev.rs:414:9:
+assertion failed: self.form == constants::DW_FORM_implicit_const

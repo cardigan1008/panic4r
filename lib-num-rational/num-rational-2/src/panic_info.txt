@@ -1,0 +1,2 @@
+thread 'main' panicked at /home/lhw/rusttest/lib-num-rational/num-rational-2/num-rational-957e23246ab8661ad576cd2d2c8d2eb88a1c76a6/src/lib.rs:779:27:
+attempt to divide by zero

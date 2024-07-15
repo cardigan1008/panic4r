@@ -1,0 +1,73 @@
+stack backtrace:
+   0:     0x55a2a2b84835 - std::backtrace_rs::backtrace::libunwind::trace::hd74cffee8849ff45
+                               at /rustc/6be96e3865c4e59028fd50396f7a46c3498ce91d/library/std/src/../../backtrace/src/backtrace/libunwind.rs:116:5
+   1:     0x55a2a2b84835 - std::backtrace_rs::backtrace::trace_unsynchronized::h3ee46c4923e8364f
+                               at /rustc/6be96e3865c4e59028fd50396f7a46c3498ce91d/library/std/src/../../backtrace/src/backtrace/mod.rs:66:5
+   2:     0x55a2a2b84835 - std::sys::backtrace::_print_fmt::h92da20937771500c
+                               at /rustc/6be96e3865c4e59028fd50396f7a46c3498ce91d/library/std/src/sys/backtrace.rs:68:5
+   3:     0x55a2a2b84835 - <std::sys::backtrace::_print::DisplayBacktrace as core::fmt::Display>::fmt::hb56b04a08d5a6dcd
+                               at /rustc/6be96e3865c4e59028fd50396f7a46c3498ce91d/library/std/src/sys/backtrace.rs:44:22
+   4:     0x55a2a2ba199b - core::fmt::rt::Argument::fmt::h43c4beacf570312b
+                               at /rustc/6be96e3865c4e59028fd50396f7a46c3498ce91d/library/core/src/fmt/rt.rs:173:76
+   5:     0x55a2a2ba199b - core::fmt::write::h5ead9f7b6e1a72c1
+                               at /rustc/6be96e3865c4e59028fd50396f7a46c3498ce91d/library/core/src/fmt/mod.rs:1182:21
+   6:     0x55a2a2b826cf - std::io::Write::write_fmt::h7db4366111f86fe2
+                               at /rustc/6be96e3865c4e59028fd50396f7a46c3498ce91d/library/std/src/io/mod.rs:1835:15
+   7:     0x55a2a2b8460e - std::sys::backtrace::_print::h2c2101d695cf6f86
+                               at /rustc/6be96e3865c4e59028fd50396f7a46c3498ce91d/library/std/src/sys/backtrace.rs:47:5
+   8:     0x55a2a2b8460e - std::sys::backtrace::print::h30bff897751ff9a6
+                               at /rustc/6be96e3865c4e59028fd50396f7a46c3498ce91d/library/std/src/sys/backtrace.rs:34:9
+   9:     0x55a2a2b858b9 - std::panicking::default_hook::{{closure}}::hc508e4eebe06507a
+  10:     0x55a2a2b8565c - std::panicking::default_hook::hef1ecc9c0aeb65d3
+                               at /rustc/6be96e3865c4e59028fd50396f7a46c3498ce91d/library/std/src/panicking.rs:292:9
+  11:     0x55a2a2b85e91 - std::panicking::rust_panic_with_hook::h5db25d88a2ba2630
+                               at /rustc/6be96e3865c4e59028fd50396f7a46c3498ce91d/library/std/src/panicking.rs:796:13
+  12:     0x55a2a2b85cc3 - std::panicking::begin_panic_handler::{{closure}}::hca387047a6717d50
+                               at /rustc/6be96e3865c4e59028fd50396f7a46c3498ce91d/library/std/src/panicking.rs:663:13
+  13:     0x55a2a2b84cf9 - std::sys::backtrace::__rust_end_short_backtrace::h2a9cc3bcfe12f367
+                               at /rustc/6be96e3865c4e59028fd50396f7a46c3498ce91d/library/std/src/sys/backtrace.rs:171:18
+  14:     0x55a2a2b85984 - rust_begin_unwind
+                               at /rustc/6be96e3865c4e59028fd50396f7a46c3498ce91d/library/std/src/panicking.rs:661:5
+  15:     0x55a2a2ba0ba3 - core::panicking::panic_fmt::h50c36e6e0219d88b
+                               at /rustc/6be96e3865c4e59028fd50396f7a46c3498ce91d/library/core/src/panicking.rs:74:14
+  16:     0x55a2a2ba4ea7 - core::panicking::panic_const::panic_const_rem_by_zero::had035521ba97011e
+                               at /rustc/6be96e3865c4e59028fd50396f7a46c3498ce91d/library/core/src/panicking.rs:181:21
+  17:     0x55a2a2b5392d - phf_shared::get_index::ha4b7642d510b9fcf
+                               at /home/lhw/rusttest/lib-phf/phf-1/rust-phf-53000d3dc844968e955fe30272734d3af36efe8f/phf_shared/src/lib.rs:46:26
+  18:     0x55a2a2b5db04 - phf::map::Map<K,V>::get_entry::h11f144bae3c01bd1
+                               at /home/lhw/rusttest/lib-phf/phf-1/rust-phf-53000d3dc844968e955fe30272734d3af36efe8f/phf/src/map.rs:84:21
+  19:     0x55a2a2b5da67 - phf::map::Map<K,V>::get::h08cb91d2b4d5731b
+                               at /home/lhw/rusttest/lib-phf/phf-1/rust-phf-53000d3dc844968e955fe30272734d3af36efe8f/phf/src/map.rs:64:9
+  20:     0x55a2a2b53d3e - phf_1::main::h2a569bb30af86324
+                               at /home/lhw/rusttest/lib-phf/phf-1/src/main.rs:5:5
+  21:     0x55a2a2b57e4b - core::ops::function::FnOnce::call_once::h048d6353e55a0921
+                               at /rustc/6be96e3865c4e59028fd50396f7a46c3498ce91d/library/core/src/ops/function.rs:250:5
+  22:     0x55a2a2b4812e - std::sys::backtrace::__rust_begin_short_backtrace::h8fb3e4704c98646d
+                               at /rustc/6be96e3865c4e59028fd50396f7a46c3498ce91d/library/std/src/sys/backtrace.rs:155:18
+  23:     0x55a2a2b4cc41 - std::rt::lang_start::{{closure}}::h0bb71237c7e8fa85
+                               at /rustc/6be96e3865c4e59028fd50396f7a46c3498ce91d/library/std/src/rt.rs:159:18
+  24:     0x55a2a2b8062d - core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once::hea2944977e4b6caa
+                               at /rustc/6be96e3865c4e59028fd50396f7a46c3498ce91d/library/core/src/ops/function.rs:284:13
+  25:     0x55a2a2b8062d - std::panicking::try::do_call::ha0150c276e2395ee
+                               at /rustc/6be96e3865c4e59028fd50396f7a46c3498ce91d/library/std/src/panicking.rs:553:40
+  26:     0x55a2a2b8062d - std::panicking::try::hb57228cf6d165c71
+                               at /rustc/6be96e3865c4e59028fd50396f7a46c3498ce91d/library/std/src/panicking.rs:517:19
+  27:     0x55a2a2b8062d - std::panic::catch_unwind::h6a8d55c2de9191ef
+                               at /rustc/6be96e3865c4e59028fd50396f7a46c3498ce91d/library/std/src/panic.rs:350:14
+  28:     0x55a2a2b8062d - std::rt::lang_start_internal::{{closure}}::h5cb9bed43a767968
+                               at /rustc/6be96e3865c4e59028fd50396f7a46c3498ce91d/library/std/src/rt.rs:141:48
+  29:     0x55a2a2b8062d - std::panicking::try::do_call::h3f8de792003c8bc3
+                               at /rustc/6be96e3865c4e59028fd50396f7a46c3498ce91d/library/std/src/panicking.rs:553:40
+  30:     0x55a2a2b8062d - std::panicking::try::h2f0c8ebff457c147
+                               at /rustc/6be96e3865c4e59028fd50396f7a46c3498ce91d/library/std/src/panicking.rs:517:19
+  31:     0x55a2a2b8062d - std::panic::catch_unwind::hdeccb5cc8ee7acf4
+                               at /rustc/6be96e3865c4e59028fd50396f7a46c3498ce91d/library/std/src/panic.rs:350:14
+  32:     0x55a2a2b8062d - std::rt::lang_start_internal::hb36eceee24848bfe
+                               at /rustc/6be96e3865c4e59028fd50396f7a46c3498ce91d/library/std/src/rt.rs:141:20
+  33:     0x55a2a2b4cc1a - std::rt::lang_start::h0014cb792ad89045
+                               at /rustc/6be96e3865c4e59028fd50396f7a46c3498ce91d/library/std/src/rt.rs:158:17
+  34:     0x55a2a2b53dae - main
+  35:     0x7f55e094c083 - __libc_start_main
+                               at /build/glibc-wuryBv/glibc-2.31/csu/../csu/libc-start.c:308:16
+  36:     0x55a2a2b47cce - _start
+  37:                0x0 - <unknown>

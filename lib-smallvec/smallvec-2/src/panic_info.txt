@@ -1,0 +1,6 @@
+thread 'main' panicked at src/main.rs:11:13:
+drop
+thread 'main' panicked at library/core/src/panicking.rs:229:5:
+panic in a destructor during cleanup
+thread caused non-unwinding panic. aborting.
+Aborted

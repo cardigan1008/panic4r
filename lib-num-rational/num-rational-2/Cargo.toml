@@ -1,0 +1,8 @@
+[package]
+name = "num-rational-2"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+num-rational = {path = "num-rational-957e23246ab8661ad576cd2d2c8d2eb88a1c76a6",default-features = false}
+num-traits = "0.2.11"

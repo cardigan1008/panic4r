@@ -1,0 +1,66 @@
+From 1509f9d32ea6bfa1ec020d1670dbaa01094552d5 Mon Sep 17 00:00:00 2001
+From: Diggory Hardy <git@dhardy.name>
+Date: Wed, 16 May 2018 11:58:33 +0100
+Subject: [PATCH] Fix #460: fill shouldn't panic on zero-length slices
+
+---
+ src/lib.rs | 29 ++++++++++++++++++++++-------
+ 1 file changed, 22 insertions(+), 7 deletions(-)
+
+diff --git a/src/lib.rs b/src/lib.rs
+index bbfc968d..f780f3bb 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -702,12 +702,19 @@ macro_rules! impl_as_byte_slice {
+     ($t:ty) => {
+         impl AsByteSliceMut for [$t] {
+             fn as_byte_slice_mut(&mut self) -> &mut [u8] {
+-                unsafe {
+-                    slice::from_raw_parts_mut(&mut self[0]
+-                        as *mut $t
+-                        as *mut u8,
+-                        self.len() * mem::size_of::<$t>()
+-                    )
++                if self.len() == 0 {
++                    unsafe {
++                        // must not use null pointer
++                        slice::from_raw_parts_mut(0x1 as *mut u8, 0)
++                    }
++                } else {
++                    unsafe {
++                        slice::from_raw_parts_mut(&mut self[0]
++                            as *mut $t
++                            as *mut u8,
++                            self.len() * mem::size_of::<$t>()
++                        )
++                    }
+                 }
+             }
+             
+@@ -762,7 +769,7 @@ macro_rules! impl_as_byte_slice_arrays {
+         }
+     };
+ }
+-impl_as_byte_slice_arrays!(32, N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,);
++impl_as_byte_slice_arrays!(32, N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,);
+ impl_as_byte_slice_arrays!(!div 4096, N,N,N,N,N,N,N,);
+ 
+ /// Iterator which will generate a stream of random items.
+@@ -1061,6 +1068,14 @@ mod test {
+         assert_eq!(array, [x as u32, (x >> 32) as u32]);
+         assert_eq!(rng.next_u32(), x as u32);
+     }
++    
++    #[test]
++    fn test_fill_empty() {
++        let mut array = [0u32; 0];
++        let mut rng = StepRng::new(0, 1);
++        rng.fill(&mut array);
++        rng.fill(&mut array[..]);
++    }
+ 
+     #[test]
+     fn test_gen_range() {
+-- 
+2.25.1
+
