@@ -1,0 +1,7 @@
+[package]
+name = "TinyTemplate-1"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tinytemplate = {path = "TinyTemplate-4403fdf0a552d7444859369ce756b9303dbaa513"}

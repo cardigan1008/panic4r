@@ -1,0 +1,7 @@
+[package]
+name = "cargo_metadata-1"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+cargo_metadata = {path = "cargo_metadata-12c913f796f8778692a519eea9ad4ba8a4a05a97"}

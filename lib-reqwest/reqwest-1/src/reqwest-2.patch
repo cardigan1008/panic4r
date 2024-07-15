@@ -1,0 +1,29 @@
+From 4a1e577aec422b408c74303ee96c0c3f22a7bf20 Mon Sep 17 00:00:00 2001
+From: Paolo Barbolini <paolo.barbolini@m4ss.net>
+Date: Wed, 20 Mar 2024 21:10:36 +0100
+Subject: [PATCH] fix: ask for h2 iff the http2 feature is enabled
+
+---
+ src/async_impl/client.rs | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/src/async_impl/client.rs b/src/async_impl/client.rs
+index 926e21e..a648695 100644
+--- a/src/async_impl/client.rs
++++ b/src/async_impl/client.rs
+@@ -590,7 +590,11 @@ impl ClientBuilder {
+                             tls.alpn_protocols = vec!["h3".into()];
+                         }
+                         HttpVersionPref::All => {
+-                            tls.alpn_protocols = vec!["h2".into(), "http/1.1".into()];
++                            tls.alpn_protocols = vec![
++                                #[cfg(feature = "http2")]
++                                "h2".into(),
++                                "http/1.1".into(),
++                            ];
+                         }
+                     }
+ 
+-- 
+2.34.1
+

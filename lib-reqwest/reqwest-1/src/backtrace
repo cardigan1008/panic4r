@@ -1,0 +1,142 @@
+stack backtrace:
+   0:     0x5632e24e7845 - std::backtrace_rs::backtrace::libunwind::trace::h1a07e5dba0da0cd2
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/../../backtrace/src/backtrace/libunwind.rs:105:5
+   1:     0x5632e24e7845 - std::backtrace_rs::backtrace::trace_unsynchronized::h61b9b8394328c0bc
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/../../backtrace/src/backtrace/mod.rs:66:5
+   2:     0x5632e24e7845 - std::sys_common::backtrace::_print_fmt::h1c5e18b460934cff
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/sys_common/backtrace.rs:68:5
+   3:     0x5632e24e7845 - <std::sys_common::backtrace::_print::DisplayBacktrace as core::fmt::Display>::fmt::h1e1a1972118942ad
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/sys_common/backtrace.rs:44:22
+   4:     0x5632e25093ab - core::fmt::rt::Argument::fmt::h07af2b4071d536cd
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/core/src/fmt/rt.rs:165:63    
+   5:     0x5632e25093ab - core::fmt::write::hc090a2ffd6b28c4a
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/core/src/fmt/mod.rs:1157:21  
+   6:     0x5632e24e4f2f - std::io::Write::write_fmt::h8898bac6ff039a23
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/io/mod.rs:1832:15    
+   7:     0x5632e24e761e - std::sys_common::backtrace::_print::h4e80c5803d4ee35b
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/sys_common/backtrace.rs:47:5
+   8:     0x5632e24e761e - std::sys_common::backtrace::print::ha96650907276675e
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/sys_common/backtrace.rs:34:9
+   9:     0x5632e24e88d9 - std::panicking::default_hook::{{closure}}::h215c2a0a8346e0e0
+  10:     0x5632e24e861d - std::panicking::default_hook::h207342be97478370
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/panicking.rs:298:9   
+  11:     0x5632e24e8d73 - std::panicking::rust_panic_with_hook::hac8bdceee1e4fe2c
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/panicking.rs:795:13  
+  12:     0x5632e24e8c1b - std::panicking::begin_panic_handler::{{closure}}::h00d785e82757ce3c
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/panicking.rs:656:13  
+  13:     0x5632e24e7d09 - std::sys_common::backtrace::__rust_end_short_backtrace::h1628d957bcd06996
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/sys_common/backtrace.rs:171:18
+  14:     0x5632e24e8987 - rust_begin_unwind
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/panicking.rs:652:5   
+  15:     0x5632e20ce973 - core::panicking::panic_fmt::hdc63834ffaaefae5
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/core/src/panicking.rs:72:14  
+  16:     0x5632e21605cb - hyper_util::client::legacy::client::Client<C,B>::connect_to::{{closure}}::{{closure}}::{{closure}}::h5d81d2d74269abe4
+                               at /home/bianhe/.cargo/registry/src/index.crates.io-6f17d22bba15001f/hyper-util-0.1.6/src/client/legacy/client.rs:569:33
+  17:     0x5632e2134b02 - <core::pin::Pin<P> as core::future::future::Future>::poll::h30c705df7704f3e1
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/core/src/future/future.rs:123:9
+  18:     0x5632e21799cc - <futures_util::future::either::Either<A,B> as core::future::future::Future>::poll::h57d10c2e257a510f
+                               at /home/bianhe/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/either.rs:109:32
+  19:     0x5632e21798ab - <F as futures_core::future::TryFuture>::try_poll::h0002ea6d0793e193
+                               at /home/bianhe/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-core-0.3.30/src/future.rs:82:9
+  20:     0x5632e21a0836 - <futures_util::future::try_future::try_flatten::TryFlatten<Fut,<Fut as futures_core::future::TryFuture>::Ok> as core::future::future::Future>::poll::hffdbe68049328680
+                               at /home/bianhe/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/try_future/try_flatten.rs:57:41
+  21:     0x5632e218b9f3 - <futures_util::future::try_future::TryFlatten<Fut1,Fut2> as core::future::future::Future>::poll::h5c04882fd028a471
+                               at /home/bianhe/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/lib.rs:91:13
+  22:     0x5632e218ba43 - <futures_util::future::try_future::AndThen<Fut1,Fut2,F> as core::future::future::Future>::poll::h6adcb3533c9538d7
+                               at /home/bianhe/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/lib.rs:91:13
+  23:     0x5632e217993c - <futures_util::future::either::Either<A,B> as core::future::future::Future>::poll::h3abff1aa2109645c
+                               at /home/bianhe/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/either.rs:109:32
+  24:     0x5632e215e847 - <hyper_util::common::lazy::Lazy<F,R> as core::future::future::Future>::poll::he8e05a66712e951b
+                               at /home/bianhe/.cargo/registry/src/index.crates.io-6f17d22bba15001f/hyper-util-0.1.6/src/common/lazy.rs:64:20
+  25:     0x5632e215e71a - futures_util::future::future::FutureExt::poll_unpin::h50b5506fdaed786a
+                               at /home/bianhe/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/future/mod.rs:558:9
+  26:     0x5632e213c58a - <futures_util::future::select::Select<A,B> as core::future::future::Future>::poll::hd43a4cd2c8aa764e
+                               at /home/bianhe/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/select.rs:118:35
+  27:     0x5632e2165e74 - hyper_util::client::legacy::client::Client<C,B>::one_connection_for::{{closure}}::hd20d9559abfff9f0
+                               at /home/bianhe/.cargo/registry/src/index.crates.io-6f17d22bba15001f/hyper-util-0.1.6/src/client/legacy/client.rs:428:49
+  28:     0x5632e2162d21 - hyper_util::client::legacy::client::Client<C,B>::connection_for::{{closure}}::h2865c69633a802b0
+                               at /home/bianhe/.cargo/registry/src/index.crates.io-6f17d22bba15001f/hyper-util-0.1.6/src/client/legacy/client.rs:379:61
+  29:     0x5632e2163a1f - hyper_util::client::legacy::client::Client<C,B>::try_send_request::{{closure}}::hb3b99902c475979d
+                               at /home/bianhe/.cargo/registry/src/index.crates.io-6f17d22bba15001f/hyper-util-0.1.6/src/client/legacy/client.rs:268:14
+  30:     0x5632e2161e68 - hyper_util::client::legacy::client::Client<C,B>::send_request::{{closure}}::h3b2cd7504d173b3f
+                               at /home/bianhe/.cargo/registry/src/index.crates.io-6f17d22bba15001f/hyper-util-0.1.6/src/client/legacy/client.rs:240:70
+  31:     0x5632e2386f65 - <hyper_util::client::legacy::client::ResponseFuture as core::future::future::Future>::poll::he43501ded28abacd
+                               at /home/bianhe/.cargo/registry/src/index.crates.io-6f17d22bba15001f/hyper-util-0.1.6/src/client/legacy/client.rs:697:9
+  32:     0x5632e20ff670 - <reqwest::async_impl::client::PendingRequest as core::future::future::Future>::poll::h5b7a851b4fa6a1ca
+                               at /mnt/d/rust_learning/lib-reqwest/reqwset-2/reqwest-92aa28caab7ed60e79544e917b8369acd6693863/src/async_impl/client.rs:2403:53
+  33:     0x5632e20ff3da - <reqwest::async_impl::client::Pending as core::future::future::Future>::poll::hb5440497913532a8
+                               at /mnt/d/rust_learning/lib-reqwest/reqwset-2/reqwest-92aa28caab7ed60e79544e917b8369acd6693863/src/async_impl/client.rs:2381:51
+  34:     0x5632e20d0092 - reqwest::get::{{closure}}::hf360840fff7e4450
+                               at /mnt/d/rust_learning/lib-reqwest/reqwset-2/reqwest-92aa28caab7ed60e79544e917b8369acd6693863/src/lib.rs:306:48
+  35:     0x5632e20d20f2 - reqwset_2::main::{{closure}}::h744b2e636b8ffc23
+                               at /mnt/d/rust_learning/lib-reqwest/reqwset-2/src/main.rs:7:10
+  36:     0x5632e20d13a6 - <core::pin::Pin<P> as core::future::future::Future>::poll::hc05d153f74e22de4
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/core/src/future/future.rs:123:9
+  37:     0x5632e20d7674 - tokio::runtime::scheduler::current_thread::CoreGuard::block_on::{{closure}}::{{closure}}::{{closure}}::h24685b498fbee89e
+                               at /home/bianhe/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tokio-1.38.0/src/runtime/scheduler/current_thread/mod.rs:659:57
+  38:     0x5632e20d75aa - tokio::runtime::coop::with_budget::h7cca57105a6c8037
+                               at /home/bianhe/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tokio-1.38.0/src/runtime/coop.rs:107:5
+  39:     0x5632e20d75aa - tokio::runtime::coop::budget::h62460dfc3357aef4
+                               at /home/bianhe/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tokio-1.38.0/src/runtime/coop.rs:73:5
+  40:     0x5632e20d75aa - tokio::runtime::scheduler::current_thread::CoreGuard::block_on::{{closure}}::{{closure}}::ha04dbe24574155bb
+                               at /home/bianhe/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tokio-1.38.0/src/runtime/scheduler/current_thread/mod.rs:659:25
+  41:     0x5632e20d626c - tokio::runtime::scheduler::current_thread::Context::enter::h72c14adb0c863506
+                               at /home/bianhe/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tokio-1.38.0/src/runtime/scheduler/current_thread/mod.rs:404:19
+  42:     0x5632e20d6dab - tokio::runtime::scheduler::current_thread::CoreGuard::block_on::{{closure}}::h50ea5cc4e7f3734b
+                               at /home/bianhe/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tokio-1.38.0/src/runtime/scheduler/current_thread/mod.rs:658:36
+  43:     0x5632e20d6adb - tokio::runtime::scheduler::current_thread::CoreGuard::enter::{{closure}}::h81cbe95adf0669c3 
+                               at /home/bianhe/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tokio-1.38.0/src/runtime/scheduler/current_thread/mod.rs:737:68
+  44:     0x5632e20d12cb - tokio::runtime::context::scoped::Scoped<T>::set::hd844e430d90a300d
+                               at /home/bianhe/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tokio-1.38.0/src/runtime/context/scoped.rs:40:9
+  45:     0x5632e20d87c9 - tokio::runtime::context::set_scheduler::{{closure}}::hf84d1fa0a6eb6c2d
+                               at /home/bianhe/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tokio-1.38.0/src/runtime/context.rs:180:26
+  46:     0x5632e20d9e56 - std::thread::local::LocalKey<T>::try_with::h372355849fd99cf5
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/thread/local.rs:286:12
+  47:     0x5632e20d9cda - std::thread::local::LocalKey<T>::with::h5c87b6ba72d73bc4
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/thread/local.rs:262:9  48:     0x5632e20d877d - tokio::runtime::context::set_scheduler::h35b2f691947edc65
+                               at /home/bianhe/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tokio-1.38.0/src/runtime/context.rs:180:9
+  49:     0x5632e20d6870 - tokio::runtime::scheduler::current_thread::CoreGuard::enter::ha0919d7bac81dcb2
+                               at /home/bianhe/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tokio-1.38.0/src/runtime/scheduler/current_thread/mod.rs:737:27
+  50:     0x5632e20d6afd - tokio::runtime::scheduler::current_thread::CoreGuard::block_on::hefa77d02f9c2e422
+                               at /home/bianhe/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tokio-1.38.0/src/runtime/scheduler/current_thread/mod.rs:646:19
+  51:     0x5632e20d5a63 - tokio::runtime::scheduler::current_thread::CurrentThread::block_on::{{closure}}::h120ae11b58747f5a
+                               at /home/bianhe/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tokio-1.38.0/src/runtime/scheduler/current_thread/mod.rs:175:28
+  52:     0x5632e20d14ab - tokio::runtime::context::runtime::enter_runtime::h45c80197be77b2c2
+                               at /home/bianhe/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tokio-1.38.0/src/runtime/context/runtime.rs:65:16
+  53:     0x5632e20d595e - tokio::runtime::scheduler::current_thread::CurrentThread::block_on::h940ffc757943093c       
+                               at /home/bianhe/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tokio-1.38.0/src/runtime/scheduler/current_thread/mod.rs:167:9
+  54:     0x5632e20d1cd4 - tokio::runtime::runtime::Runtime::block_on::hf7631306cbb0a75b
+                               at /home/bianhe/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tokio-1.38.0/src/runtime/runtime.rs:347:47
+  55:     0x5632e20d0fa6 - reqwset_2::main::h2e0bc8d6344ca857
+                               at /mnt/d/rust_learning/lib-reqwest/reqwset-2/src/main.rs:12:5
+  56:     0x5632e20d8adb - core::ops::function::FnOnce::call_once::h3e6cff3445b6476c
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/core/src/ops/function.rs:250:5
+  57:     0x5632e20d030e - std::sys_common::backtrace::__rust_begin_short_backtrace::h7e623497b0246953
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/sys_common/backtrace.rs:155:18
+  58:     0x5632e20d3cb1 - std::rt::lang_start::{{closure}}::h73d46706354ee38e
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/rt.rs:159:18
+  59:     0x5632e24e1820 - core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once::h6abeee5a7794ceb5
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/core/src/ops/function.rs:284:13
+  60:     0x5632e24e1820 - std::panicking::try::do_call::hd6e966bb06877057
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/panicking.rs:559:40  
+  61:     0x5632e24e1820 - std::panicking::try::hc9b3807f5768cb19
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/panicking.rs:523:19  
+  62:     0x5632e24e1820 - std::panic::catch_unwind::h94a757c154076c6e
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/panic.rs:149:14      
+  63:     0x5632e24e1820 - std::rt::lang_start_internal::{{closure}}::hc5223fb36050c743
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/rt.rs:141:48
+  64:     0x5632e24e1820 - std::panicking::try::do_call::hddf7b4e1ebeb3f69
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/panicking.rs:559:40  
+  65:     0x5632e24e1820 - std::panicking::try::h1842860a1f941a31
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/panicking.rs:523:19  
+  66:     0x5632e24e1820 - std::panic::catch_unwind::h009016ccf811d4c3
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/panic.rs:149:14      
+  67:     0x5632e24e1820 - std::rt::lang_start_internal::h3ed4fe7b2f419135
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/rt.rs:141:20
+  68:     0x5632e20d3c8a - std::rt::lang_start::h59ab221328520ba6
+                               at /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/rt.rs:158:17
+  69:     0x5632e20d104e - main
+  70:     0x7f8b7bc98d90 - <unknown>
+  71:     0x7f8b7bc98e40 - __libc_start_main
+  72:     0x5632e20cf305 - _start
+  73:                0x0 - <unknown>

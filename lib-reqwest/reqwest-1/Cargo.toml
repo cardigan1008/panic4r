@@ -1,0 +1,9 @@
+[package]
+name = "reqwset-2"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tokio = { version = "1", features = ["macros", "rt"] }
+# same with `native-tls-alpn`
+reqwest = { path =  "reqwest-92aa28caab7ed60e79544e917b8369acd6693863", default-features = false, features = ["rustls-tls-native-roots"]}

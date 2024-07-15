@@ -1,0 +1,2 @@
+thread 'main' panicked at /home/bianhe/.cargo/registry/src/index.crates.io-6f17d22bba15001f/hyper-util-0.1.6/src/client/legacy/client.rs:569:33:
+http2 feature is not enabled

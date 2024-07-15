@@ -1,0 +1,151 @@
+From 725f8d99b32ed45e547a4afc993de34663f512ad Mon Sep 17 00:00:00 2001
+From: Alex Rawson <ajzecrom@gmail.com>
+Date: Mon, 5 Sep 2022 20:31:36 -0500
+Subject: [PATCH] Add fallback to root_package when no_deps is set
+
+fixes  oli-obk/cargo_metadata#198
+---
+ src/lib.rs                              | 22 +++++++++++++++++-----
+ tests/all/Cargo.toml                    |  1 +
+ tests/basic_workspace/Cargo.toml        |  8 ++++++++
+ tests/basic_workspace/ex_lib/Cargo.toml |  7 +++++++
+ tests/basic_workspace/ex_lib/src/lib.rs |  1 +
+ tests/basic_workspace/src/main.rs       |  1 +
+ tests/test_samples.rs                   | 22 ++++++++++++++++++++++
+ 7 files changed, 57 insertions(+), 5 deletions(-)
+ create mode 100644 tests/basic_workspace/Cargo.toml
+ create mode 100644 tests/basic_workspace/ex_lib/Cargo.toml
+ create mode 100644 tests/basic_workspace/ex_lib/src/lib.rs
+ create mode 100644 tests/basic_workspace/src/main.rs
+
+diff --git a/src/lib.rs b/src/lib.rs
+index 4f7265c..4a9cb15 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -155,10 +155,22 @@ pub struct Metadata {
+ }
+ 
+ impl Metadata {
+-    /// Get the root package of this metadata instance.
++    /// Get the workspace's root package of this metadata instance.
+     pub fn root_package(&self) -> Option<&Package> {
+-        let root = self.resolve.as_ref()?.root.as_ref()?;
+-        self.packages.iter().find(|pkg| &pkg.id == root)
++        match &self.resolve {
++            Some(resolve) => {
++                // if dependencies are resolved, use Cargo's answer
++                let root = resolve.root.as_ref()?;
++                self.packages.iter().find(|pkg| &pkg.id == root)
++            }
++            None => {
++                // if dependencies aren't resolved, check for a root package manually
++                let root_manifest_path = self.workspace_root.join("Cargo.toml");
++                self.packages
++                    .iter()
++                    .find(|pkg| pkg.manifest_path == root_manifest_path)
++            }
++        }
+     }
+ 
+     /// Get the workspace packages.
+@@ -533,7 +545,7 @@ pub struct MetadataCommand {
+     manifest_path: Option<PathBuf>,
+     /// Current directory of the `cargo metadata` process.
+     current_dir: Option<PathBuf>,
+-    /// Output information only about the root package and don't fetch dependencies.
++    /// Output information only about workspace members and don't fetch dependencies.
+     no_deps: bool,
+     /// Collections of `CargoOpt::SomeFeatures(..)`
+     features: Vec<String>,
+@@ -569,7 +581,7 @@ impl MetadataCommand {
+         self.current_dir = Some(path.into());
+         self
+     }
+-    /// Output information only about the root package and don't fetch dependencies.
++    /// Output information only about workspace members and don't fetch dependencies.
+     pub fn no_deps(&mut self) -> &mut MetadataCommand {
+         self.no_deps = true;
+         self
+diff --git a/tests/all/Cargo.toml b/tests/all/Cargo.toml
+index b5e833b..9077aa4 100644
+--- a/tests/all/Cargo.toml
++++ b/tests/all/Cargo.toml
+@@ -1,3 +1,4 @@
++# Used in tests/test_samples.rs
+ [package]
+ name = "all"
+ version = "0.1.0"
+diff --git a/tests/basic_workspace/Cargo.toml b/tests/basic_workspace/Cargo.toml
+new file mode 100644
+index 0000000..d0a34ed
+--- /dev/null
++++ b/tests/basic_workspace/Cargo.toml
+@@ -0,0 +1,8 @@
++[package]
++name = "ex_bin"
++version = "0.1.0"
++
++[dependencies]
++ex_lib = { version = "0.1.0", path = "./ex_lib" }
++
++[workspace]
+diff --git a/tests/basic_workspace/ex_lib/Cargo.toml b/tests/basic_workspace/ex_lib/Cargo.toml
+new file mode 100644
+index 0000000..811404c
+--- /dev/null
++++ b/tests/basic_workspace/ex_lib/Cargo.toml
+@@ -0,0 +1,7 @@
++[package]
++name = "ex_lib"
++version = "0.1.0"
++
++# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
++
++[dependencies]
+diff --git a/tests/basic_workspace/ex_lib/src/lib.rs b/tests/basic_workspace/ex_lib/src/lib.rs
+new file mode 100644
+index 0000000..8b13789
+--- /dev/null
++++ b/tests/basic_workspace/ex_lib/src/lib.rs
+@@ -0,0 +1 @@
++
+diff --git a/tests/basic_workspace/src/main.rs b/tests/basic_workspace/src/main.rs
+new file mode 100644
+index 0000000..f328e4d
+--- /dev/null
++++ b/tests/basic_workspace/src/main.rs
+@@ -0,0 +1 @@
++fn main() {}
+diff --git a/tests/test_samples.rs b/tests/test_samples.rs
+index a5c15b0..3c747c5 100644
+--- a/tests/test_samples.rs
++++ b/tests/test_samples.rs
+@@ -623,3 +623,25 @@ fn depkind_to_string() {
+     assert_eq!(DependencyKind::Build.to_string(), "build");
+     assert_eq!(DependencyKind::Unknown.to_string(), "Unknown");
+ }
++
++#[test]
++fn basic_workspace_root_package_exists() {
++    // First try with dependencies
++    let meta = MetadataCommand::new()
++        .manifest_path("tests/basic_workspace/Cargo.toml")
++        .exec()
++        .unwrap();
++    assert_eq!(meta.root_package().unwrap().name, "ex_bin");
++    // Now with no_deps, it should still work exactly the same
++    let meta = MetadataCommand::new()
++        .manifest_path("tests/basic_workspace/Cargo.toml")
++        .no_deps()
++        .exec()
++        .unwrap();
++    assert_eq!(
++        meta.root_package()
++            .expect("workspace root still exists when no_deps used")
++            .name,
++        "ex_bin"
++    );
++}
+-- 
+2.34.1
+

@@ -1,0 +1,2 @@
+thread 'main' panicked at src/main.rs:14:10:
+root package exists w/ no_deps called
