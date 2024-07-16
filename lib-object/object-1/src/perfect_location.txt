@@ -1,1 +1,5 @@
 src/write/macho.rs:306:10
+src/write/macho.rs:312:18
+src/write/macho.rs:329:14
+src/write/macho.rs:336:10
+src/write/macho.rs:540:14

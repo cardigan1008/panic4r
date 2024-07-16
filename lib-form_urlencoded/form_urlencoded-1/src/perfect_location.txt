@@ -1,1 +1,4 @@
 url/src/lib.rs:686:14
+url/src/parser.rs:477:14
+url/src/parser.rs:479:14
+url/src/parser.rs:1357:10

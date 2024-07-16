@@ -1,1 +1,4 @@
 src/lib.rs:93:10
+src/lib.rs:779:10
+src/lib.rs:784:14
+src/lib.rs:786:10
