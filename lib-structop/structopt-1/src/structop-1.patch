@@ -1,0 +1,57 @@
+From 776fe37464e06455d78515865ccbf8e654b32c45 Mon Sep 17 00:00:00 2001
+From: CreepySkeleton <creepy-skeleton@yandex.ru>
+Date: Fri, 12 Jun 2020 15:34:56 +0300
+Subject: [PATCH] Flattening a subcommand now panics with a meaningful error
+ message
+
+---
+ structopt-derive/src/lib.rs |  3 ++-
+ tests/flatten.rs            | 24 ++++++++++++++++++++++++
+ 2 files changed, 26 insertions(+), 1 deletion(-)
+
+diff --git a/structopt-derive/src/lib.rs b/structopt-derive/src/lib.rs
+index a5cd7c26..87fadf26 100644
+--- a/structopt-derive/src/lib.rs
++++ b/structopt-derive/src/lib.rs
+@@ -559,7 +559,8 @@ fn gen_from_clap_enum(name: &Ident) -> TokenStream {
+     quote! {
+         fn from_clap(matches: &::structopt::clap::ArgMatches) -> Self {
+             <#name as ::structopt::StructOptInternal>::from_subcommand(matches.subcommand())
+-                .unwrap()
++                .expect("structopt misuse: You likely tried to #[flatten] a struct \
++                         that contains #[subcommand]. This is forbidden.")
+         }
+     }
+ }
+diff --git a/tests/flatten.rs b/tests/flatten.rs
+index f01e44e7..ddc0ef7b 100644
+--- a/tests/flatten.rs
++++ b/tests/flatten.rs
+@@ -127,3 +127,27 @@ fn merge_subcommands_with_flatten() {
+         Opt::from_iter(&["test", "command2", "43"])
+     );
+ }
++
++#[test]
++#[should_panic = "structopt misuse: You likely tried to #[flatten] a struct \
++                  that contains #[subcommand]. This is forbidden."]
++fn subcommand_in_flatten() {
++    #[derive(Debug, StructOpt)]
++    pub enum Struct1 {
++        #[structopt(flatten)]
++        Struct1(Struct2),
++    }
++
++    #[derive(Debug, StructOpt)]
++    pub struct Struct2 {
++        #[structopt(subcommand)]
++        command_type: Enum3,
++    }
++
++    #[derive(Debug, StructOpt)]
++    pub enum Enum3 {
++        Command { args: Vec<String> },
++    }
++
++    Struct1::from_iter(&["test", "command", "foo"]);
++}
