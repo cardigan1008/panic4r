@@ -1,0 +1,7 @@
+[package]
+name = "structopt-2"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+structopt = {path = "structopt-caa145571fe170bc03b45866189465044d589e69"}
