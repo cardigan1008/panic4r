@@ -1,0 +1,2 @@
+thread 'main' panicked at src/main.rs:7:29:
+`async fn` resumed after completion
