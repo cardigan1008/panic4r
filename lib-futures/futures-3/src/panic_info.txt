@@ -1,0 +1,2 @@
+thread 'main' panicked at futures-rs-5073eb9729d4d812f6ee4a42529bbc1c928b1a10/futures-util/src/stream/futures_unordered/abort.rs:11:5: 
+inconsistent in drop
