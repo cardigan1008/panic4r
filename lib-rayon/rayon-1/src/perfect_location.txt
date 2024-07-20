@@ -1,4 +1,4 @@
-src/registry.rs:217:9
+rayon-core/src/registry.rs:217:9
 rayon-core/src/sleep/counters.rs:71:1
 rayon-core/src/sleep/mod.rs:14:1
 rayon-core/src/sleep/mod.rs:65:9
