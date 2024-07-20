@@ -1,97 +1,47 @@
 stack backtrace:
-   0:     0x55aef726b056 - std::backtrace_rs::backtrace::libunwind::trace::h24a2eb3edb39d0f3
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/../../backtrace/src/backtrace/libunwind.rs:104:5
-   1:     0x55aef726b056 - std::backtrace_rs::backtrace::trace_unsynchronized::h9690b32974005e28
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/../../backtrace/src/backtrace/mod.rs:66:5
-   2:     0x55aef726b056 - std::sys_common::backtrace::_print_fmt::h50333491dc4fc462
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/sys_common/backtrace.rs:68:5
-   3:     0x55aef726b056 - <std::sys_common::backtrace::_print::DisplayBacktrace as core::fmt::Display>::fmt::he8279f297710df71
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/sys_common/backtrace.rs:44:22
-   4:     0x55aef728862c - core::fmt::rt::Argument::fmt::h4c6b6c3e0f65b4f1
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/core/src/fmt/rt.rs:142:9
-   5:     0x55aef728862c - core::fmt::write::h361c1f46d14a47aa
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/core/src/fmt/mod.rs:1120:17
-   6:     0x55aef726921f - std::io::Write::write_fmt::h50b711f125b80c24
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/io/mod.rs:1846:15
-   7:     0x55aef726ae04 - std::sys_common::backtrace::_print::hb7c6965646d03340
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/sys_common/backtrace.rs:47:5
-   8:     0x55aef726ae04 - std::sys_common::backtrace::print::h2d4726478ed3fcc3
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/sys_common/backtrace.rs:34:9
-   9:     0x55aef726c2eb - std::panicking::default_hook::{{closure}}::h349609a89998c39e
-  10:     0x55aef726c047 - std::panicking::default_hook::h56f95df654325ad9
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/panicking.rs:292:9
-  11:     0x55aef726c78d - std::panicking::rust_panic_with_hook::h98b728a1b3f62701
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/panicking.rs:779:13
-  12:     0x55aef726c629 - std::panicking::begin_panic_handler::{{closure}}::h3998c72d5aeca2ca
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/panicking.rs:649:13
-  13:     0x55aef726b536 - std::sys_common::backtrace::__rust_end_short_backtrace::h4da7fe95a2aa1e6f
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/sys_common/backtrace.rs:171:18
-  14:     0x55aef726c394 - rust_begin_unwind
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/panicking.rs:645:5
-  15:     0x55aef724ef35 - core::panicking::panic_fmt::h9fa2a341c4c930d8
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/core/src/panicking.rs:72:14
-  16:     0x55aef7250826 - proc_macro::bridge::client::Bridge::with::{{closure}}::hd516f57216b515c4
-  17:     0x55aef7250826 - proc_macro::bridge::scoped_cell::ScopedCell<T>::replace::hf2efc056689a8cba
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/proc_macro/src/bridge/scoped_cell.rs:57:9
-  18:     0x55aef7250826 - proc_macro::bridge::client::BridgeState::with::{{closure}}::h04d2d8bcd1f2a187
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/proc_macro/src/bridge/client.rs:299:35
-  19:     0x55aef7250826 - std::thread::local::LocalKey<T>::try_with::h3f64734395a366c6
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/thread/local.rs:284:16
-  20:     0x55aef7250826 - std::thread::local::LocalKey<T>::with::h2aed898065996828
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/thread/local.rs:260:9
-  21:     0x55aef7250826 - proc_macro::bridge::client::BridgeState::with::h654ce879124d4391
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/proc_macro/src/bridge/client.rs:299:22
-  22:     0x55aef7250826 - proc_macro::bridge::client::Bridge::with::hbb4e32cd58f5b3f7
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/proc_macro/src/bridge/client.rs:305:9
-  23:     0x55aef7250826 - proc_macro::bridge::client::Span::call_site::h26d31f8f783cd721
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/proc_macro/src/bridge/client.rs:209:9
-  24:     0x55aef7250826 - proc_macro::Span::call_site::h4939b897b279b29c
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/proc_macro/src/lib.rs:472:14
-  25:     0x55aef724fd87 - proc_macro2::imp::nightly_works::{{closure}}::hdfc185f5e7180b88
-                               at /home/lhw/rusttest/lib-proc-macro2/proc-macro2-1/proc-macro2-b07f847a3eb263a9768927187732cdd9c39c1fe8/src/unstable.rs:33:40
-  26:     0x55aef724fc42 - std::panicking::try::do_call::h104186df04427475
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/panicking.rs:552:40
-  27:     0x55aef724fcfb - __rust_try
-  28:     0x55aef724fbcf - std::panicking::try::h567e55d5dd9ba1c6
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/panicking.rs:516:19
-  29:     0x55aef724fd72 - std::panic::catch_unwind::h47ab9dfcc8815fdf
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/panic.rs:146:14
-  30:     0x55aef724fa9a - proc_macro2::imp::nightly_works::hfb655ae79fb43a7b
-                               at /home/lhw/rusttest/lib-proc-macro2/proc-macro2-1/proc-macro2-b07f847a3eb263a9768927187732cdd9c39c1fe8/src/unstable.rs:33:17
-  31:     0x55aef724fb77 - proc_macro2::imp::Span::call_site::h6109b7fa3c4d3ad3
-                               at /home/lhw/rusttest/lib-proc-macro2/proc-macro2-1/proc-macro2-b07f847a3eb263a9768927187732cdd9c39c1fe8/src/unstable.rs:354:12
-  32:     0x55aef724f866 - proc_macro2::Span::call_site::h02cf6f09acb5cac7
-                               at /home/lhw/rusttest/lib-proc-macro2/proc-macro2-1/proc-macro2-b07f847a3eb263a9768927187732cdd9c39c1fe8/src/lib.rs:301:20
-  33:     0x55aef724f71a - proc_macro2_1::main::ha1f5c916122fbadb
-                               at /home/lhw/rusttest/lib-proc-macro2/proc-macro2-1/src/main.rs:2:5
-  34:     0x55aef724f60b - core::ops::function::FnOnce::call_once::h65562c7fe40f1ff7
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/core/src/ops/function.rs:250:5
-  35:     0x55aef724f76e - std::sys_common::backtrace::__rust_begin_short_backtrace::h2323bd60f888e294
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/sys_common/backtrace.rs:155:18
-  36:     0x55aef724f7e1 - std::rt::lang_start::{{closure}}::hbe8951826155dc29
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/rt.rs:166:18
-  37:     0x55aef7266de3 - core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once::h6f266cd01c1c1b78
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/core/src/ops/function.rs:284:13
-  38:     0x55aef7266de3 - std::panicking::try::do_call::h3c009bec9c3f900f
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/panicking.rs:552:40
-  39:     0x55aef7266de3 - std::panicking::try::h18c32ff081194e17
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/panicking.rs:516:19
-  40:     0x55aef7266de3 - std::panic::catch_unwind::h9ae5fab1cd9ef444
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/panic.rs:146:14
-  41:     0x55aef7266de3 - std::rt::lang_start_internal::{{closure}}::h55a90dafdb9d964a
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/rt.rs:148:48
-  42:     0x55aef7266de3 - std::panicking::try::do_call::h7ed9db1b4a9d4be6
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/panicking.rs:552:40
-  43:     0x55aef7266de3 - std::panicking::try::heec45cf070229609
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/panicking.rs:516:19
-  44:     0x55aef7266de3 - std::panic::catch_unwind::h614326bf9f3546ff
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/panic.rs:146:14
-  45:     0x55aef7266de3 - std::rt::lang_start_internal::h422f7dc070921016
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/rt.rs:148:20
-  46:     0x55aef724f7ba - std::rt::lang_start::hfe33f71ee5469f95
-                               at /rustc/878c8a2a62d49ca5c454547ad67290a1df746cb5/library/std/src/rt.rs:165:17
-  47:     0x55aef724f75e - main
-  48:     0x7f4329c81083 - __libc_start_main
-                               at /build/glibc-wuryBv/glibc-2.31/csu/../csu/libc-start.c:308:16
-  49:     0x55aef724f51e - _start
-  50:                0x0 - <unknown>
+   0:     0x577c2d5f76c0 - <std::sys::backtrace::_print::DisplayBacktrace as core::fmt::Display>::fmt::ha3fd8ac48be20882
+   1:     0x577c2d61152b - core::fmt::write::h4e26e0ecfdae25c2
+   2:     0x577c2d5ebcd9 - std::io::Write::write_fmt::heb5d33e25fc97cc9
+   3:     0x577c2d5f747e - std::sys::backtrace::print::h550118c7ec714c84
+   4:     0x577c2d60103a - std::panicking::default_hook::{{closure}}::h5e1b23aab6d944e3
+   5:     0x577c2d600d62 - std::panicking::default_hook::h7a9473f298eaba34
+   6:     0x577c2d6014c8 - std::panicking::rust_panic_with_hook::h83a1d1b3201195e0
+   7:     0x577c2d5f7a97 - std::panicking::begin_panic_handler::{{closure}}::h16f0b30c3ec46ca8
+   8:     0x577c2d5f78d9 - std::sys::backtrace::__rust_end_short_backtrace::h90548f2ce3086294
+   9:     0x577c2d601124 - rust_begin_unwind
+  10:     0x577c2d6124e3 - core::panicking::panic_fmt::h04a703978d894a1d
+  11:     0x577c2d6163cb - core::option::expect_failed::hb24d05b2ecfa6f87
+  12:     0x577c2d5d2f1f - proc_macro::Span::call_site::h2415951532e99536
+  13:     0x577c2d5d2857 - proc_macro2::imp::nightly_works::{{closure}}::hc09a4b67a8c2a42c
+                               at /home/sigger/Documents/panic4r/panic4r/lib-proc-macro2/proc-macro2-1/proc-macro2-b07f847a3eb263a9768927187732cdd9c39c1fe8/src/unstable.rs:33:40
+  14:     0x577c2d5d2891 - std::panicking::try::do_call::hb78261ca249924d9
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/std/src/panicking.rs:553:40
+  15:     0x577c2d5d2e6b - __rust_try
+  16:     0x577c2d5d2dff - std::panicking::try::hbe7948b8cdb2414e
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/std/src/panicking.rs:517:19
+  17:     0x577c2d5d2dff - std::panic::catch_unwind::h8ab9948e20942c7d
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/std/src/panic.rs:350:14
+  18:     0x577c2d5d29ea - proc_macro2::imp::nightly_works::h509758b768bcc2b0
+                               at /home/sigger/Documents/panic4r/panic4r/lib-proc-macro2/proc-macro2-1/proc-macro2-b07f847a3eb263a9768927187732cdd9c39c1fe8/src/unstable.rs:33:17
+  19:     0x577c2d5d2ab7 - proc_macro2::imp::Span::call_site::hde21ab42fb8ace88
+                               at /home/sigger/Documents/panic4r/panic4r/lib-proc-macro2/proc-macro2-1/proc-macro2-b07f847a3eb263a9768927187732cdd9c39c1fe8/src/unstable.rs:354:12
+  20:     0x577c2d5d26e6 - proc_macro2::Span::call_site::hfc2eeaa704933887
+                               at /home/sigger/Documents/panic4r/panic4r/lib-proc-macro2/proc-macro2-1/proc-macro2-b07f847a3eb263a9768927187732cdd9c39c1fe8/src/lib.rs:301:20
+  21:     0x577c2d5d24da - proc_macro2_1::main::hd2cfd382ccf6f6d7
+                               at /home/sigger/Documents/panic4r/panic4r/lib-proc-macro2/proc-macro2-1/src/main.rs:2:5
+  22:     0x577c2d5d254b - core::ops::function::FnOnce::call_once::h0df1c21dbafa416e
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/core/src/ops/function.rs:250:5
+  23:     0x577c2d5d262e - std::sys::backtrace::__rust_begin_short_backtrace::h3d0ade0244fe3cee
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/std/src/sys/backtrace.rs:155:18
+  24:     0x577c2d5d2601 - std::rt::lang_start::{{closure}}::h463c8b26bebaf068
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/std/src/rt.rs:159:18
+  25:     0x577c2d6003f5 - std::rt::lang_start_internal::hf1ebab5f3c7c0266
+  26:     0x577c2d5d25da - std::rt::lang_start::hbf726448a13d6fcc
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/std/src/rt.rs:158:17
+  27:     0x577c2d5d251e - main
+  28:     0x756382e29d90 - __libc_start_call_main
+                               at ./csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+  29:     0x756382e29e40 - __libc_start_main_impl
+                               at ./csu/../csu/libc-start.c:392:3
+  30:     0x577c2d5d2405 - _start
+  31:                0x0 - <unknown>
