@@ -1,73 +1,298 @@
-From cfb827ad3cdefc4d3404793132e13463e7883f94 Mon Sep 17 00:00:00 2001
-From: Taiki Endo <te316e89@gmail.com>
-Date: Sat, 24 Oct 2020 02:13:55 +0900
-Subject: [PATCH] Fix unsoundness in MappedMutexGuard (#2240)
+From 8f1e79e516e4930a33cf3b5b6ed41f0de80b6d46 Mon Sep 17 00:00:00 2001
+From: Sam Rijs <srijs@airpost.net>
+Date: Tue, 18 Apr 2017 19:45:10 +1000
+Subject: [PATCH] implement Stream::concat2
 
-See #2239
 ---
- futures-util/src/lock/mutex.rs | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+ src/stream/concat.rs | 129 ++++++++++++++++++++++++++++++++++++-------
+ src/stream/mod.rs    |  48 ++++++++++++++--
+ tests/stream.rs      |  14 ++++-
+ 3 files changed, 165 insertions(+), 26 deletions(-)
 
-diff --git a/futures-util/src/lock/mutex.rs b/futures-util/src/lock/mutex.rs
-index 96549eac..84aeedaa 100644
---- a/futures-util/src/lock/mutex.rs
-+++ b/futures-util/src/lock/mutex.rs
-@@ -3,15 +3,16 @@ use futures_core::task::{Context, Poll, Waker};
- use slab::Slab;
- use std::{fmt, mem};
- use std::cell::UnsafeCell;
-+use std::marker::PhantomData;
- use std::ops::{Deref, DerefMut};
- use std::pin::Pin;
- use std::sync::Mutex as StdMutex;
- use std::sync::atomic::{AtomicUsize, Ordering};
+diff --git a/src/stream/concat.rs b/src/stream/concat.rs
+index 7ee0af98..1a1dedd9 100644
+--- a/src/stream/concat.rs
++++ b/src/stream/concat.rs
+@@ -1,4 +1,6 @@
+ use core::mem;
++use core::fmt::{Debug, Formatter, Result as FmtResult};
++use core::default::Default;
  
- /// A futures-aware mutex.
--/// 
+ use {Poll, Async};
+ use future::Future;
+@@ -8,13 +10,67 @@ use stream::Stream;
+ /// yielded item.
+ ///
+ /// This structure is produced by the `Stream::concat` method.
+-#[derive(Debug)]
++#[must_use = "streams do nothing unless polled"]
++pub struct Concat2<S>
++    where S: Stream,
++{
++    inner: ConcatSafe<S>
++}
++
++impl<S: Debug> Debug for Concat2<S> where S: Stream, S::Item: Debug {
++    fn fmt(&self, fmt: &mut Formatter) -> FmtResult {
++        fmt.debug_struct("Concat2")
++            .field("inner", &self.inner)
++            .finish()
++    }
++}
++
++pub fn new2<S>(s: S) -> Concat2<S>
++    where S: Stream,
++          S::Item: Extend<<<S as Stream>::Item as IntoIterator>::Item> + IntoIterator + Default,
++{
++    Concat2 {
++        inner: new_safe(s)
++    }
++}
++
++impl<S> Future for Concat2<S>
++    where S: Stream,
++          S::Item: Extend<<<S as Stream>::Item as IntoIterator>::Item> + IntoIterator + Default,
++
++{
++    type Item = S::Item;
++    type Error = S::Error;
++
++    fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
++        self.inner.poll().map(|a| {
++            match a {
++                Async::NotReady => Async::NotReady,
++                Async::Ready(None) => Async::Ready(Default::default()),
++                Async::Ready(Some(e)) => Async::Ready(e)
++            }
++        })
++    }
++}
++
++
++/// A stream combinator to concatenate the results of a stream into the first
++/// yielded item.
 +///
- /// # Fairness
--/// 
-+///
- /// This mutex provides no fairness guarantees. Tasks may not acquire the mutex
- /// in the order that they requested the lock, and it's possible for a single task
- /// which repeatedly takes the lock to starve other tasks, which may be left waiting
-@@ -288,7 +289,7 @@ impl<'a, T: ?Sized> MutexGuard<'a, T> {
-         // Don't run the `drop` method for MutexGuard. The ownership of the underlying
-         // locked state is being moved to the returned MappedMutexGuard.
-         mem::forget(this);
--        MappedMutexGuard { mutex, value }
-+        MappedMutexGuard { mutex, value, _marker: PhantomData }
++/// This structure is produced by the `Stream::concat` method.
+ #[must_use = "streams do nothing unless polled"]
+ pub struct Concat<S>
+     where S: Stream,
+ {
+-    stream: S,
+-    extend: Inner<S::Item>,
++    inner: ConcatSafe<S>
++}
++
++impl<S: Debug> Debug for Concat<S> where S: Stream, S::Item: Debug {
++    fn fmt(&self, fmt: &mut Formatter) -> FmtResult {
++        fmt.debug_struct("Concat")
++            .field("inner", &self.inner)
++            .finish()
++    }
+ }
+ 
+ pub fn new<S>(s: S) -> Concat<S>
+@@ -22,8 +78,7 @@ pub fn new<S>(s: S) -> Concat<S>
+           S::Item: Extend<<<S as Stream>::Item as IntoIterator>::Item> + IntoIterator,
+ {
+     Concat {
+-        stream: s,
+-        extend: Inner::First,
++        inner: new_safe(s)
      }
  }
  
-@@ -325,6 +326,7 @@ impl<T: ?Sized> DerefMut for MutexGuard<'_, T> {
- pub struct MappedMutexGuard<'a, T: ?Sized, U: ?Sized> {
-     mutex: &'a Mutex<T>,
-     value: *mut U,
-+    _marker: PhantomData<&'a mut U>,
- }
+@@ -35,6 +90,44 @@ impl<S> Future for Concat<S>
+     type Item = S::Item;
+     type Error = S::Error;
  
- impl<'a, T: ?Sized, U: ?Sized> MappedMutexGuard<'a, T, U> {
-@@ -354,7 +356,7 @@ impl<'a, T: ?Sized, U: ?Sized> MappedMutexGuard<'a, T, U> {
-         // Don't run the `drop` method for MappedMutexGuard. The ownership of the underlying
-         // locked state is being moved to the returned MappedMutexGuard.
-         mem::forget(this);
--        MappedMutexGuard { mutex, value }
-+        MappedMutexGuard { mutex, value, _marker: PhantomData }
++    fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
++        self.inner.poll().map(|a| {
++            match a {
++                Async::NotReady => Async::NotReady,
++                Async::Ready(None) => panic!("attempted concatenation of empty stream"),
++                Async::Ready(Some(e)) => Async::Ready(e)
++            }
++        })
++    }
++}
++
++
++#[derive(Debug)]
++struct ConcatSafe<S>
++    where S: Stream,
++{
++    stream: S,
++    extend: Inner<S::Item>,
++}
++
++fn new_safe<S>(s: S) -> ConcatSafe<S>
++    where S: Stream,
++          S::Item: Extend<<<S as Stream>::Item as IntoIterator>::Item> + IntoIterator,
++{
++    ConcatSafe {
++        stream: s,
++        extend: Inner::First,
++    }
++}
++
++impl<S> Future for ConcatSafe<S>
++    where S: Stream,
++          S::Item: Extend<<<S as Stream>::Item as IntoIterator>::Item> + IntoIterator,
++
++{
++    type Item = Option<S::Item>;
++    type Error = S::Error;
++
+     fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
+         loop {
+             match self.stream.poll() {
+@@ -49,10 +142,16 @@ impl<S> Future for Concat<S>
+                         Inner::Done => unreachable!(),
+                     }
+                 },
+-                Ok(Async::Ready(None)) => return Ok(Async::Ready(expect(self.extend.take()))),
++                Ok(Async::Ready(None)) => {
++                    match mem::replace(&mut self.extend, Inner::Done) {
++                        Inner::First => return Ok(Async::Ready(None)),
++                        Inner::Extending(e) => return Ok(Async::Ready(Some(e))),
++                        Inner::Done => panic!("cannot poll Concat again")
++                    }
++                },
+                 Ok(Async::NotReady) => return Ok(Async::NotReady),
+                 Err(e) => {
+-                    self.extend.take();
++                    self.extend = Inner::Done;
+                     return Err(e)
+                 }
+             }
+@@ -60,22 +159,10 @@ impl<S> Future for Concat<S>
      }
  }
  
-@@ -401,8 +403,8 @@ unsafe impl<T: ?Sized> Sync for MutexLockFuture<'_, T> {}
- // lock is essentially spinlock-equivalent (attempt to flip an atomic bool)
- unsafe impl<T: ?Sized + Send> Send for MutexGuard<'_, T> {}
- unsafe impl<T: ?Sized + Sync> Sync for MutexGuard<'_, T> {}
--unsafe impl<T: ?Sized + Send, U: ?Sized> Send for MappedMutexGuard<'_, T, U> {}
--unsafe impl<T: ?Sized + Sync, U: ?Sized> Sync for MappedMutexGuard<'_, T, U> {}
-+unsafe impl<T: ?Sized + Send, U: ?Sized + Send> Send for MappedMutexGuard<'_, T, U> {}
-+unsafe impl<T: ?Sized + Sync, U: ?Sized + Sync> Sync for MappedMutexGuard<'_, T, U> {}
++
+ #[derive(Debug)]
+ enum Inner<E> {
+     First,
+     Extending(E),
+     Done,
+-}
+-
+-impl<E> Inner<E> {
+-    fn take(&mut self) -> Option<E> {
+-        match mem::replace(self, Inner::Done) {
+-            Inner::Extending(e) => Some(e),
+-            _ => None,
+-        }
+-    }
+-}
+-
+-fn expect<T>(opt: Option<T>) -> T {
+-    opt.expect("cannot poll Concat again")
+-}
++}
+\ No newline at end of file
+diff --git a/src/stream/mod.rs b/src/stream/mod.rs
+index c6d114a7..a0e50e57 100755
+--- a/src/stream/mod.rs
++++ b/src/stream/mod.rs
+@@ -54,7 +54,7 @@ mod zip;
+ mod forward;
+ pub use self::and_then::AndThen;
+ pub use self::chain::Chain;
+-pub use self::concat::Concat;
++pub use self::concat::{Concat, Concat2};
+ pub use self::empty::{Empty, empty};
+ pub use self::filter::Filter;
+ pub use self::filter_map::FilterMap;
+@@ -540,9 +540,48 @@ pub trait Stream {
+     /// destination, returning a future representing the end result.
+     ///
+     /// This combinator will extend the first item with the contents
+-    /// of all the successful results of the stream. If an error
+-    /// occurs, all the results will be dropped and the error will be
+-    /// returned.
++    /// of all the successful results of the stream. If the stream is
++    /// empty, the default value will be returned. If an error occurs,
++    /// all the results will be dropped and the error will be returned.
++    ///
++    /// The name `concat2` is an intermediate measure until the release of
++    /// futures 0.2, at which point it will be renamed back to `concat`.
++    ///
++    /// # Examples
++    ///
++    /// ```
++    /// use std::thread;
++    ///
++    /// use futures::{Future, Sink, Stream};
++    /// use futures::sync::mpsc;
++    ///
++    /// let (mut tx, rx) = mpsc::channel(1);
++    ///
++    /// thread::spawn(move || {
++    ///     for i in (0..3).rev() {
++    ///         let n = i * 3;
++    ///         tx = tx.send(vec![n + 1, n + 2, n + 3]).wait().unwrap();
++    ///     }
++    /// });
++    /// let result = rx.concat2();
++    /// assert_eq!(result.wait(), Ok(vec![7, 8, 9, 4, 5, 6, 1, 2, 3]));
++    /// ```
++    fn concat2(self) -> Concat2<Self>
++        where Self: Sized,
++              Self::Item: Extend<<<Self as Stream>::Item as IntoIterator>::Item> + IntoIterator + Default,
++    {
++        concat::new2(self)
++    }
++
++    /// Concatenate all results of a stream into a single extendable
++    /// destination, returning a future representing the end result.
++    ///
++    /// This combinator will extend the first item with the contents
++    /// of all the successful results of the stream. If an error occurs,
++    /// all the results will be dropped and the error will be returned.
++    ///
++    /// It's important to note that this function will panic if the stream
++    /// is empty, which is the reason for its deprecation.
+     ///
+     /// # Examples
+     ///
+@@ -563,6 +602,7 @@ pub trait Stream {
+     /// let result = rx.concat();
+     /// assert_eq!(result.wait(), Ok(vec![7, 8, 9, 4, 5, 6, 1, 2, 3]));
+     /// ```
++    #[deprecated(since="0.1.14", note="please use `Stream::concat2` instead")]
+     fn concat(self) -> Concat<Self>
+         where Self: Sized,
+               Self::Item: Extend<<<Self as Stream>::Item as IntoIterator>::Item> + IntoIterator,
+diff --git a/tests/stream.rs b/tests/stream.rs
+index ea32b2e9..2a776dd2 100644
+--- a/tests/stream.rs
++++ b/tests/stream.rs
+@@ -4,7 +4,7 @@ extern crate futures;
+ use futures::{Poll, Future, Stream, Sink};
+ use futures::executor;
+ use futures::future::{ok, err};
+-use futures::stream::{iter, Peekable, BoxStream};
++use futures::stream::{empty, iter, Peekable, BoxStream};
+ use futures::sync::oneshot;
+ use futures::sync::mpsc;
  
- #[test]
- fn test_mutex_guard_debug_not_recurse() {
+@@ -344,3 +344,15 @@ fn concat() {
+     let b = iter(vec![Ok::<_, ()>(vec![1, 2, 3]), Err(()), Ok(vec![7, 8, 9])]);
+     assert_done(move || b.concat(), Err(()));
+ }
++
++#[test]
++fn concat2() {
++    let a = iter(vec![Ok::<_, ()>(vec![1, 2, 3]), Ok(vec![4, 5, 6]), Ok(vec![7, 8, 9])]);
++    assert_done(move || a.concat2(), Ok(vec![1, 2, 3, 4, 5, 6, 7, 8, 9]));
++
++    let b = iter(vec![Ok::<_, ()>(vec![1, 2, 3]), Err(()), Ok(vec![7, 8, 9])]);
++    assert_done(move || b.concat2(), Err(()));
++
++    let c = empty::<Vec<()>, ()>();
++    assert_done(move || c.concat2(), Ok(vec![]))
++}
 -- 
 2.34.1
 

@@ -1,84 +1,108 @@
-From e14824406ddef7d73c44d413cad73df5c0ab70e3 Mon Sep 17 00:00:00 2001
+From 76672516d3e82cde655fc924b5df6c2ae8d7a778 Mon Sep 17 00:00:00 2001
 From: Taiki Endo <te316e89@gmail.com>
-Date: Sat, 18 Dec 2021 23:15:25 +0900
-Subject: [PATCH] Revert "Remove implicit clear in `ReadyToRunQueue::drop`
- (#2493)"
+Date: Mon, 2 Nov 2020 01:38:00 +0900
+Subject: [PATCH] Fix panic in some TryStreamExt combinators (#2250)
 
-This reverts commit 37dfb05b6c9414ede608d61e4c4507cd7c148038.
 ---
- .../src/stream/futures_unordered/mod.rs       | 21 ++++++++++++++++---
- .../futures_unordered/ready_to_run_queue.rs   | 15 ++++++++++++-
- 2 files changed, 32 insertions(+), 4 deletions(-)
+ .../src/stream/try_stream/try_filter_map.rs   |  3 +-
+ .../src/stream/try_stream/try_skip_while.rs   |  5 ++-
+ .../src/stream/try_stream/try_take_while.rs   |  5 ++-
+ futures/tests/try_stream.rs                   | 38 +++++++++++++++++++
+ 4 files changed, 46 insertions(+), 5 deletions(-)
+ create mode 100644 futures/tests/try_stream.rs
 
-diff --git a/futures-util/src/stream/futures_unordered/mod.rs b/futures-util/src/stream/futures_unordered/mod.rs
-index 6918a26b..4a05d882 100644
---- a/futures-util/src/stream/futures_unordered/mod.rs
-+++ b/futures-util/src/stream/futures_unordered/mod.rs
-@@ -558,7 +558,7 @@ impl<Fut> FuturesUnordered<Fut> {
-     pub fn clear(&mut self) {
-         self.clear_head_all();
+diff --git a/futures-util/src/stream/try_stream/try_filter_map.rs b/futures-util/src/stream/try_stream/try_filter_map.rs
+index 6c1e48fd..b02e9ee2 100644
+--- a/futures-util/src/stream/try_stream/try_filter_map.rs
++++ b/futures-util/src/stream/try_stream/try_filter_map.rs
+@@ -66,8 +66,9 @@ impl<St, Fut, F, T> Stream for TryFilterMap<St, Fut, F>
+         Poll::Ready(loop {
+             if let Some(p) = this.pending.as_mut().as_pin_mut() {
+                 // We have an item in progress, poll that until it's done
+-                let item = ready!(p.try_poll(cx)?);
++                let res = ready!(p.try_poll(cx));
+                 this.pending.set(None);
++                let item = res?;
+                 if item.is_some() {
+                     break item.map(Ok);
+                 }
+diff --git a/futures-util/src/stream/try_stream/try_skip_while.rs b/futures-util/src/stream/try_stream/try_skip_while.rs
+index 35759d04..b359ae79 100644
+--- a/futures-util/src/stream/try_stream/try_skip_while.rs
++++ b/futures-util/src/stream/try_stream/try_skip_while.rs
+@@ -74,9 +74,10 @@ impl<St, Fut, F> Stream for TrySkipWhile<St, Fut, F>
  
--        // SAFETY: we just cleared all the tasks and we have &mut self
-+        // we just cleared all the tasks, and we have &mut self, so this is safe.
-         unsafe { self.ready_to_run_queue.clear() };
+         Poll::Ready(loop {
+             if let Some(fut) = this.pending_fut.as_mut().as_pin_mut() {
+-                let skipped = ready!(fut.try_poll(cx)?);
+-                let item = this.pending_item.take();
++                let res = ready!(fut.try_poll(cx));
+                 this.pending_fut.set(None);
++                let skipped = res?;
++                let item = this.pending_item.take();
+                 if !skipped {
+                     *this.done_skipping = true;
+                     break item.map(Ok);
+diff --git a/futures-util/src/stream/try_stream/try_take_while.rs b/futures-util/src/stream/try_stream/try_take_while.rs
+index 16bfb204..e1ffffd4 100644
+--- a/futures-util/src/stream/try_stream/try_take_while.rs
++++ b/futures-util/src/stream/try_stream/try_take_while.rs
+@@ -76,9 +76,10 @@ where
  
-         self.is_terminated.store(false, Relaxed);
-@@ -575,9 +575,24 @@ impl<Fut> FuturesUnordered<Fut> {
- 
- impl<Fut> Drop for FuturesUnordered<Fut> {
-     fn drop(&mut self) {
-+        // When a `FuturesUnordered` is dropped we want to drop all futures
-+        // associated with it. At the same time though there may be tons of
-+        // wakers flying around which contain `Task<Fut>` references
-+        // inside them. We'll let those naturally get deallocated.
-         self.clear_head_all();
--        // SAFETY: we just cleared all the tasks and we have &mut self
--        unsafe { self.ready_to_run_queue.clear() };
+         Poll::Ready(loop {
+             if let Some(fut) = this.pending_fut.as_mut().as_pin_mut() {
+-                let take = ready!(fut.try_poll(cx)?);
+-                let item = this.pending_item.take();
++                let res = ready!(fut.try_poll(cx));
+                 this.pending_fut.set(None);
++                let take = res?;
++                let item = this.pending_item.take();
+                 if take {
+                     break item.map(Ok);
+                 } else {
+diff --git a/futures/tests/try_stream.rs b/futures/tests/try_stream.rs
+new file mode 100644
+index 00000000..194e74db
+--- /dev/null
++++ b/futures/tests/try_stream.rs
+@@ -0,0 +1,38 @@
++use futures::{
++    stream::{self, StreamExt, TryStreamExt},
++    task::Poll,
++};
++use futures_test::task::noop_context;
 +
-+        // Note that at this point we could still have a bunch of tasks in the
-+        // ready to run queue. None of those tasks, however, have futures
-+        // associated with them so they're safe to destroy on any thread. At
-+        // this point the `FuturesUnordered` struct, the owner of the one strong
-+        // reference to the ready to run queue will drop the strong reference.
-+        // At that point whichever thread releases the strong refcount last (be
-+        // it this thread or some other thread as part of an `upgrade`) will
-+        // clear out the ready to run queue and free all remaining tasks.
-+        //
-+        // While that freeing operation isn't guaranteed to happen here, it's
-+        // guaranteed to happen "promptly" as no more "blocking work" will
-+        // happen while there's a strong refcount held.
-     }
- }
- 
-diff --git a/futures-util/src/stream/futures_unordered/ready_to_run_queue.rs b/futures-util/src/stream/futures_unordered/ready_to_run_queue.rs
-index 2bc20868..5ef6cde8 100644
---- a/futures-util/src/stream/futures_unordered/ready_to_run_queue.rs
-+++ b/futures-util/src/stream/futures_unordered/ready_to_run_queue.rs
-@@ -94,7 +94,7 @@ impl<Fut> ReadyToRunQueue<Fut> {
-     //
-     // # Safety
-     //
--    // - All tasks **must** have had their futures dropped already (by FuturesUnordered::clear_head_all)
-+    // - All tasks **must** have had their futures dropped already (by FuturesUnordered::clear)
-     // - The caller **must** guarantee unique access to `self`
-     pub(crate) unsafe fn clear(&self) {
-         loop {
-@@ -107,3 +107,16 @@ impl<Fut> ReadyToRunQueue<Fut> {
-         }
-     }
- }
++#[test]
++fn try_filter_map_after_err() {
++    let cx = &mut noop_context();
++    let mut s = stream::iter(1..=3)
++        .map(Ok)
++        .try_filter_map(|v| async move { Err::<Option<()>, _>(v) })
++        .filter_map(|r| async move { r.ok() })
++        .boxed();
++    assert_eq!(Poll::Ready(None), s.poll_next_unpin(cx));
++}
 +
-+impl<Fut> Drop for ReadyToRunQueue<Fut> {
-+    fn drop(&mut self) {
-+        // Once we're in the destructor for `Inner<Fut>` we need to clear out
-+        // the ready to run queue of tasks if there's anything left in there.
++#[test]
++fn try_skip_while_after_err() {
++    let cx = &mut noop_context();
++    let mut s = stream::iter(1..=3)
++        .map(Ok)
++        .try_skip_while(|_| async move { Err::<_, ()>(()) })
++        .filter_map(|r| async move { r.ok() })
++        .boxed();
++    assert_eq!(Poll::Ready(None), s.poll_next_unpin(cx));
++}
 +
-+        // All tasks have had their futures dropped already by the `FuturesUnordered`
-+        // destructor above, and we have &mut self, so this is safe.
-+        unsafe {
-+            self.clear();
-+        }
-+    }
++#[test]
++fn try_take_while_after_err() {
++    let cx = &mut noop_context();
++    let mut s = stream::iter(1..=3)
++        .map(Ok)
++        .try_take_while(|_| async move { Err::<_, ()>(()) })
++        .filter_map(|r| async move { r.ok() })
++        .boxed();
++    assert_eq!(Poll::Ready(None), s.poll_next_unpin(cx));
 +}
 -- 
 2.34.1

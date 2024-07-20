@@ -1,7 +1,8 @@
 [package]
-name = "futures-2"
+name = "futures-3"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-futures={path="futures-rs-9ec770782cf2e98c93ee43f9568088396687b05b/futures"}
+futures = {path="futures-rs-5073eb9729d4d812f6ee4a42529bbc1c928b1a10/futures"}
+tokio = { version = "=1.14.0", features = ["rt-multi-thread", "sync", "macros","time"] }

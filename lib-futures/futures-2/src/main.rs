@@ -1,9 +1,24 @@
-use futures::stream::FuturesUnordered;
-use std::future::ready;
+use futures::stream::{FuturesUnordered, StreamExt};
+ 
+async fn run_loop() {
+    async fn test() {
+        tokio::spawn(async {
+            tokio::time::sleep(std::time::Duration::from_millis(1)).await;
+        })
+        .await
+        .unwrap();
+    }
+    loop {
+        let mut futures = FuturesUnordered::new();
+        for _ in 0..4 {
+            futures.push(test());
+        }
+        let _ = futures.next().await;
+        drop(futures);
+    }
+}
 
-fn main() {
-    let _ = FuturesUnordered::from_iter(vec![ready(1), ready(2), ready(3), ready(4)])
-        .into_iter()
-        .take(3)
-        .count();
+#[tokio::main]
+async fn main() {
+    run_loop().await
 }

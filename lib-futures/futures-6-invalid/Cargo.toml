@@ -1,8 +1,0 @@
-[package]
-name = "futures-6"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-futures = {path="futures-rs-4e411a8795471ba4ecb689784f3d16d19ca5cede"}
-tokio-core = "0.1.18"

@@ -1,65 +1,85 @@
-From 391d89ef64f558a1f0caf88e62b27357f536cb97 Mon Sep 17 00:00:00 2001
-From: Bill Fraser <bill.fraser@gmail.com>
-Date: Wed, 23 Feb 2022 04:22:06 -0800
-Subject: [PATCH] FuturesUnordered: fix partial iteration (#2574)
+From e14824406ddef7d73c44d413cad73df5c0ab70e3 Mon Sep 17 00:00:00 2001
+From: Taiki Endo <te316e89@gmail.com>
+Date: Sat, 18 Dec 2021 23:15:25 +0900
+Subject: [PATCH] Revert "Remove implicit clear in `ReadyToRunQueue::drop`
+ (#2493)"
 
-The IntoIter impl advances the head pointer every iteration, but this breaks the linked list invariant that the head's prev should be null.
-
-If the iteration is not done to completion, on subsequent drop, FuturesUnordered::unlink relies on this broken invariant and ends up panicking.
-
-The fix is to maintain the `head->prev == null` invariant while iterating. Also added a test for this bug.
+This reverts commit 37dfb05b6c9414ede608d61e4c4507cd7c148038.
 ---
- futures-util/src/stream/futures_unordered/iter.rs |  4 ++++
- futures/tests/stream_futures_unordered.rs         | 14 ++++++++++++++
- 2 files changed, 18 insertions(+)
+ .../src/stream/futures_unordered/mod.rs       | 21 ++++++++++++++++---
+ .../futures_unordered/ready_to_run_queue.rs   | 15 ++++++++++++-
+ 2 files changed, 32 insertions(+), 4 deletions(-)
 
-diff --git a/futures-util/src/stream/futures_unordered/iter.rs b/futures-util/src/stream/futures_unordered/iter.rs
-index 04db5ee7..20248c70 100644
---- a/futures-util/src/stream/futures_unordered/iter.rs
-+++ b/futures-util/src/stream/futures_unordered/iter.rs
-@@ -2,6 +2,7 @@ use super::task::Task;
- use super::FuturesUnordered;
- use core::marker::PhantomData;
- use core::pin::Pin;
-+use core::ptr;
- use core::sync::atomic::Ordering::Relaxed;
+diff --git a/futures-util/src/stream/futures_unordered/mod.rs b/futures-util/src/stream/futures_unordered/mod.rs
+index 6918a26b..4a05d882 100644
+--- a/futures-util/src/stream/futures_unordered/mod.rs
++++ b/futures-util/src/stream/futures_unordered/mod.rs
+@@ -558,7 +558,7 @@ impl<Fut> FuturesUnordered<Fut> {
+     pub fn clear(&mut self) {
+         self.clear_head_all();
  
- /// Mutable iterator over all futures in the unordered set.
-@@ -58,6 +59,9 @@ impl<Fut: Unpin> Iterator for IntoIter<Fut> {
-             // valid `next_all` checks can be skipped.
-             let next = (**task).next_all.load(Relaxed);
-             *task = next;
-+            if !task.is_null() {
-+                *(**task).prev_all.get() = ptr::null_mut();
-+            }
-             self.len -= 1;
-             Some(future)
-         }
-diff --git a/futures/tests/stream_futures_unordered.rs b/futures/tests/stream_futures_unordered.rs
-index 8ddd62f4..844f1325 100644
---- a/futures/tests/stream_futures_unordered.rs
-+++ b/futures/tests/stream_futures_unordered.rs
-@@ -261,6 +261,20 @@ fn into_iter_len() {
-     assert!(into_iter.next().is_none());
+-        // SAFETY: we just cleared all the tasks and we have &mut self
++        // we just cleared all the tasks, and we have &mut self, so this is safe.
+         unsafe { self.ready_to_run_queue.clear() };
+ 
+         self.is_terminated.store(false, Relaxed);
+@@ -575,9 +575,24 @@ impl<Fut> FuturesUnordered<Fut> {
+ 
+ impl<Fut> Drop for FuturesUnordered<Fut> {
+     fn drop(&mut self) {
++        // When a `FuturesUnordered` is dropped we want to drop all futures
++        // associated with it. At the same time though there may be tons of
++        // wakers flying around which contain `Task<Fut>` references
++        // inside them. We'll let those naturally get deallocated.
+         self.clear_head_all();
+-        // SAFETY: we just cleared all the tasks and we have &mut self
+-        unsafe { self.ready_to_run_queue.clear() };
++
++        // Note that at this point we could still have a bunch of tasks in the
++        // ready to run queue. None of those tasks, however, have futures
++        // associated with them so they're safe to destroy on any thread. At
++        // this point the `FuturesUnordered` struct, the owner of the one strong
++        // reference to the ready to run queue will drop the strong reference.
++        // At that point whichever thread releases the strong refcount last (be
++        // it this thread or some other thread as part of an `upgrade`) will
++        // clear out the ready to run queue and free all remaining tasks.
++        //
++        // While that freeing operation isn't guaranteed to happen here, it's
++        // guaranteed to happen "promptly" as no more "blocking work" will
++        // happen while there's a strong refcount held.
+     }
  }
  
-+#[test]
-+fn into_iter_partial() {
-+    let stream = vec![future::ready(1), future::ready(2), future::ready(3), future::ready(4)]
-+        .into_iter()
-+        .collect::<FuturesUnordered<_>>();
+diff --git a/futures-util/src/stream/futures_unordered/ready_to_run_queue.rs b/futures-util/src/stream/futures_unordered/ready_to_run_queue.rs
+index 2bc20868..5ef6cde8 100644
+--- a/futures-util/src/stream/futures_unordered/ready_to_run_queue.rs
++++ b/futures-util/src/stream/futures_unordered/ready_to_run_queue.rs
+@@ -94,7 +94,7 @@ impl<Fut> ReadyToRunQueue<Fut> {
+     //
+     // # Safety
+     //
+-    // - All tasks **must** have had their futures dropped already (by FuturesUnordered::clear_head_all)
++    // - All tasks **must** have had their futures dropped already (by FuturesUnordered::clear)
+     // - The caller **must** guarantee unique access to `self`
+     pub(crate) unsafe fn clear(&self) {
+         loop {
+@@ -107,3 +107,16 @@ impl<Fut> ReadyToRunQueue<Fut> {
+         }
+     }
+ }
 +
-+    let mut into_iter = stream.into_iter();
-+    assert!(into_iter.next().is_some());
-+    assert!(into_iter.next().is_some());
-+    assert!(into_iter.next().is_some());
-+    assert_eq!(into_iter.len(), 1);
-+    // don't panic when iterator is dropped before completing
++impl<Fut> Drop for ReadyToRunQueue<Fut> {
++    fn drop(&mut self) {
++        // Once we're in the destructor for `Inner<Fut>` we need to clear out
++        // the ready to run queue of tasks if there's anything left in there.
++
++        // All tasks have had their futures dropped already by the `FuturesUnordered`
++        // destructor above, and we have &mut self, so this is safe.
++        unsafe {
++            self.clear();
++        }
++    }
 +}
-+
- #[test]
- fn futures_not_moved_after_poll() {
-     // Future that will be ready after being polled twice,
 -- 
 2.34.1
 
