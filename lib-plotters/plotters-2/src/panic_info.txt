@@ -1,0 +1,2 @@
+thread 'main' panicked at /mnt/d/rust_learning/lib-plotters/plotters-2/plotters-72479a086a2f50b4c73d6e613cbf53b7aea604f5/src/coord/ranged1d/types/datetime.rs:205:24:
+attempt to divide by zero

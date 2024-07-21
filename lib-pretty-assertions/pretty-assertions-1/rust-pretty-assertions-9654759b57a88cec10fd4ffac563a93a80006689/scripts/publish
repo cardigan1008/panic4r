@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -euxo pipefail
+
+# Don't log the cargo login token while authenticating
+set +x
+echo "cargo login ***********************************"
+cargo login "${CARGO_LOGIN_TOKEN}"
+set -x
+
+pushd pretty_assertions
+cargo publish
+popd

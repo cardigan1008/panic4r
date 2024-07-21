@@ -1,0 +1,8 @@
+[package]
+name = "plotters-2"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+plotters = {path = "plotters-72479a086a2f50b4c73d6e613cbf53b7aea604f5"}
+chrono = "0.4"

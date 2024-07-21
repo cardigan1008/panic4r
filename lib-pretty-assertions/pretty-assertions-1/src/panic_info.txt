@@ -1,0 +1,3 @@
+panicked at /mnt/d/rust_learning/lib-pretty-assertions/pretty-assertions-1/rust-pretty-assertions-9654759b57a88cec10fd4ffac563a93a80006689/pretty_assertions/src/printer.rs:105:17:
+thread panicked while processing panic. aborting.
+Aborted

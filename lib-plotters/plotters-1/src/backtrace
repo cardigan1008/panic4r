@@ -1,0 +1,73 @@
+stack backtrace:
+   0:     0x55cc12528655 - std::backtrace_rs::backtrace::libunwind::trace::hc250b73431e918cf
+                               at /rustc/5069856495870486134dd2ca0b0e2516308c5c2a/library/std/src/../../backtrace/src/backtrace/libunwind.rs:116:5
+   1:     0x55cc12528655 - std::backtrace_rs::backtrace::trace_unsynchronized::h2df92b48fa7ca599
+                               at /rustc/5069856495870486134dd2ca0b0e2516308c5c2a/library/std/src/../../backtrace/src/backtrace/mod.rs:66:5
+   2:     0x55cc12528655 - std::sys::backtrace::_print_fmt::h4bb338d85bd8bd47
+                               at /rustc/5069856495870486134dd2ca0b0e2516308c5c2a/library/std/src/sys/backtrace.rs:65:5
+   3:     0x55cc12528655 - <std::sys::backtrace::BacktraceLock::print::DisplayBacktrace as core::fmt::Display>::fmt::h1839f17c6b348065
+                               at /rustc/5069856495870486134dd2ca0b0e2516308c5c2a/library/std/src/sys/backtrace.rs:40:26
+   4:     0x55cc1254619b - core::fmt::rt::Argument::fmt::h4466b6b418622ef0
+                               at /rustc/5069856495870486134dd2ca0b0e2516308c5c2a/library/core/src/fmt/rt.rs:173:76   
+   5:     0x55cc1254619b - core::fmt::write::h18d7b0f91ff52569
+                               at /rustc/5069856495870486134dd2ca0b0e2516308c5c2a/library/core/src/fmt/mod.rs:1182:21 
+   6:     0x55cc1252662f - std::io::Write::write_fmt::ha7376a7515e2ef37
+                               at /rustc/5069856495870486134dd2ca0b0e2516308c5c2a/library/std/src/io/mod.rs:1827:15   
+   7:     0x55cc125297a1 - std::sys::backtrace::BacktraceLock::print::h7c87ac8928594db4
+                               at /rustc/5069856495870486134dd2ca0b0e2516308c5c2a/library/std/src/sys/backtrace.rs:43:9
+   8:     0x55cc125297a1 - std::panicking::default_hook::{{closure}}::hdc9dc974375222aa
+                               at /rustc/5069856495870486134dd2ca0b0e2516308c5c2a/library/std/src/panicking.rs:269:22 
+   9:     0x55cc1252947c - std::panicking::default_hook::hc6e3d3a216afacca
+                               at /rustc/5069856495870486134dd2ca0b0e2516308c5c2a/library/std/src/panicking.rs:296:9  
+  10:     0x55cc12529e21 - std::panicking::rust_panic_with_hook::hd297d7efdf112480
+                               at /rustc/5069856495870486134dd2ca0b0e2516308c5c2a/library/std/src/panicking.rs:800:13 
+  11:     0x55cc12529c87 - std::panicking::begin_panic_handler::{{closure}}::h4dfdaf67f1de5b9e
+                               at /rustc/5069856495870486134dd2ca0b0e2516308c5c2a/library/std/src/panicking.rs:674:13 
+  12:     0x55cc12528b19 - std::sys::backtrace::__rust_end_short_backtrace::h3f43dc9c13b55bd8
+                               at /rustc/5069856495870486134dd2ca0b0e2516308c5c2a/library/std/src/sys/backtrace.rs:168:18
+  13:     0x55cc12529914 - rust_begin_unwind
+                               at /rustc/5069856495870486134dd2ca0b0e2516308c5c2a/library/std/src/panicking.rs:665:5  
+  14:     0x55cc12545305 - core::panicking::panic_nounwind_fmt::runtime::h8a77b0cfe021dd22
+                               at /rustc/5069856495870486134dd2ca0b0e2516308c5c2a/library/core/src/panicking.rs:112:18  15:     0x55cc12545305 - core::panicking::panic_nounwind_fmt::h99266086da7b394e
+                               at /rustc/5069856495870486134dd2ca0b0e2516308c5c2a/library/core/src/panicking.rs:122:5 
+  16:     0x55cc12545533 - core::panicking::panic_misaligned_pointer_dereference::h30c8fbc0a2abd9bd
+                               at /rustc/5069856495870486134dd2ca0b0e2516308c5c2a/library/core/src/panicking.rs:289:5 
+  17:     0x55cc12462c10 - <plotters_bitmap::bitmap_pixel::rgb::RGBPixel as plotters_bitmap::bitmap_pixel::pixel_format::PixelFormat>::fill_rect_fast::h3d1c4730085dd5f0
+                               at /mnt/d/rust_learning/lib-plotters/plotters-1/plotters-acf5158c6f49b8bfe8a5431c64b0867a1a8b36d1/plotters-bitmap/src/bitmap_pixel/rgb.rs:215:29
+  18:     0x55cc124410c1 - <plotters_bitmap::bitmap::BitMapBackend<P> as plotters_backend::DrawingBackend>::draw_line::hddbb96310766153e
+                               at /mnt/d/rust_learning/lib-plotters/plotters-1/plotters-acf5158c6f49b8bfe8a5431c64b0867a1a8b36d1/plotters-bitmap/src/bitmap.rs:259:21
+  19:     0x55cc12455618 - plotters_1::main::h103bec0e93dd2484
+                               at /mnt/d/rust_learning/lib-plotters/plotters-1/src/main.rs:5:5
+  20:     0x55cc124573db - core::ops::function::FnOnce::call_once::h22daa3aad38e3300
+                               at /rustc/5069856495870486134dd2ca0b0e2516308c5c2a/library/core/src/ops/function.rs:250:5
+  21:     0x55cc124555ae - std::sys::backtrace::__rust_begin_short_backtrace::h0f195f83c57438e5
+                               at /rustc/5069856495870486134dd2ca0b0e2516308c5c2a/library/std/src/sys/backtrace.rs:152:18
+  22:     0x55cc12446e41 - std::rt::lang_start::{{closure}}::hfac1c3395e87a294
+                               at /rustc/5069856495870486134dd2ca0b0e2516308c5c2a/library/std/src/rt.rs:162:18        
+  23:     0x55cc12524250 - core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once::hd79fb51bc28554e3
+                               at /rustc/5069856495870486134dd2ca0b0e2516308c5c2a/library/core/src/ops/function.rs:284:13
+  24:     0x55cc12524250 - std::panicking::try::do_call::h0d30c62e42664426
+                               at /rustc/5069856495870486134dd2ca0b0e2516308c5c2a/library/std/src/panicking.rs:557:40 
+  25:     0x55cc12524250 - std::panicking::try::hf8df75fa3bd0a7cf
+                               at /rustc/5069856495870486134dd2ca0b0e2516308c5c2a/library/std/src/panicking.rs:521:19 
+  26:     0x55cc12524250 - std::panic::catch_unwind::hb07ad26fc0b3a6c4
+                               at /rustc/5069856495870486134dd2ca0b0e2516308c5c2a/library/std/src/panic.rs:350:14     
+  27:     0x55cc12524250 - std::rt::lang_start_internal::{{closure}}::hbc25e413f97a169d
+                               at /rustc/5069856495870486134dd2ca0b0e2516308c5c2a/library/std/src/rt.rs:141:48        
+  28:     0x55cc12524250 - std::panicking::try::do_call::h328c6b8abde2bfa9
+                               at /rustc/5069856495870486134dd2ca0b0e2516308c5c2a/library/std/src/panicking.rs:557:40 
+  29:     0x55cc12524250 - std::panicking::try::hf4d44c0b1a47c692
+                               at /rustc/5069856495870486134dd2ca0b0e2516308c5c2a/library/std/src/panicking.rs:521:19 
+  30:     0x55cc12524250 - std::panic::catch_unwind::h61d25a5043684121
+                               at /rustc/5069856495870486134dd2ca0b0e2516308c5c2a/library/std/src/panic.rs:350:14     
+  31:     0x55cc12524250 - std::rt::lang_start_internal::h103d317cc4ab23f9
+                               at /rustc/5069856495870486134dd2ca0b0e2516308c5c2a/library/std/src/rt.rs:141:20        
+  32:     0x55cc12446e1a - std::rt::lang_start::hc82cee1721343ef8
+                               at /rustc/5069856495870486134dd2ca0b0e2516308c5c2a/library/std/src/rt.rs:161:17        
+  33:     0x55cc1245575e - main
+  34:     0x7f8c8a975d90 - <unknown>
+  35:     0x7f8c8a975e40 - __libc_start_main
+  36:     0x55cc1243d7c5 - _start
+  37:                0x0 - <unknown>
+thread caused non-unwinding panic. aborting.
+Aborted

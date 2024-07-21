@@ -1,0 +1,7 @@
+[package]
+name = "tar-1"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tar = {path = "tar-rs-60c6bd81d73fd0e340cfb0e147aae13ce23e18c6"}

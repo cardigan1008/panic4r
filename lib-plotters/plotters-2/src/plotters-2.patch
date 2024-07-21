@@ -1,0 +1,29 @@
+From 85d69672bf0605a1eb0f4c83dfe0f375b1d666bf Mon Sep 17 00:00:00 2001
+From: komi1230 <ykominami@hey.jp>
+Date: Sat, 21 Aug 2021 13:14:09 +0900
+Subject: [PATCH] Properly works when all data is in the same week.
+
+---
+ src/coord/ranged1d/types/datetime.rs | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/src/coord/ranged1d/types/datetime.rs b/src/coord/ranged1d/types/datetime.rs
+index f6b5717..1484ef8 100644
+--- a/src/coord/ranged1d/types/datetime.rs
++++ b/src/coord/ranged1d/types/datetime.rs
+@@ -200,6 +200,12 @@ where
+             return ret;
+         }
+ 
++        // When all data is in the same week, just plot properly.
++        if total_weeks == 0 {
++            ret.push(self.0.clone());
++            return ret;
++        }
++
+         let week_per_point = ((total_weeks as f64) / (max_points as f64)).ceil() as usize;
+ 
+         for idx in 0..=(total_weeks as usize / week_per_point) {
+-- 
+2.34.1
+

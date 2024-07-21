@@ -1,0 +1,7 @@
+[package]
+name = "brotli-decompressor-1"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+brotli = {path = "rust-brotli-decompressor-0045b6e18a91b12937ffc45a7a4f934ffeab7d2e"}

@@ -1,0 +1,26 @@
+From 9abcb2f6dfb3de3df225b815cdc4edda3098ae99 Mon Sep 17 00:00:00 2001
+From: Yuyi Wang <Strawberry_Str@hotmail.com>
+Date: Thu, 20 Apr 2023 16:46:33 +0800
+Subject: [PATCH] Fix unaligned write in bitmap backend.
+
+---
+ plotters-bitmap/src/bitmap_pixel/rgb.rs | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/plotters-bitmap/src/bitmap_pixel/rgb.rs b/plotters-bitmap/src/bitmap_pixel/rgb.rs
+index e8b88216..b7eae78f 100644
+--- a/plotters-bitmap/src/bitmap_pixel/rgb.rs
++++ b/plotters-bitmap/src/bitmap_pixel/rgb.rs
+@@ -212,9 +212,9 @@ impl PixelFormat for RGBPixel {
+                                 b, r, g, b, r, g, b, r, // QW2
+                                 g, b, r, g, b, r, g, b, // QW3
+                             ]);
+-                            *ptr = d1;
+-                            *ptr.offset(1) = d2;
+-                            *ptr.offset(2) = d3;
++                            ptr.write_unaligned(d1);
++                            ptr.offset(1).write_unaligned(d2);
++                            ptr.offset(2).write_unaligned(d3);
+                         }
+                     }
+ 

@@ -1,0 +1,7 @@
+[package]
+name = "pretty-assertions-1"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+pretty_assertions = {path = "rust-pretty-assertions-9654759b57a88cec10fd4ffac563a93a80006689/pretty_assertions"}
