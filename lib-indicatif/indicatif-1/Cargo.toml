@@ -1,0 +1,7 @@
+[package]
+name = "indicatif-1"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+indicatif = {path = "indicatif-d9b77b999fc87156a82bddc216b7e58100434fc9"}

@@ -1,0 +1,2 @@
+thread 'main' panicked at indicatif-d9b77b999fc87156a82bddc216b7e58100434fc9/src/progress.rs:984:30:
+called `Result::unwrap()` on an `Err` value: PoisonError { .. }

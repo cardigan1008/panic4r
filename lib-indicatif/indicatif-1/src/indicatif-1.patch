@@ -1,0 +1,36 @@
+From 821ed338e7b648183803cbb0ad118cf12e5a5616 Mon Sep 17 00:00:00 2001
+From: Armin Ronacher <armin.ronacher@active-4.com>
+Date: Sun, 8 Sep 2019 01:27:14 +0200
+Subject: [PATCH] Only update and draw on last refcount drop
+
+---
+ src/progress.rs | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
+
+diff --git a/src/progress.rs b/src/progress.rs
+index 020c290..e7a6c3f 100644
+--- a/src/progress.rs
++++ b/src/progress.rs
+@@ -981,12 +981,14 @@ impl MultiProgress {
+ 
+ impl Drop for ProgressBar {
+     fn drop(&mut self) {
+-        if self.state.read().unwrap().is_finished() {
+-            return;
++        if Arc::get_mut(&mut self.state).is_some() {
++            if self.state.read().unwrap().is_finished() {
++                return;
++            }
++            self.update_and_draw(|state| {
++                state.status = Status::DoneHidden;
++            });
+         }
+-        self.update_and_draw(|state| {
+-            state.status = Status::DoneHidden;
+-        });
+     }
+ }
+ 
+-- 
+2.25.1
+

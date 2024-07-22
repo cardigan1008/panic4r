@@ -1,0 +1,32 @@
+From 1472925bd795659bb7bd93fe313496f97dd9c055 Mon Sep 17 00:00:00 2001
+From: Ivan Ukhov <ivan.ukhov@gmail.com>
+Date: Fri, 12 Oct 2018 21:56:05 +0200
+Subject: [PATCH] Allow overflow when updating handled
+
+---
+ src/lib.rs | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/lib.rs b/src/lib.rs
+index 3b4faab..f69c32b 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -115,11 +115,11 @@ impl Context {
+ 
+         let data = data.as_ref();
+         let length = data.len() as u32;
+-        if (self.handled[0] + (length << 3)) < self.handled[0] {
+-            self.handled[1] += 1;
++        if (self.handled[0].wrapping_add(length << 3)) < self.handled[0] {
++            self.handled[1] = self.handled[1].wrapping_add(1);
+         }
+-        self.handled[0] += length << 3;
+-        self.handled[1] += length >> 29;
++        self.handled[0] = self.handled[0].wrapping_add(length <<  3);
++        self.handled[1] = self.handled[1].wrapping_add(length >> 29);
+ 
+         for &value in data {
+             self.input[k] = value;
+-- 
+2.25.1
+
