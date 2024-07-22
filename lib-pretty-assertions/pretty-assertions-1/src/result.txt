@@ -1,0 +1,8 @@
+location-baseline3(backtrace random):
+Ranked fault locations:
+Ranked patches:
+Total analysis time: 5.062473968s
+location-baseline3(backtrace random):
+Ranked fault locations:
+Ranked patches:
+Total analysis time: 4.72983528s
