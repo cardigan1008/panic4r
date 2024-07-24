@@ -1,0 +1,95 @@
+From 2a54ad01d0945c851a093849c83019de69e98dee Mon Sep 17 00:00:00 2001
+From: Erk <Erk-@users.noreply.github.com>
+Date: Sat, 10 Jun 2023 14:24:19 +0200
+Subject: [PATCH] time: do not overflow to signal value (#5710)
+
+---
+ tokio/src/runtime/time/entry.rs  |  6 +++++-
+ tokio/src/runtime/time/mod.rs    |  2 +-
+ tokio/src/runtime/time/source.rs |  3 ++-
+ tokio/tests/time_sleep.rs        | 14 ++++++++++++++
+ 4 files changed, 22 insertions(+), 3 deletions(-)
+
+diff --git a/tokio/src/runtime/time/entry.rs b/tokio/src/runtime/time/entry.rs
+index 6aea2b15..798d3c11 100644
+--- a/tokio/src/runtime/time/entry.rs
++++ b/tokio/src/runtime/time/entry.rs
+@@ -72,6 +72,10 @@ type TimerResult = Result<(), crate::time::error::Error>;
+ const STATE_DEREGISTERED: u64 = u64::MAX;
+ const STATE_PENDING_FIRE: u64 = STATE_DEREGISTERED - 1;
+ const STATE_MIN_VALUE: u64 = STATE_PENDING_FIRE;
++/// The largest safe integer to use for ticks.
++///
++/// This value should be updated if any other signal values are added above.
++pub(super) const MAX_SAFE_MILLIS_DURATION: u64 = u64::MAX - 2;
+ 
+ /// This structure holds the current shared state of the timer - its scheduled
+ /// time (if registered), or otherwise the result of the timer completing, as
+@@ -126,7 +130,7 @@ impl StateCell {
+     fn when(&self) -> Option<u64> {
+         let cur_state = self.state.load(Ordering::Relaxed);
+ 
+-        if cur_state == u64::MAX {
++        if cur_state == STATE_DEREGISTERED {
+             None
+         } else {
+             Some(cur_state)
+diff --git a/tokio/src/runtime/time/mod.rs b/tokio/src/runtime/time/mod.rs
+index 215714dd..423ad79a 100644
+--- a/tokio/src/runtime/time/mod.rs
++++ b/tokio/src/runtime/time/mod.rs
+@@ -8,7 +8,7 @@
+ 
+ mod entry;
+ pub(crate) use entry::TimerEntry;
+-use entry::{EntryList, TimerHandle, TimerShared};
++use entry::{EntryList, TimerHandle, TimerShared, MAX_SAFE_MILLIS_DURATION};
+ 
+ mod handle;
+ pub(crate) use self::handle::Handle;
+diff --git a/tokio/src/runtime/time/source.rs b/tokio/src/runtime/time/source.rs
+index 412812da..4647bc41 100644
+--- a/tokio/src/runtime/time/source.rs
++++ b/tokio/src/runtime/time/source.rs
+@@ -1,3 +1,4 @@
++use super::MAX_SAFE_MILLIS_DURATION;
+ use crate::time::{Clock, Duration, Instant};
+ 
+ /// A structure which handles conversion from Instants to u64 timestamps.
+@@ -25,7 +26,7 @@ impl TimeSource {
+             .unwrap_or_else(|| Duration::from_secs(0));
+         let ms = dur.as_millis();
+ 
+-        ms.try_into().unwrap_or(u64::MAX)
++        ms.try_into().unwrap_or(MAX_SAFE_MILLIS_DURATION)
+     }
+ 
+     pub(crate) fn tick_to_duration(&self, t: u64) -> Duration {
+diff --git a/tokio/tests/time_sleep.rs b/tokio/tests/time_sleep.rs
+index 4174a73b..94022e3c 100644
+--- a/tokio/tests/time_sleep.rs
++++ b/tokio/tests/time_sleep.rs
+@@ -267,6 +267,20 @@ async fn exactly_max() {
+     time::sleep(ms(MAX_DURATION)).await;
+ }
+ 
++#[tokio::test]
++async fn issue_5183() {
++    time::pause();
++
++    let big = std::time::Duration::from_secs(u64::MAX / 10);
++    // This is a workaround since awaiting sleep(big) will never finish.
++    #[rustfmt::skip]
++    tokio::select! {
++	biased;
++        _ = tokio::time::sleep(big) => {}
++        _ = tokio::time::sleep(std::time::Duration::from_nanos(1)) => {}
++    }
++}
++
+ #[tokio::test]
+ async fn no_out_of_bounds_close_to_max() {
+     time::pause();
+-- 
+2.34.1
+

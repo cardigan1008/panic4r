@@ -1,0 +1,67 @@
+stack backtrace:
+   0:     0x5622f998e500 - <std::sys::backtrace::_print::DisplayBacktrace as core::fmt::Display>::fmt::ha3fd8ac48be20882
+   1:     0x5622f99aa51b - core::fmt::write::h4e26e0ecfdae25c2
+   2:     0x5622f99827e9 - std::io::Write::write_fmt::heb5d33e25fc97cc9
+   3:     0x5622f998e2be - std::sys::backtrace::print::h550118c7ec714c84
+   4:     0x5622f99989ca - std::panicking::default_hook::{{closure}}::h5e1b23aab6d944e3
+   5:     0x5622f99986f2 - std::panicking::default_hook::h7a9473f298eaba34
+   6:     0x5622f9998ee8 - std::panicking::rust_panic_with_hook::h83a1d1b3201195e0
+   7:     0x5622f998e8a3 - std::panicking::begin_panic_handler::{{closure}}::h16f0b30c3ec46ca8
+   8:     0x5622f998e719 - std::sys::backtrace::__rust_end_short_backtrace::h90548f2ce3086294
+   9:     0x5622f9998ab4 - rust_begin_unwind
+  10:     0x5622f99ab713 - core::panicking::panic_fmt::h04a703978d894a1d
+  11:     0x5622f99ab79c - core::panicking::panic::ha91659952f6e6c86
+  12:     0x5622f98e84c9 - tokio::runtime::time::entry::StateCell::set_expiration::h3e60744533f659cb
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-5/tokio-cb18b0a231828a3e65d3f64c6d2744751c6b30ed/tokio/src/runtime/time/entry.rs:239:9
+  13:     0x5622f98e8760 - tokio::runtime::time::entry::TimerShared::set_expiration::hf8725bb3876b96e8
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-5/tokio-cb18b0a231828a3e65d3f64c6d2744751c6b30ed/tokio/src/runtime/time/entry.rs:427:9
+  14:     0x5622f98e8d14 - tokio::runtime::time::entry::TimerHandle::set_expiration::h39cf0cb0cfddb415
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-5/tokio-cb18b0a231828a3e65d3f64c6d2744751c6b30ed/tokio/src/runtime/time/entry.rs:594:9
+  15:     0x5622f9902896 - tokio::runtime::time::<impl tokio::runtime::time::handle::Handle>::reregister::h84ebfc7260c1eb18
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-5/tokio-cb18b0a231828a3e65d3f64c6d2744751c6b30ed/tokio/src/runtime/time/mod.rs:362:17
+  16:     0x5622f98e8b43 - tokio::runtime::time::entry::TimerEntry::reset::ha47a105151baaa7c
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-5/tokio-cb18b0a231828a3e65d3f64c6d2744751c6b30ed/tokio/src/runtime/time/entry.rs:542:17
+  17:     0x5622f98e8bfc - tokio::runtime::time::entry::TimerEntry::poll_elapsed::hc235f6dabcacf399
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-5/tokio-cb18b0a231828a3e65d3f64c6d2744751c6b30ed/tokio/src/runtime/time/entry.rs:558:13
+  18:     0x5622f9907216 - tokio::time::sleep::Sleep::poll_elapsed::hdba20f6a4e8fd778
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-5/tokio-cb18b0a231828a3e65d3f64c6d2744751c6b30ed/tokio/src/time/sleep.rs:415:22
+  19:     0x5622f99072e3 - <tokio::time::sleep::Sleep as core::future::future::Future>::poll::h92b86efe23f67644
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-5/tokio-cb18b0a231828a3e65d3f64c6d2744751c6b30ed/tokio/src/time/sleep.rs:447:22
+  20:     0x5622f98b7d48 - tokio_5::main::{{closure}}::h3ef3c4e2483f0245
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-5/src/main.rs:5:29
+  21:     0x5622f98b75ef - tokio::runtime::park::CachedParkThread::block_on::{{closure}}::h93ccd08188acb040
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-5/tokio-cb18b0a231828a3e65d3f64c6d2744751c6b30ed/tokio/src/runtime/park.rs:283:63
+  22:     0x5622f98b704c - tokio::runtime::coop::with_budget::hbd959f40815d03a6
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-5/tokio-cb18b0a231828a3e65d3f64c6d2744751c6b30ed/tokio/src/runtime/coop.rs:107:5
+  23:     0x5622f98b704c - tokio::runtime::coop::budget::h18246355a1d71eae
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-5/tokio-cb18b0a231828a3e65d3f64c6d2744751c6b30ed/tokio/src/runtime/coop.rs:73:5
+  24:     0x5622f98b704c - tokio::runtime::park::CachedParkThread::block_on::hcdc0efd4fc69a7ec
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-5/tokio-cb18b0a231828a3e65d3f64c6d2744751c6b30ed/tokio/src/runtime/park.rs:283:31
+  25:     0x5622f98b7b71 - tokio::runtime::context::blocking::BlockingRegionGuard::block_on::heb90765bd638e124
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-5/tokio-cb18b0a231828a3e65d3f64c6d2744751c6b30ed/tokio/src/runtime/context/blocking.rs:66:9
+  26:     0x5622f98b4ba6 - tokio::runtime::scheduler::multi_thread::MultiThread::block_on::{{closure}}::hc62327a39bec29b9
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-5/tokio-cb18b0a231828a3e65d3f64c6d2744751c6b30ed/tokio/src/runtime/scheduler/multi_thread/mod.rs:87:13
+  27:     0x5622f98b7f02 - tokio::runtime::context::runtime::enter_runtime::h1abeccba78ae7f59
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-5/tokio-cb18b0a231828a3e65d3f64c6d2744751c6b30ed/tokio/src/runtime/context/runtime.rs:65:16
+  28:     0x5622f98b4b61 - tokio::runtime::scheduler::multi_thread::MultiThread::block_on::hcc0b1f410b5518a2
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-5/tokio-cb18b0a231828a3e65d3f64c6d2744751c6b30ed/tokio/src/runtime/scheduler/multi_thread/mod.rs:86:9
+  29:     0x5622f98b8892 - tokio::runtime::runtime::Runtime::block_on::haa82bc6bb650c589
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-5/tokio-cb18b0a231828a3e65d3f64c6d2744751c6b30ed/tokio/src/runtime/runtime.rs:313:45
+  30:     0x5622f98b792d - tokio_5::main::hc1fc12f023a35d2e
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-5/src/main.rs:5:5
+  31:     0x5622f98b6b1b - core::ops::function::FnOnce::call_once::h109202a233db412f
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/core/src/ops/function.rs:250:5
+  32:     0x5622f98b898e - std::sys::backtrace::__rust_begin_short_backtrace::hab048b32155878ac
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/std/src/sys/backtrace.rs:155:18
+  33:     0x5622f98b8961 - std::rt::lang_start::{{closure}}::he706cf43f260c231
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/std/src/rt.rs:159:18
+  34:     0x5622f9997d85 - std::rt::lang_start_internal::hf1ebab5f3c7c0266
+  35:     0x5622f98b893a - std::rt::lang_start::h53d437420b67865e
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/std/src/rt.rs:158:17
+  36:     0x5622f98b79de - main
+  37:     0x7d2e6a229d90 - __libc_start_call_main
+                               at ./csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+  38:     0x7d2e6a229e40 - __libc_start_main_impl
+                               at ./csu/../csu/libc-start.c:392:3
+  39:     0x5622f98b3e75 - _start
+  40:                0x0 - <unknown>
