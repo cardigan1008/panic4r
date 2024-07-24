@@ -1,0 +1,8 @@
+[package]
+name = "tokio-4"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tokio={path="tokio-731dde21dc92e9cb9d25cf74a2b29e15cd364dbb/tokio", features = ["full"]}
+futures = "0.3"
