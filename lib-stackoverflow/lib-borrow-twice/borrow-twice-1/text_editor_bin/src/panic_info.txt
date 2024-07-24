@@ -1,2 +1,0 @@
-thread 'main' panicked at /home/yunboni/panic4r/lib-stackoverflow/lib-borrow-twice/borrow-twice-1/text_editor_lib/src/lib.rs:26:26:
-already mutably borrowed: BorrowError

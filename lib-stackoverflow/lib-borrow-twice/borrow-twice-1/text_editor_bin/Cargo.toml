@@ -1,7 +1,0 @@
-[package]
-name = "text_editor_bin"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-text_editor_lib = { path = "../text_editor_lib" }
