@@ -1,0 +1,12 @@
+diff --git a/lib.rs b/lib.rs
+index 09869cd..2368c7d 100644
+--- a/lib.rs
++++ b/lib.rs
+@@ -22,7 +22,6 @@ impl TextEditor {
+         if let Some(previous_content) = history_borrow.pop_front() {
+             self.content = previous_content;
+             // Remove the unnecessary borrow call
+-            self.history.borrow(); 
+             Ok(())
+         } else {
+             Err("No previous history available.".to_string())
