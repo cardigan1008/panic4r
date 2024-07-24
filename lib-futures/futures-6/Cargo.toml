@@ -1,7 +1,0 @@
-[package]
-name = "futures-6"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-futures={path="futures-rs-9ec770782cf2e98c93ee43f9568088396687b05b/futures"}

@@ -1,8 +1,0 @@
-[package]
-name = "futures-example-functional"
-edition = "2018"
-version = "0.1.0"
-publish = false
-
-[dependencies]
-futures = { path = "../../futures", features = ["thread-pool"] }
