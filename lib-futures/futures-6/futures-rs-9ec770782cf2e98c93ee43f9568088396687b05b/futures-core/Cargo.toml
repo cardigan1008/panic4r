@@ -1,0 +1,25 @@
+[package]
+name = "futures-core"
+version = "1.0.0-alpha.0"
+edition = "2018"
+rust-version = "1.36"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/rust-lang/futures-rs"
+homepage = "https://rust-lang.github.io/futures-rs"
+description = """
+The core traits and types in for the `futures` library.
+"""
+
+[features]
+default = ["std"]
+std = ["alloc"]
+alloc = []
+
+[dependencies]
+
+[dev-dependencies]
+futures = { path = "../futures" }
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
