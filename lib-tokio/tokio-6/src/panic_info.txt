@@ -1,0 +1,8 @@
+thread 'main' panicked at /home/sigger/Documents/panickiller/PanicKiller/library/std/src/thread/local.rs:260:26:
+cannot access a Thread Local Storage value during or after destruction: AccessError
+thread 'main' panicked at /home/sigger/Documents/panickiller/PanicKiller/library/std/src/thread/local.rs:260:26:
+cannot access a Thread Local Storage value during or after destruction: AccessError
+thread 'main' panicked at library/core/src/panicking.rs:229:5:
+panic in a destructor during cleanup
+thread caused non-unwinding panic. aborting.
+Aborted (core dumped)

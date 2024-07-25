@@ -1,0 +1,7 @@
+[package]
+name = "tokio-6"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tokio = { path="tokio-9e3fb1673a73046363af64c09a040eeed67f2a4c/tokio", features = ["full"] }

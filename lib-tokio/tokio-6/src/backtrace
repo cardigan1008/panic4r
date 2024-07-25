@@ -1,0 +1,126 @@
+stack backtrace:
+   0:     0x64aee7b0b420 - <std::sys::backtrace::_print::DisplayBacktrace as core::fmt::Display>::fmt::ha3fd8ac48be20882
+   1:     0x64aee7b26c2b - core::fmt::write::h4e26e0ecfdae25c2
+   2:     0x64aee7aff879 - std::io::Write::write_fmt::heb5d33e25fc97cc9
+   3:     0x64aee7b0b1de - std::sys::backtrace::print::h550118c7ec714c84
+   4:     0x64aee7b1522a - std::panicking::default_hook::{{closure}}::h5e1b23aab6d944e3
+   5:     0x64aee7b14f52 - std::panicking::default_hook::h7a9473f298eaba34
+   6:     0x64aee7b15748 - std::panicking::rust_panic_with_hook::h83a1d1b3201195e0
+   7:     0x64aee7b0b7f7 - std::panicking::begin_panic_handler::{{closure}}::h16f0b30c3ec46ca8
+   8:     0x64aee7b0b639 - std::sys::backtrace::__rust_end_short_backtrace::h90548f2ce3086294
+   9:     0x64aee7b15314 - rust_begin_unwind
+  10:     0x64aee7b27de3 - core::panicking::panic_fmt::h04a703978d894a1d
+  11:     0x64aee7b2a5f6 - core::result::unwrap_failed::hbfb11f91c48a4d7e
+  12:     0x64aee7a46849 - core::result::Result<T,E>::expect::ha43bfcc55280fe32
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/core/src/result.rs:1059:23
+  13:     0x64aee7a59007 - std::thread::local::LocalKey<T>::with::he0bb02007f034955
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/std/src/thread/local.rs:260:9
+  14:     0x64aee7a573cd - tokio::runtime::context::budget::he664ffccdd97c1ed
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-6/tokio-9e3fb1673a73046363af64c09a040eeed67f2a4c/tokio/src/runtime/context.rs:67:5
+  15:     0x64aee7a885c9 - tokio::runtime::coop::with_budget::h17e981d023fc8c1f
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-6/tokio-9e3fb1673a73046363af64c09a040eeed67f2a4c/tokio/src/runtime/coop.rs:93:5
+  16:     0x64aee7a885c9 - tokio::runtime::coop::budget::h8c025b8864cb4085
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-6/tokio-9e3fb1673a73046363af64c09a040eeed67f2a4c/tokio/src/runtime/coop.rs:70:5
+  17:     0x64aee7a885c9 - tokio::runtime::park::CachedParkThread::block_on::h2ccb478c7cb81205
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-6/tokio-9e3fb1673a73046363af64c09a040eeed67f2a4c/tokio/src/runtime/park.rs:272:31
+  18:     0x64aee7a57a89 - tokio::runtime::context::BlockingRegionGuard::block_on::h908b96fddb32d9be
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-6/tokio-9e3fb1673a73046363af64c09a040eeed67f2a4c/tokio/src/runtime/context.rs:242:13
+  19:     0x64aee7a4d7dc - tokio::runtime::blocking::shutdown::Receiver::wait::hcf531c88ff223d1d
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-6/tokio-9e3fb1673a73046363af64c09a040eeed67f2a4c/tokio/src/runtime/blocking/shutdown.rs:67:21
+  20:     0x64aee7a7cf20 - tokio::runtime::blocking::pool::BlockingPool::shutdown::h19802fd9348849de
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-6/tokio-9e3fb1673a73046363af64c09a040eeed67f2a4c/tokio/src/runtime/blocking/pool.rs:261:12
+  21:     0x64aee7a93b2e - <tokio::runtime::blocking::pool::BlockingPool as core::ops::drop::Drop>::drop::hc0a1968a8b68900a
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-6/tokio-9e3fb1673a73046363af64c09a040eeed67f2a4c/tokio/src/runtime/blocking/pool.rs:278:9
+  22:     0x64aee7a8cca7 - core::ptr::drop_in_place<tokio::runtime::blocking::pool::BlockingPool>::h3612ab5aa210c033
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/core/src/ptr/mod.rs:542:1
+  23:     0x64aee7a8c384 - core::ptr::drop_in_place<tokio::runtime::runtime::Runtime>::hddcfe37528bdba13
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/core/src/ptr/mod.rs:542:1
+  24:     0x64aee7a35497 - core::ptr::drop_in_place<tokio_6::TokioLocalSet>::h23fd7c41b52c2ca6
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/core/src/ptr/mod.rs:542:1
+  25:     0x64aee7a3516b - core::ptr::drop_in_place<std::sys::thread_local::native::lazy::State<tokio_6::TokioLocalSet,()>>::heb2321c30836e803
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/core/src/ptr/mod.rs:542:1
+  26:     0x64aee7a3314f - core::mem::drop::h5020be6430e3594b
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/core/src/mem/mod.rs:938:24
+  27:     0x64aee7a3314f - std::sys::thread_local::native::lazy::destroy::{{closure}}::hbbdd2dad821a0bf5
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/std/src/sys/thread_local/native/lazy.rs:99:9
+  28:     0x64aee7a3318e - std::sys::thread_local::abort_on_dtor_unwind::h99bdc58d5f9632a9
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/std/src/sys/thread_local/mod.rs:168:5
+  29:     0x64aee7a330ad - std::sys::thread_local::native::lazy::destroy::he7e58d01d8da9c40
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/std/src/sys/thread_local/native/lazy.rs:94:5
+  30:     0x73b4aba45d9f - __GI___call_tls_dtors
+                               at ./stdlib/cxa_thread_atexit_impl.c:159:7
+  31:     0x73b4aba455c9 - __run_exit_handlers
+                               at ./stdlib/exit.c:46:7
+  32:     0x73b4aba45610 - __GI_exit
+                               at ./stdlib/exit.c:143:3
+  33:     0x73b4aba29d97 - __libc_start_call_main
+                               at ./csu/../sysdeps/nptl/libc_start_call_main.h:74:3
+  34:     0x73b4aba29e40 - __libc_start_main_impl
+                               at ./csu/../csu/libc-start.c:392:3
+  35:     0x64aee7a2c9f5 - _start
+  36:                0x0 - <unknown>
+stack backtrace:
+   0:     0x64aee7b0b420 - <std::sys::backtrace::_print::DisplayBacktrace as core::fmt::Display>::fmt::ha3fd8ac48be20882
+   1:     0x64aee7b26c2b - core::fmt::write::h4e26e0ecfdae25c2
+   2:     0x64aee7aff879 - std::io::Write::write_fmt::heb5d33e25fc97cc9
+   3:     0x64aee7b0b1de - std::sys::backtrace::print::h550118c7ec714c84
+   4:     0x64aee7b1522a - std::panicking::default_hook::{{closure}}::h5e1b23aab6d944e3
+   5:     0x64aee7b14f52 - std::panicking::default_hook::h7a9473f298eaba34
+   6:     0x64aee7b15748 - std::panicking::rust_panic_with_hook::h83a1d1b3201195e0
+   7:     0x64aee7b0b7f7 - std::panicking::begin_panic_handler::{{closure}}::h16f0b30c3ec46ca8
+   8:     0x64aee7b0b639 - std::sys::backtrace::__rust_end_short_backtrace::h90548f2ce3086294
+   9:     0x64aee7b15314 - rust_begin_unwind
+  10:     0x64aee7b27de3 - core::panicking::panic_fmt::h04a703978d894a1d
+  11:     0x64aee7b2a5f6 - core::result::unwrap_failed::hbfb11f91c48a4d7e
+  12:     0x64aee7a467c0 - core::result::Result<T,E>::expect::h97bfdca2d86525ed
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/core/src/result.rs:1059:23
+  13:     0x64aee7a58d57 - std::thread::local::LocalKey<T>::with::h6fd63571c40ab7bf
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/std/src/thread/local.rs:260:9
+  14:     0x64aee7a37295 - tokio::task::local::<impl tokio::runtime::task::Schedule for alloc::sync::Arc<tokio::task::local::Shared>>::release::hffe620773f24df95
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-6/tokio-9e3fb1673a73046363af64c09a040eeed67f2a4c/tokio/src/task/local.rs:979:9
+  15:     0x64aee7a2e597 - tokio::runtime::task::harness::Harness<T,S>::release::hf6e9bd544f424b38
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-6/tokio-9e3fb1673a73046363af64c09a040eeed67f2a4c/tokio/src/runtime/task/harness.rs:342:29
+  16:     0x64aee7a2e68f - tokio::runtime::task::harness::Harness<T,S>::complete::hfe133e5bf451670d
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-6/tokio-9e3fb1673a73046363af64c09a040eeed67f2a4c/tokio/src/runtime/task/harness.rs:328:27
+  17:     0x64aee7a2e78e - tokio::runtime::task::harness::Harness<T,S>::shutdown::h4c71570e92f2bd2a
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-6/tokio-9e3fb1673a73046363af64c09a040eeed67f2a4c/tokio/src/runtime/task/harness.rs:151:9
+  18:     0x64aee7a31cfb - tokio::runtime::task::raw::shutdown::h7d264b6edf0497e3
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-6/tokio-9e3fb1673a73046363af64c09a040eeed67f2a4c/tokio/src/runtime/task/raw.rs:235:5
+  19:     0x64aee7a9e628 - tokio::runtime::task::raw::RawTask::shutdown::h078ff7c8719f1ea3
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-6/tokio-9e3fb1673a73046363af64c09a040eeed67f2a4c/tokio/src/runtime/task/raw.rs:168:18
+  20:     0x64aee7a44d92 - tokio::runtime::task::Task<S>::shutdown::hb889d4ef9e2607b4
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-6/tokio-9e3fb1673a73046363af64c09a040eeed67f2a4c/tokio/src/runtime/task/mod.rs:376:9
+  21:     0x64aee7a5f97e - tokio::runtime::task::list::LocalOwnedTasks<S>::close_and_shutdown_all::hc3e9f3e6a61c0d00
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-6/tokio-9e3fb1673a73046363af64c09a040eeed67f2a4c/tokio/src/runtime/task/list.rs:227:13
+  22:     0x64aee7a5cb7c - <tokio::task::local::LocalSet as core::ops::drop::Drop>::drop::{{closure}}::h7c5c9bdfb9df8226
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-6/tokio-9e3fb1673a73046363af64c09a040eeed67f2a4c/tokio/src/task/local.rs:822:13
+  23:     0x64aee7a5ca2b - tokio::task::local::LocalSet::with_if_possible::h895a7f47a322bb1b
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-6/tokio-9e3fb1673a73046363af64c09a040eeed67f2a4c/tokio/src/task/local.rs:705:35
+  24:     0x64aee7a94361 - <tokio::task::local::LocalSet as core::ops::drop::Drop>::drop::h7f6c025e1522a82f
+                               at /home/sigger/Documents/panic4r/panic4r/lib-tokio/tokio-6/tokio-9e3fb1673a73046363af64c09a040eeed67f2a4c/tokio/src/task/local.rs:819:9
+  25:     0x64aee7a35507 - core::ptr::drop_in_place<tokio::task::local::LocalSet>::hd5d5a3844a263cb5
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/core/src/ptr/mod.rs:542:1
+  26:     0x64aee7a354a7 - core::ptr::drop_in_place<tokio_6::TokioLocalSet>::h23fd7c41b52c2ca6
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/core/src/ptr/mod.rs:542:1
+  27:     0x64aee7a3516b - core::ptr::drop_in_place<std::sys::thread_local::native::lazy::State<tokio_6::TokioLocalSet,()>>::heb2321c30836e803
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/core/src/ptr/mod.rs:542:1
+  28:     0x64aee7a3314f - core::mem::drop::h5020be6430e3594b
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/core/src/mem/mod.rs:938:24
+  29:     0x64aee7a3314f - std::sys::thread_local::native::lazy::destroy::{{closure}}::hbbdd2dad821a0bf5
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/std/src/sys/thread_local/native/lazy.rs:99:9
+  30:     0x64aee7a3318e - std::sys::thread_local::abort_on_dtor_unwind::h99bdc58d5f9632a9
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/std/src/sys/thread_local/mod.rs:168:5
+  31:     0x64aee7a330ad - std::sys::thread_local::native::lazy::destroy::he7e58d01d8da9c40
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/std/src/sys/thread_local/native/lazy.rs:94:5
+  32:     0x73b4aba45d9f - __GI___call_tls_dtors
+                               at ./stdlib/cxa_thread_atexit_impl.c:159:7
+  33:     0x73b4aba455c9 - __run_exit_handlers
+                               at ./stdlib/exit.c:46:7
+  34:     0x73b4aba45610 - __GI_exit
+                               at ./stdlib/exit.c:143:3
+  35:     0x73b4aba29d97 - __libc_start_call_main
+                               at ./csu/../sysdeps/nptl/libc_start_call_main.h:74:3
+  36:     0x73b4aba29e40 - __libc_start_main_impl
+                               at ./csu/../csu/libc-start.c:392:3
+  37:     0x64aee7a2c9f5 - _start
+  38:                0x0 - <unknown>
