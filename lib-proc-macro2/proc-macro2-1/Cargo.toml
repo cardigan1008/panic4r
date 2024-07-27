@@ -4,4 +4,4 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-proc-macro2 = {path = "proc-macro2-12eddc03a40e8393e82f7ef1dadbaaabdcb00a08", features = ["span-locations"]}
+proc-macro2 = {path = "proc-macro2-b07f847a3eb263a9768927187732cdd9c39c1fe8"}
