@@ -1,0 +1,50 @@
+stack backtrace:
+   0:     0x638ebc2b22b0 - <std::sys::backtrace::_print::DisplayBacktrace as core::fmt::Display>::fmt::ha3fd8ac48be20882
+   1:     0x638ebc2cc06b - core::fmt::write::h4e26e0ecfdae25c2
+   2:     0x638ebc2a6909 - std::io::Write::write_fmt::heb5d33e25fc97cc9
+   3:     0x638ebc2b206e - std::sys::backtrace::print::h550118c7ec714c84
+   4:     0x638ebc2bb95a - std::panicking::default_hook::{{closure}}::h5e1b23aab6d944e3
+   5:     0x638ebc2bb682 - std::panicking::default_hook::h7a9473f298eaba34
+   6:     0x638ebc2bbde8 - std::panicking::rust_panic_with_hook::h83a1d1b3201195e0
+   7:     0x638ebc2b2687 - std::panicking::begin_panic_handler::{{closure}}::h16f0b30c3ec46ca8
+   8:     0x638ebc2b24c9 - std::sys::backtrace::__rust_end_short_backtrace::h90548f2ce3086294
+   9:     0x638ebc2bba44 - rust_begin_unwind
+  10:     0x638ebc2cd143 - core::panicking::panic_fmt::h04a703978d894a1d
+  11:     0x638ebc2ce23a - core::str::slice_error_fail_rt::h7214742e7eebb87e
+  12:     0x638ebc2cde2a - core::str::slice_error_fail::ha5ac34bb65fd5b2a
+  13:     0x638ebc268de8 - core::str::traits::<impl core::slice::index::SliceIndex<str> for core::ops::range::RangeFrom<usize>>::index::hb1359fb208ce31e7
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/core/src/str/traits.rs:544:21
+  14:     0x638ebc27fb6b - <alloc::string::String as core::ops::index::Index<I>>::index::h0812be0532d98ab1
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/alloc/src/string.rs:2463:9
+  15:     0x638ebc27e315 - proc_macro2::fallback::FileInfo::source_text::h33650af173ac05a4
+                               at /home/sigger/Documents/panic4r/panic4r/lib-proc-macro2/proc-macro2-3/proc-macro2-12eddc03a40e8393e82f7ef1dadbaaabdcb00a08/src/fallback.rs:367:41
+  16:     0x638ebc26a646 - proc_macro2::fallback::Span::source_text::{{closure}}::hde07b57f99ae293a
+                               at /home/sigger/Documents/panic4r/panic4r/lib-proc-macro2/proc-macro2-3/proc-macro2-12eddc03a40e8393e82f7ef1dadbaaabdcb00a08/src/fallback.rs:572:43
+  17:     0x638ebc284b93 - std::thread::local::LocalKey<T>::try_with::h7d307af45a874306
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/std/src/thread/local.rs:283:12
+  18:     0x638ebc2848e2 - std::thread::local::LocalKey<T>::with::h2849edee8a605980
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/std/src/thread/local.rs:260:9
+  19:     0x638ebc27e9cd - proc_macro2::fallback::Span::source_text::h32e080c3eebc716a
+                               at /home/sigger/Documents/panic4r/panic4r/lib-proc-macro2/proc-macro2-3/proc-macro2-12eddc03a40e8393e82f7ef1dadbaaabdcb00a08/src/fallback.rs:572:22
+  20:     0x638ebc2640d3 - proc_macro2::imp::Span::source_text::h5a411e122bb4fd00
+                               at /home/sigger/Documents/panic4r/panic4r/lib-proc-macro2/proc-macro2-3/proc-macro2-12eddc03a40e8393e82f7ef1dadbaaabdcb00a08/src/wrapper.rs:489:34
+  21:     0x638ebc262626 - proc_macro2::Span::source_text::h57cfa383fc3843ad
+                               at /home/sigger/Documents/panic4r/panic4r/lib-proc-macro2/proc-macro2-3/proc-macro2-12eddc03a40e8393e82f7ef1dadbaaabdcb00a08/src/lib.rs:523:9
+  22:     0x638ebc2621a3 - proc_macro2_3::main::ha2c7d661279b5491
+                               at /home/sigger/Documents/panic4r/panic4r/lib-proc-macro2/proc-macro2-3/src/main.rs:12:5
+  23:     0x638ebc261e2b - core::ops::function::FnOnce::call_once::h56f83aae6fa2be72
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/core/src/ops/function.rs:250:5
+  24:     0x638ebc261e7e - std::sys::backtrace::__rust_begin_short_backtrace::h1b96bd6863dc592c
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/std/src/sys/backtrace.rs:155:18
+  25:     0x638ebc2622f1 - std::rt::lang_start::{{closure}}::hfdc187715c8f492d
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/std/src/rt.rs:159:18
+  26:     0x638ebc2bad15 - std::rt::lang_start_internal::hf1ebab5f3c7c0266
+  27:     0x638ebc2622ca - std::rt::lang_start::h608cb14111449907
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/std/src/rt.rs:158:17
+  28:     0x638ebc26228e - main
+  29:     0x7c1935e29d90 - __libc_start_call_main
+                               at ./csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+  30:     0x7c1935e29e40 - __libc_start_main_impl
+                               at ./csu/../csu/libc-start.c:392:3
+  31:     0x638ebc261cf5 - _start
+  32:                0x0 - <unknown>

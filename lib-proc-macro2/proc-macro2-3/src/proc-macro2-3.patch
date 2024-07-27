@@ -1,0 +1,43 @@
+From 137ae0a341be5cb04be12f251f48911437b566cd Mon Sep 17 00:00:00 2001
+From: David Tolnay <dtolnay@gmail.com>
+Date: Sun, 8 Oct 2023 14:31:09 -0700
+Subject: [PATCH] Fix source_text treating span.lo as byte offset not char
+ index
+
+---
+ src/fallback.rs | 5 ++++-
+ tests/test.rs   | 2 +-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/src/fallback.rs b/src/fallback.rs
+index 281b7b2..70deb4b 100644
+--- a/src/fallback.rs
++++ b/src/fallback.rs
+@@ -364,7 +364,10 @@ impl FileInfo {
+ 
+     fn source_text(&self, span: Span) -> String {
+         let lo = (span.lo - self.span.lo) as usize;
+-        let trunc_lo = &self.source_text[lo..];
++        let trunc_lo = match self.source_text.char_indices().nth(lo) {
++            Some((offset, _ch)) => &self.source_text[offset..],
++            None => return String::new(),
++        };
+         let char_len = (span.hi - span.lo) as usize;
+         let source_text = match trunc_lo.char_indices().nth(char_len) {
+             Some((offset, _ch)) => &trunc_lo[..offset],
+diff --git a/tests/test.rs b/tests/test.rs
+index fa3fa34..1916a85 100644
+--- a/tests/test.rs
++++ b/tests/test.rs
+@@ -338,7 +338,7 @@ fn source_text() {
+     assert_eq!("𓀕", ident.span().source_text().unwrap());
+ 
+     let ident = tokens.next().unwrap();
+-    assert_eq!("c", ident.span().source_text().unwrap()); // FIXME
++    assert_eq!("c", ident.span().source_text().unwrap());
+ }
+ 
+ #[test]
+-- 
+2.34.1
+

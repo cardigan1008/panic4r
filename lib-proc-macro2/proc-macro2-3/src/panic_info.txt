@@ -1,0 +1,2 @@
+thread 'main' panicked at proc-macro2-12eddc03a40e8393e82f7ef1dadbaaabdcb00a08/src/fallback.rs:367:41:
+byte index 6 is not a char boundary; it is inside '𓀕' (bytes 4..8) of `    𓀕 c    `
