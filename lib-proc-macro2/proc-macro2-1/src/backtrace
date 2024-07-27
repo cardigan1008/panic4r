@@ -1,47 +1,50 @@
 stack backtrace:
-   0:     0x577c2d5f76c0 - <std::sys::backtrace::_print::DisplayBacktrace as core::fmt::Display>::fmt::ha3fd8ac48be20882
-   1:     0x577c2d61152b - core::fmt::write::h4e26e0ecfdae25c2
-   2:     0x577c2d5ebcd9 - std::io::Write::write_fmt::heb5d33e25fc97cc9
-   3:     0x577c2d5f747e - std::sys::backtrace::print::h550118c7ec714c84
-   4:     0x577c2d60103a - std::panicking::default_hook::{{closure}}::h5e1b23aab6d944e3
-   5:     0x577c2d600d62 - std::panicking::default_hook::h7a9473f298eaba34
-   6:     0x577c2d6014c8 - std::panicking::rust_panic_with_hook::h83a1d1b3201195e0
-   7:     0x577c2d5f7a97 - std::panicking::begin_panic_handler::{{closure}}::h16f0b30c3ec46ca8
-   8:     0x577c2d5f78d9 - std::sys::backtrace::__rust_end_short_backtrace::h90548f2ce3086294
-   9:     0x577c2d601124 - rust_begin_unwind
-  10:     0x577c2d6124e3 - core::panicking::panic_fmt::h04a703978d894a1d
-  11:     0x577c2d6163cb - core::option::expect_failed::hb24d05b2ecfa6f87
-  12:     0x577c2d5d2f1f - proc_macro::Span::call_site::h2415951532e99536
-  13:     0x577c2d5d2857 - proc_macro2::imp::nightly_works::{{closure}}::hc09a4b67a8c2a42c
-                               at /home/sigger/Documents/panic4r/panic4r/lib-proc-macro2/proc-macro2-1/proc-macro2-b07f847a3eb263a9768927187732cdd9c39c1fe8/src/unstable.rs:33:40
-  14:     0x577c2d5d2891 - std::panicking::try::do_call::hb78261ca249924d9
-                               at /home/sigger/Documents/panickiller/PanicKiller/library/std/src/panicking.rs:553:40
-  15:     0x577c2d5d2e6b - __rust_try
-  16:     0x577c2d5d2dff - std::panicking::try::hbe7948b8cdb2414e
-                               at /home/sigger/Documents/panickiller/PanicKiller/library/std/src/panicking.rs:517:19
-  17:     0x577c2d5d2dff - std::panic::catch_unwind::h8ab9948e20942c7d
-                               at /home/sigger/Documents/panickiller/PanicKiller/library/std/src/panic.rs:350:14
-  18:     0x577c2d5d29ea - proc_macro2::imp::nightly_works::h509758b768bcc2b0
-                               at /home/sigger/Documents/panic4r/panic4r/lib-proc-macro2/proc-macro2-1/proc-macro2-b07f847a3eb263a9768927187732cdd9c39c1fe8/src/unstable.rs:33:17
-  19:     0x577c2d5d2ab7 - proc_macro2::imp::Span::call_site::hde21ab42fb8ace88
-                               at /home/sigger/Documents/panic4r/panic4r/lib-proc-macro2/proc-macro2-1/proc-macro2-b07f847a3eb263a9768927187732cdd9c39c1fe8/src/unstable.rs:354:12
-  20:     0x577c2d5d26e6 - proc_macro2::Span::call_site::hfc2eeaa704933887
-                               at /home/sigger/Documents/panic4r/panic4r/lib-proc-macro2/proc-macro2-1/proc-macro2-b07f847a3eb263a9768927187732cdd9c39c1fe8/src/lib.rs:301:20
-  21:     0x577c2d5d24da - proc_macro2_1::main::hd2cfd382ccf6f6d7
-                               at /home/sigger/Documents/panic4r/panic4r/lib-proc-macro2/proc-macro2-1/src/main.rs:2:5
-  22:     0x577c2d5d254b - core::ops::function::FnOnce::call_once::h0df1c21dbafa416e
+   0:     0x59e87362b2b0 - <std::sys::backtrace::_print::DisplayBacktrace as core::fmt::Display>::fmt::ha3fd8ac48be20882
+   1:     0x59e87364506b - core::fmt::write::h4e26e0ecfdae25c2
+   2:     0x59e87361f909 - std::io::Write::write_fmt::heb5d33e25fc97cc9
+   3:     0x59e87362b06e - std::sys::backtrace::print::h550118c7ec714c84
+   4:     0x59e87363495a - std::panicking::default_hook::{{closure}}::h5e1b23aab6d944e3
+   5:     0x59e873634682 - std::panicking::default_hook::h7a9473f298eaba34
+   6:     0x59e873634de8 - std::panicking::rust_panic_with_hook::h83a1d1b3201195e0
+   7:     0x59e87362b687 - std::panicking::begin_panic_handler::{{closure}}::h16f0b30c3ec46ca8
+   8:     0x59e87362b4c9 - std::sys::backtrace::__rust_end_short_backtrace::h90548f2ce3086294
+   9:     0x59e873634a44 - rust_begin_unwind
+  10:     0x59e873646143 - core::panicking::panic_fmt::h04a703978d894a1d
+  11:     0x59e87364723a - core::str::slice_error_fail_rt::h7214742e7eebb87e
+  12:     0x59e873646e2a - core::str::slice_error_fail::ha5ac34bb65fd5b2a
+  13:     0x59e8735e1de8 - core::str::traits::<impl core::slice::index::SliceIndex<str> for core::ops::range::RangeFrom<usize>>::index::hb1359fb208ce31e7
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/core/src/str/traits.rs:544:21
+  14:     0x59e8735f8b6b - <alloc::string::String as core::ops::index::Index<I>>::index::h0812be0532d98ab1
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/alloc/src/string.rs:2463:9
+  15:     0x59e8735f7315 - proc_macro2::fallback::FileInfo::source_text::h33650af173ac05a4
+                               at /home/sigger/Documents/panic4r/panic4r/lib-proc-macro2/proc-macro2-1/proc-macro2-12eddc03a40e8393e82f7ef1dadbaaabdcb00a08/src/fallback.rs:367:41
+  16:     0x59e8735e3646 - proc_macro2::fallback::Span::source_text::{{closure}}::hde07b57f99ae293a
+                               at /home/sigger/Documents/panic4r/panic4r/lib-proc-macro2/proc-macro2-1/proc-macro2-12eddc03a40e8393e82f7ef1dadbaaabdcb00a08/src/fallback.rs:572:43
+  17:     0x59e8735fdb93 - std::thread::local::LocalKey<T>::try_with::h7d307af45a874306
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/std/src/thread/local.rs:283:12
+  18:     0x59e8735fd8e2 - std::thread::local::LocalKey<T>::with::h2849edee8a605980
+                               at /home/sigger/Documents/panickiller/PanicKiller/library/std/src/thread/local.rs:260:9
+  19:     0x59e8735f79cd - proc_macro2::fallback::Span::source_text::h32e080c3eebc716a
+                               at /home/sigger/Documents/panic4r/panic4r/lib-proc-macro2/proc-macro2-1/proc-macro2-12eddc03a40e8393e82f7ef1dadbaaabdcb00a08/src/fallback.rs:572:22
+  20:     0x59e8735dd0d3 - proc_macro2::imp::Span::source_text::h5a411e122bb4fd00
+                               at /home/sigger/Documents/panic4r/panic4r/lib-proc-macro2/proc-macro2-1/proc-macro2-12eddc03a40e8393e82f7ef1dadbaaabdcb00a08/src/wrapper.rs:489:34
+  21:     0x59e8735db626 - proc_macro2::Span::source_text::h57cfa383fc3843ad
+                               at /home/sigger/Documents/panic4r/panic4r/lib-proc-macro2/proc-macro2-1/proc-macro2-12eddc03a40e8393e82f7ef1dadbaaabdcb00a08/src/lib.rs:523:9
+  22:     0x59e8735db193 - proc_macro2_1::main::h86b542e8f8a2650a
+                               at /home/sigger/Documents/panic4r/panic4r/lib-proc-macro2/proc-macro2-1/src/main.rs:12:5
+  23:     0x59e8735dadeb - core::ops::function::FnOnce::call_once::h7b3fa313339da11a
                                at /home/sigger/Documents/panickiller/PanicKiller/library/core/src/ops/function.rs:250:5
-  23:     0x577c2d5d262e - std::sys::backtrace::__rust_begin_short_backtrace::h3d0ade0244fe3cee
+  24:     0x59e8735dae3e - std::sys::backtrace::__rust_begin_short_backtrace::hbe26693305b7fb4e
                                at /home/sigger/Documents/panickiller/PanicKiller/library/std/src/sys/backtrace.rs:155:18
-  24:     0x577c2d5d2601 - std::rt::lang_start::{{closure}}::h463c8b26bebaf068
+  25:     0x59e8735db2e1 - std::rt::lang_start::{{closure}}::h13128fad00ad34a9
                                at /home/sigger/Documents/panickiller/PanicKiller/library/std/src/rt.rs:159:18
-  25:     0x577c2d6003f5 - std::rt::lang_start_internal::hf1ebab5f3c7c0266
-  26:     0x577c2d5d25da - std::rt::lang_start::hbf726448a13d6fcc
+  26:     0x59e873633d15 - std::rt::lang_start_internal::hf1ebab5f3c7c0266
+  27:     0x59e8735db2ba - std::rt::lang_start::h8bad360fdd70b110
                                at /home/sigger/Documents/panickiller/PanicKiller/library/std/src/rt.rs:158:17
-  27:     0x577c2d5d251e - main
-  28:     0x756382e29d90 - __libc_start_call_main
+  28:     0x59e8735db27e - main
+  29:     0x7baeb3a29d90 - __libc_start_call_main
                                at ./csu/../sysdeps/nptl/libc_start_call_main.h:58:16
-  29:     0x756382e29e40 - __libc_start_main_impl
+  30:     0x7baeb3a29e40 - __libc_start_main_impl
                                at ./csu/../csu/libc-start.c:392:3
-  30:     0x577c2d5d2405 - _start
-  31:                0x0 - <unknown>
+  31:     0x59e8735dacf5 - _start
+  32:                0x0 - <unknown>
